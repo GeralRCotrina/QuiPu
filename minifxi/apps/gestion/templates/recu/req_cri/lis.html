@@ -1,0 +1,42 @@
+{% extends "panel.html" %}
+
+
+{% block txt_lv1 %}CRITICIDAD DE REQUERIMIENTO{% endblock txt_lv1 %}
+{% block txt_lv2 %}Listar{% endblock txt_lv2 %}
+
+{% block section_1 %}
+
+
+<div class="tabla tab_team">
+	<a href="#" class="desc" onclick="tableToExcel('tabla1', 'minifex')">Descargar..</a>
+	<a href="{% url 'req_cri_cre' %}" class="desc">Registrar..</a>
+	
+	<table id="tabla1">
+		<thead> 
+			<tr style="background-color: #9EA665;color: white;
+							line-height: 1.5em; text-align:center;">
+				<td><i class="fa fa-edit"></i></td>
+				<td>PK</td>
+				<td>CRITICIDAD</td>
+				<td>CRIT.</td>
+			</tr>
+		</thead>
+		<tbody>
+			{% for ob in object_list %}
+				<tr>
+					<td>
+						<a href="{% url 'req_cri_edi' ob.pk %}"><i class="fa fa-edit"></i></a>
+						<a href="{% url 'req_cri_edi' ob.pk %}"><i class="fa fa-trash"></i></a>
+					</td>
+					<td>[{{ ob.pk }}] </td>
+					<td>{{ ob.criticidad }} </td>
+					<td>{{ ob.crit }} </td>
+				</tr>
+			{% endfor %}
+		</tbody>
+	</table>
+</div>
+
+
+
+{% endblock section_1 %}

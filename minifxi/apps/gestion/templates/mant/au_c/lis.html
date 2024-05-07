@@ -1,0 +1,76 @@
+{% extends "panel.html" %}
+
+
+{% block txt_lv1 %}ASIGNACIONES <i class="inv">___</i><small>Ajustar correctamente las fechas.</small>{% endblock txt_lv1 %}
+{% block txt_lv2 %}Listar{% endblock txt_lv2 %}
+
+{% block section_1 %}
+
+
+
+
+
+{% if object_list %}
+
+
+	<div class="tabla tab_mant">
+			<a class="desc" onclick="tableToExcel('tabla1', 'minifex')">Descargar..  <i class="fa fa-file-excel-o"></i></a>
+			{% if perms.gestion.es_leader %}
+			<a href="{% url 'au_c_cre' %}" class="desc">Registrar.. <i class="fa fa-plus-circle"></i></a>
+			{% endif %}<i class="inv">...</i>
+			<a class="desc" onclick="ActivarFiltros('fil-avz','in')" data-toggle="tooltip" data-original-title="Filtro Incluyente"><i class="fa fa-filter"><i class="inv">___</i>+</i></a><i class="inv">...</i>
+			<a class="desc" onclick="ActivarFiltros('fil-avz','ex')" data-toggle="tooltip" data-original-title="Filtro Excluyente"><i class="fa fa-filter"><i class="inv">___</i>-</i></a>
+			<!--a class="desc" onclick="ActivarFiltros('fil-avz')">Filtros.. <i class="fa fa-filter"></i></a-->
+		<table id="tabla1">
+			<thead>
+				<tr style="background-color:#4668a4;color: white;
+							line-height: 1.5em; text-align:center;">
+					<td><i class="fa fa-edit"></i></td>
+					<td>Cliente</td>
+					<td>Colaborador</td>
+					<td>Asignación</td>
+					<td>Fecha de alta</td>
+					<td>Fecha de baja</td>
+					<td>Descripción</td>
+				</tr>
+
+				<tr id="fil-avz" class="fil-avz" style="background: #9EA665;">
+					<td id="tdfd00" class="no-fil"></td>
+					<td id="tdfd01" contenteditable onkeyup='Filtrar(this.id)'></td>
+					<td id="tdfd02" contenteditable onkeyup='Filtrar(this.id)'></td>
+					<td id="tdfd03" contenteditable onkeyup='Filtrar(this.id)'></td>
+					<td id="tdfd04" contenteditable onkeyup='Filtrar(this.id)'></td>
+					<td id="tdfd05" contenteditable onkeyup='Filtrar(this.id)'></td>
+					<td id="tdfd06" contenteditable onkeyup='Filtrar(this.id)'></td>
+				</tr>
+
+			</thead>
+			<tbody id="tab-body-fil" >
+				{% for ob in object_list %}
+					<tr>
+					{% if perms.gestion.es_leader  %}
+						<td>
+							<a href="{% url 'au_c_edi' ob.pk %}"><i class="fa fa-edit"></i></a>
+							<a href="{% url 'au_c_eli' ob.pk %}"><i class="fa fa-trash"></i></a><br>
+						</td>
+					{% else %}<td></td>{% endif %}						
+						<td>{{ ob.idcliente.codigo }}</td>
+						<td>{{ ob.idauth.alias }}</td>
+						<td>{{ ob.asignacion }}</td>
+						<td>{{ ob.fecha_alta.day }}.{{ ob.fecha_alta.month }}.{{ ob.fecha_alta.year }}</td>
+						<td>{{ ob.fecha_baja.day }}.{{ ob.fecha_baja.month }}.{{ ob.fecha_baja.year }}</td>
+						<td>{{ ob.descripcion }}</td>
+					</tr> 
+				{% endfor %}
+
+			</tbody>
+		</table>
+	</div>
+{% else %}
+	<p class="alert alert-warning"> No se encontraron datos.</p>
+{% endif %}
+
+
+{% endblock section_1 %}
+
+

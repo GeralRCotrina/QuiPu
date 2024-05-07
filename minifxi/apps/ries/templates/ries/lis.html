@@ -1,0 +1,118 @@
+{% extends "panel.html" %}
+
+
+{% block txt_lv1 %}RIESGO{% endblock txt_lv1 %}
+{% block txt_lv2 %}Listar{% endblock txt_lv2 %}
+
+{% block section_1 %}
+
+	<div class="reporte1">
+		<input id="input_url" type="text" value="{% url 'rie_lis' %}" hidden>
+		<input type="date" id="fecha_desde1" class="input_d1">
+		<input type="date" id="fecha_hasta1" class="input_d2">
+		<select name="sel_cliente" id="sel_cliente" class="input_d2">
+			{% if obj2 %}
+					<option value="0">- - -</option>
+				{% for ob in obj2  %}
+					<option value="{{ ob.pk }}">{{ ob }}</option>
+				{% endfor %}
+			{% else %}
+				<option value="CAL">ERROR AL TRAER LOS DATOS</option>
+			{% endif %}
+		</select>
+		<button onclick="Consultar()" class="input_d3">Consultar</button>
+	</div>
+	<hr> 
+
+	
+{% if object_list %}
+
+
+<div class="tabla tab_req">
+	<input type="text" id="hide_panel" hidden> <!-- Ocultar el panel lateral -->
+	<a class="desc" onclick="tableToExcel('tabla1', 'minifex')">Descargar..  <i class="fa fa-file-excel-o"></i></a>
+	<a class="desc" onclick="ActivarFiltros('fil-avz')">Filtros.. <i class="fa fa-filter"></i></a>
+	<table id="tabla1">
+		<thead> 
+			<tr style="background-color: #FFC000;
+						color: white;
+						font-weight: bold;
+						line-height: 1.5em;
+						height:35px;">
+					<td colspan="15" style="text-align:left;padding-left:50px;">{{ msj }} </td>
+				</tr>
+
+			<tr style="background-color: #4668A4;color: white;
+							line-height: 1.5em; text-align:center;">
+				<td><i class="fa fa-edit"></i></td>
+				<td>SF</td>
+				<td>CÓDIGO</td>
+				<td>CLIENTE</td>
+				<td>PERIODO</td>
+				<td>FECH. INCENTIFICACIÓN</td>
+				<td>PETICIONES /OTs</td>
+				<td>TIPOS</td>
+				<td>ESTADO</td>
+				<td>RESOLUCIÓN</td>
+				<td>RESPONSABLE</td>
+				<td>CATEGORÍA</td>
+				<td>DESCRIPCIÓN</td>
+				<td>ACCIÓNES</td>
+				<td>SEGUIMIENTO</td>
+			</tr>
+
+
+			<tr id="fil-avz" class="fil-avz" style="background: #9EA665;">
+				<td id="tdfd00" class="no-fil"></td>
+				<td id="tdfd01" class="no-fil"></td>
+				<td id="tdfd02" contenteditable onkeyup='Filtrar(this.id)'></td>
+				<td id="tdfd03" contenteditable onkeyup='Filtrar(this.id)'></td>
+				<td id="tdfd04" contenteditable onkeyup='Filtrar(this.id)'></td>
+				<td id="tdfd05" contenteditable onkeyup='Filtrar(this.id)'></td>
+				<td id="tdfd06" contenteditable onkeyup='Filtrar(this.id)'></td>
+				<td id="tdfd07" contenteditable onkeyup='Filtrar(this.id)'></td>
+				<td id="tdfd08" contenteditable onkeyup='Filtrar(this.id)'></td>
+				<td id="tdfd09" contenteditable onkeyup='Filtrar(this.id)'></td>
+				<td id="tdfd10" contenteditable onkeyup='Filtrar(this.id)'></td>
+				<td id="tdfd11" contenteditable onkeyup='Filtrar(this.id)'></td>
+				<td id="tdfd12" contenteditable onkeyup='Filtrar(this.id)'></td>
+				<td id="tdfd13" contenteditable onkeyup='Filtrar(this.id)'></td>
+				<td id="tdfd14" contenteditable onkeyup='Filtrar(this.id)'></td>
+			</tr>
+
+		</thead>
+		<tbody id="tab-body-fil">
+			{% for ob in object_list %}
+				<tr>
+					<td>
+						<a href="{% url 'rie_edi' ob.id %}"><i class="fa fa-edit"></i></a>
+						<a href="{% url 'rie_eli' ob.id %}"><i class="fa fa-trash"></i></a>
+					</td>
+					<td class="{% if ob.sf == '1' %}sf-y{% else %}sf-n{% endif %}" onclick="ActualizarSf('r',{{ ob.id }})" id="sf_{{ ob.id }}"></td>
+					<td>{{ ob.codigo }}</td>
+					<td>{{ ob.cliente }}</td>
+					<td>{{ ob.periodo }} </td>
+					<td>{{ ob.fecha_ind }} </td>
+					<td>{{ ob.pet_ot }}</td>
+					<td>{{ ob.tipo }}</td>
+					<td>{{ ob.estado }}</td>
+					<td>{{ ob.resolucion }}</td>
+					<td>{{ ob.responsable }}</td>
+					<td>{{ ob.categoria }}</td>
+					<td  class="tdri07">{{ ob.desripcion }}</td>
+					<td>{{ ob.acciones }}</td>
+					<td>{% if  ob.seguimiento == None %} {% else %}{{ ob.seguimiento }} {% endif %}</td>
+
+				</tr>
+			{% endfor %}
+		</tbody>
+	</table>
+</div>
+{% else %}
+	<p class="alert alert-warning"> {{ msj }} : No se encontraron datos.</p>
+{% endif %}
+
+
+
+
+{% endblock section_1 %}

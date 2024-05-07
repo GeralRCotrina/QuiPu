@@ -1,0 +1,84 @@
+/*    G R A F I8 C O S    */
+
+
+.tab_dai table {
+	width: 180%;
+	text-align: center;
+}
+.tabla table tbody tr td {
+	border-right: solid #E3E8F1 1px;
+}
+
+.tabla table tbody tr td select {
+	background:rgba(0, 0, 0, 0.0);
+	border: none;
+}
+
+.tabla table tbody tr td input {
+	background:rgba(0, 0, 0, 0.0);
+	border: none;
+	outline: none;
+}
+.tabla table tbody tr td textarea {
+	background:rgba(0, 0, 0, 0.0);
+	border: none;
+	outline: none;
+}
+
+
+/* INBC T A B L A S */
+.tabla table{
+	margin: 0% 0% 2% 0%;
+}
+
+.bg-head{
+	background-color: #A6D6EF;
+}
+
+.daily-col-1{
+	width: 30px;
+	position: sticky !important;
+	left: 0 !important;
+	z-index: 1;
+}
+
+.daily-col-2{
+	width: 60px;
+	position: sticky !important;
+	left: 30px !important;
+	z-index: 2;
+}
+
+.daily-col-3{
+	width: 60px;
+	position: sticky !important;
+	left: 90px !important;
+	z-index: 1;
+}
+
+.daily-col-4{
+	width: 60px;
+	position: sticky !important;
+	left: 150px !important;
+	z-index: 1;
+}
+
+.daily-col-5{
+	width: 60px;
+	position: sticky !important;
+	left: 210px !important;
+	z-index: 1;
+}
+
+.daily-col-6{
+	width: 60px;
+	position: sticky !important;
+	left: 270px !important;
+	z-index: 1;
+}
+
+.daily-col-7{
+	position: sticky !important;
+	left: 330px !important;
+	z-index: 1;
+}

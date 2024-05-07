@@ -1,0 +1,105 @@
+{% extends "panel.html" %}
+
+
+{% block txt_lv1 %}LOG DE MODIFICACIONES{% endblock txt_lv1 %}
+{% block txt_lv2 %}Listar{% endblock txt_lv2 %}
+
+{% block section_1 %}
+
+
+
+
+
+{% if object_list %}
+
+
+
+
+
+	<div class="tabla tab_mant">
+		<a class="desc" onclick="tableToExcel('tabla1', 'minifex')">Descargar..  <i class="fa fa-file-excel-o"></i></a><i class="inv">___</i>
+		<a class="desc" onclick="ActivarFiltros('fil-avz','in')" data-toggle="tooltip" data-original-title="Filtro Incluyente"><i class="fa fa-filter"><i class="inv">___</i>+</i></a><i class="inv">___</i>
+		<a class="desc" onclick="ActivarFiltros('fil-avz','ex')" data-toggle="tooltip" data-original-title="Filtro Excluyente"><i class="fa fa-filter"><i class="inv">___</i>-</i></a>
+		<table id="tabla1">
+			<thead>
+				<tr style="background-color: #6788A4;color: white;
+							line-height: 1.5em; text-align:center;">
+					<td>USUARIO</td>
+					<td>CLIENTE</td>
+					<td>FECHA</td>
+					<td>HORA</td>
+					<td>MODIFICACIÓN</td>
+					<td>TABLA</td>
+					<td>CAMPO</td>
+					<td>ENTIDAD</td>
+					<td>LOG</td>
+				</tr>
+
+				<tr id="fil-avz" class="fil-avz" style="background: #9EA665;">
+					<td id="tdfd00" contenteditable onkeyup='Filtrar(this.id)'></td>
+					<td id="tdfd01" contenteditable onkeyup='Filtrar(this.id)'></td>
+					<td id="tdfd02" contenteditable onkeyup='Filtrar(this.id)'></td>
+					<td id="tdfd03" contenteditable onkeyup='Filtrar(this.id)'></td>
+					<td id="tdfd04" contenteditable onkeyup='Filtrar(this.id)'></td>
+					<td id="tdfd05" contenteditable onkeyup='Filtrar(this.id)'></td>
+					<td id="tdfd06" contenteditable onkeyup='Filtrar(this.id)'></td>
+					<td id="tdfd07" contenteditable onkeyup='Filtrar(this.id)'></td>
+					<td id="tdfd08" contenteditable onkeyup='Filtrar(this.id)'></td>
+				</tr>
+			</thead>
+			<tbody id="tab-body-fil" >
+				{% for ob in object_list %}
+					<tr>						
+						<td>{{ ob.usuario.first_name }}</td>
+						<td><b>{{ ob.cliente.cliente }}</b></td>
+						<td>{{ ob.fecha.day }}-{{ ob.fecha.month }}-{{ ob.fecha.year }}</td>
+						<td>{{ ob.hora }}</td>
+						<!-- TM (Tipo de modificación) Create:0		Read:1		Update:2		Delete:3 -->
+						<td> {% if ob.tipo_modificacion == '3' %} <span class="badge" style="background-color: tomato;">Eliminado</span>
+							{% elif ob.tipo_modificacion == '2' %} <span class="badge" style="background-color: rgb(182, 184, 48);;">Modificado</span>
+							{% elif ob.tipo_modificacion == '1' %} <span class="badge" style="background-color: rgb(181, 192, 180);">Leído</span>
+							{% elif ob.tipo_modificacion == '0' %} <span class="badge" style="background-color: rgb(39, 146, 25);">Creado</span>
+							{% else %} {{ob.tipo_modificacion  }}{% endif %}</td>
+						<td><b> {{ ob.tabla }}</b></td>
+						<td>{{ ob.campo }}</td>
+						<td>{{ ob.id_entidad }}</td>
+						<td>{{ ob.log }}</td>
+					</tr> 
+				{% endfor %}
+
+			</tbody>
+		</table>
+		
+	</div>
+
+
+	
+	<nav>
+		{% if is_paginated %}
+			<ul class="pagination">
+				{% if page_obj.has_previous %}
+					<li><a href="?page={{ page_obj.previous_page_number }}">&laquo;</a></li>
+				{% endif %}
+	
+				{% for i in paginator.page_range %}
+					<li {% if page_obj.number == i %} class="active" {% endif %}>
+						<a href="?page={{i}}">{{ i }}</a>
+					</li>
+				{% endfor %}
+	
+				{% if page_obj.has_next %}
+					<li><a href="?page={{ page_obj.next_page_number }}">&raquo;</a></li>
+				{% endif %}
+			</ul>
+		{% endif %}
+	</nav>
+
+
+{% else %}
+	<p class="alert alert-warning"> No se encontraron datos.</p>
+{% endif %}
+
+
+{% endblock section_1 %}
+
+

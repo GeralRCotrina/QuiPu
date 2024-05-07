@@ -1,0 +1,91 @@
+{% extends "panel.html" %}
+
+
+{% block txt_lv1 %}Peer Review{% endblock txt_lv1 %}
+{% block txt_lv2 %}Listar{% endblock txt_lv2 %}
+
+{% block section_1 %} 
+
+
+
+<hr> 
+{% if object_list %}
+
+
+<div class="tabla">
+	<input type="text" id="hide_panel" hidden> <!-- Ocultar el panel lateral -->
+	<a class="desc" onclick="tableToExcel('tabla1', 'minifex')">Descargar..  <i class="fa fa-file-excel-o"></i></a>
+	<a class="desc" onclick="ActivarFiltros('fil-avz')">Filtros.. <i class="fa fa-filter"></i></a>
+</div>
+
+<div class="tabla peer">
+	<table id="tabla1">
+		<thead> 
+			<tr style="background-color: #6AAAB4;
+						color: white;
+						font-weight: bold;
+						line-height: 1.5em;
+						height:35px;">
+					<td colspan="15" style="text-align:left;padding-left:50px;">{{ msj }} </td>
+				</tr>
+
+			<tr style="background-color: #9EA665;color: white;
+							line-height: 1.5em; text-align:center;">
+				<td><i class="fa fa-edit"></i></td>
+				<td>CÓDIGO</td>
+				<td>REQUERIMIENTO</td>
+				<td>REVISOR</td>
+				<td>RESULTADO</td>
+				<td>VERSIÓN</td>
+				<td>FECHA</td>
+				<td>NOTA</td>
+			</tr>
+
+
+			<tr id="fil-avz" class="fil-avz" style="background: #9EA665;">
+				<td id="tdfd00" class="no-fil"></td>
+				<td id="tdfd01" contenteditable onkeyup='Filtrar(this.id)'></td>
+				<td id="tdfd02" contenteditable onkeyup='Filtrar(this.id)'></td>
+				<td id="tdfd03" contenteditable onkeyup='Filtrar(this.id)'></td>
+				<td id="tdfd04" contenteditable onkeyup='Filtrar(this.id)'></td>
+				<td id="tdfd05" contenteditable onkeyup='Filtrar(this.id)'></td>
+				<td id="tdfd06" contenteditable onkeyup='Filtrar(this.id)'></td>
+				<td id="tdfd07" contenteditable onkeyup='Filtrar(this.id)'></td>
+			</tr>
+
+		</thead>
+		<tbody id="tab-body-fil">
+			{% for ob in object_list %}
+				<tr>
+					<td><a href="{% url 'pr_edi' ob.pk %}"><i class="fa fa-edit"></i></a>
+						<a href="{% url 'pr_eli' ob.pk %}"><i class="fa fa-trash"></i></a></td>
+					<td>{{ ob.codigo }}</td>
+					<td>{{ ob.requerimiento }}</td>
+					<td>{{ ob.revisor.alias }} </td>
+
+					{% if ob.resultado == '1' %}
+						<td style="background: #E6FEE8; font-weight: bold;">OK </td>
+					{% elif  ob.resultado == '2' %}
+						<td style="background: #FEE6E6; font-weight: bold;">KO </td>
+					{% elif  ob.resultado == '3' %}
+						<td>N/A</td>
+					{% else %}
+						<td>Err. </td>						
+					{% endif %}
+
+					<td>v_{{ ob.version }}</td>
+					<td>{{ ob.fecha }}</td>
+					<td>{{ ob.nota }}</td>
+				</tr>
+			{% endfor %}
+		</tbody>
+	</table>
+</div>
+{% else %}
+	<p class="alert alert-warning"> {{ msj }} : No se encontraron datos.</p>
+{% endif %}
+
+
+
+
+{% endblock section_1 %}

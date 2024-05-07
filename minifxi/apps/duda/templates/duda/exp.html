@@ -1,0 +1,169 @@
+{% extends "panel.html" %}
+{% load staticfiles %}
+
+
+
+
+
+
+{% block blck_static_head %} 
+<!-- XLSX -->
+<script src="{% static 'xlsx/xlsx.full.min.js' %}"> </script>
+<script src="{% static 'xlsx/FileSaver.min.js' %}"> </script>
+<script src="{% static 'xlsx/tableexport.min.js' %}"> </script>
+
+{% endblock blck_static_head %}
+
+
+
+
+
+
+
+{% block txt_lv1 %}PLANTILLA DE CARGA MASIVA DE DUDAS{% endblock txt_lv1 %}
+{% block txt_lv2 %}Exportar{% endblock txt_lv2 %}
+
+{% block section_1 %}
+
+
+	
+{% if object_list %}
+
+
+	<div class="tabla tab_exp_inc">
+		<a href="#" class="desc" onclick="tableToExcel('tabla', 'minifex')">Descargar..   <i class="fa fa-file-excel-o"></i></a>
+
+		<input type="text" id="hide_panel" hidden> <!-- Ocultar el panel lateral -->
+
+		<a id="btnExportar" class="desc" >Plantilla de carga masiva..   <i class="fa fa-file-excel-o"></i></a>
+		<input type="text" id="nom_xlsx" value="Plantilla_de_carga_de_Dudas" hidden>
+		<input type="text" id="nom_hoja" value="Dudas" hidden>
+
+		<table id="tabla">
+
+			<tr style="text-align: center; font-weight: bold; color: #FFF;">
+				<td style="background: #ABD561;">ID Duda</td>				<!-- Verde -->
+				<td style="background: #ABD561;">ID Requerimiento</td>
+				<td style="background: #ABD561;">Estado</td>
+				<td style="background: #ABD561;">ACC</td>
+				<td style="background: #ABD561;">Descripción</td>
+
+				<td style="background: #ABD561;">Respuesta</td>
+				<td style="background: #ABD561;">Responsable respuesta proyecto</td>
+				<td style="background: #ABD561;">Responsable respuesta cliente</td>
+				<td style="background: #ABD561;">Responsable consulta</td>
+				<td style="background: #ABD561;">Fecha prevista respuesta</td>
+
+				<td style="background: #ABD561;">Agrupación</td>
+				<td style="background: #ABD561;">Id. Relacionada</td>
+				<td style="background: #ABD561;">Ámbito</td>
+				<td style="background: #ABD561;">Criticidad</td>
+				<td style="background: #ABD561;">Fase localizada</td>
+
+				<td style="background: #ABD561;">Relativa a</td>
+				<td style="background: #ABD561;">Documentación entrada incompleta</td>
+				<td style="background: #ABD561;">Autor última actualización</td>
+				<td style="background: #ABD561;">Localizada en Cambio Alcance</td>
+
+				<td style="background: #909090;">Creador</td>							<!-- Plomo -->
+				<td style="background: #909090;">Fecha alta</td>
+				<td style="background: #909090;">Fecha ult. Modificación</td>
+
+
+			</tr>
+
+
+
+			{% for ob in object_list %}
+					<tr>
+						<td ></td>
+						<td style="background: #EFED3B;">{{ ob.id_req}}</td>
+						<td >{{ ob.estado }}</td>
+						<td ></td>
+						<td >{{ ob.descr }}</td>
+
+						<td >{{ ob.rpta }}</td>
+						<td >{{ ob.resp_resp_proy }}</td>
+						<td >{{ ob.resp_resp_clie }}</td>
+						<td >{{ ob.resp_con }}</td>
+						<td >{{ ob.fecha_prev_resp }}</td>
+
+						<td ></td>
+						<td ></td>
+						<td >{{ ob.ambito }}</td>
+						<td >{{ ob.criticidad }}</td>
+						<td >{{ ob.fase_localizacion }}</td>
+
+						<td >{{ ob.relativa_a }}</td>
+						<td >{{ ob.doc_incompleta }}</td>
+						<td >{{ ob.autor_utl }}</td>
+						<td ></td>
+						<td ></td>
+
+						<td ></td>
+						<td ></td>
+
+					</tr>
+
+			{% endfor %}
+
+
+
+		</table>
+
+
+
+	</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	<br><hr><br>
+
+
+
+
+	<div class="trj">	
+		<div >
+            <h5>Manual </h5>
+            <li><b>1°</b> El reporte descargable puede subirse directamente a fenix.</li>
+        </div>
+	</div><br>
+
+
+
+
+
+
+{% else %}
+	<p class="alert alert-warning"> {{msj}}</p>
+{% endif %}
+
+
+
+{% endblock section_1 %}
+
+
+
+
+
+
+{% block blck_static_foot %} 
+<!-- XLSX -->
+<script src="{% static 'xlsx/script.js' %}"> </script>
+
+{% endblock blck_static_foot %}

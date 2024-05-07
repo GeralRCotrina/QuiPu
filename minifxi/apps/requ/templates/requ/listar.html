@@ -1,0 +1,579 @@
+{% extends "panel.html" %}
+
+
+
+
+{% block blck_static_head %}
+	{% load staticfiles i18n %} 
+ 	<script src="{% static 'js/estim.js' %}" type="text/javascript"> </script>
+	<script src="{% static 'js/task.js' %}" type="text/javascript"> </script>
+	<script src="{% static 'js/jquery.js' %}" type="text/javascript"> </script>
+{% endblock blck_static_head %}
+
+
+
+
+{% block txt_lv1 %}REQUERIMIENTO{% endblock txt_lv1 %}
+{% block txt_lv2 %}Listar{% endblock txt_lv2 %}
+
+
+ 
+
+
+{% block section_1 %}
+
+
+	<div class="reporte1">
+		<input id="input_url" type="text" value="{% url 'req_listar' %}" hidden>
+		<input type="date" id="fecha_desde1" class="input_d1">
+		<input type="date" id="fecha_hasta1" class="input_d2">
+		<select name="sel_cliente" id="sel_cliente" class="input_d2">
+			{% if lst_cliente %}
+					<option value="0">- - -</option>
+				{% for ob in lst_cliente  %}
+					<option value="{{ ob.pk }}">{{ ob }}</option>
+				{% endfor %}
+			{% else %}
+				<option value="CAL">ERROR AL TRAER LOS DATOS</option>
+			{% endif %}
+		</select>
+		<button onclick="Consultar()" class="input_d3">Consultar</button>
+	</div>
+	<hr>
+
+	 
+{% if object_list %}
+
+
+	<div class="tabla">
+		<input type="text" id="hide_panel" hidden> <!-- Ocultar el panel lateral -->
+		<a class="desc" onclick="tableToExcel('tabla1', 'minifex')">Descargar..  <i class="fa fa-file-excel-o"></i></a><i class="inv">...</i>
+		<a class="desc" onclick="ActivarFiltros('fil-avz','in')" data-toggle="tooltip" data-original-title="Filtro Incluyente"><i class="fa fa-filter"><i class="inv">___</i>+</i></a><i class="inv">...</i>
+		<a class="desc" onclick="ActivarFiltros('fil-avz','ex')" data-toggle="tooltip" data-original-title="Filtro Excluyente"><i class="fa fa-filter"><i class="inv">___</i>-</i></a>
+		<!--a class="desc" onclick="ActivarFiltros('fil-avz')">Filtros.. <i class="fa fa-filter"></i></a-->
+	</div>
+
+	<div class="tabla tab_req">
+		<table id="tabla1">
+			<thead>
+				<tr style="background-color: #4668A4;
+							color: white;
+							font-weight: bold;
+							line-height: 1.5em;
+							height:35px;">
+					<td colspan="38" style=" text-align:left; padding-left:50px;">{{ msj }} </td>
+				</tr>
+
+				<tr style="background-color: #4668A4;
+							color: white;
+							line-height: 1.5em;
+							text-align: center;">
+					<td><i class="fa fa-edit"></i></td>
+					<td>Estim.</td>
+					<td>Inci.</td>
+					<td>Ries.</td>
+					<td>Dud.</td>
+					<td>Task</td>
+
+					<td>PrRv.</td>
+					<td>País</td>
+					<td>Cliente</td>
+					<td>Proy.</td>
+
+					<td>Codigo</td>
+					<td class="td107">Breve_Descripción</td>
+					<td>Descripción</td>
+					<td>Criticidad</td>
+					<td>Módulo</td>
+
+					<td>Estado</td>
+					<td>Tipo Pet.</td>
+					<td>Tipo Gest.</td>
+					<td>Petición</td>
+					<td>Responsable</td>
+					<td>Contacto</td>
+					<!--td>Fech. Solicitud</td>
+					<td>Fech. Estimación</td-->
+					<td>Fech. Inic. Planificado</td>
+					<td>Fech. Inicio Real</td>
+					<td>Fech. Fin Planificada</td>
+					<td>Fech. Entrega Real</td>
+					<td>Calid. Input</td>
+					<td>Input Final</td><!-- grcl4-->
+					<td>Est. Alto Nivel</td>
+					<td>Prioridad</td>
+					<td>Est. Acuerdo</td>
+					<td>Est. Fenix H.</td>
+
+					<td>Plan. Task</td>
+					<td>Inc. Task</td>
+					<td>Inc. Gant</td>
+
+					<td>Etc</td>
+					<td>H. Adic.</td>
+					<td>Avance %</td>
+					<td class="td131">Comentarios_de_seguimiento <br><small>(doble click para editar)</small></td>
+					<!--td class="td131">Orden de transporte</td>
+					<td class="td131">Programas modificados</td-->
+ 				</tr>
+
+
+				<tr id="fil-avz" class="fil-avz" style="background: #4668A4;">
+					<td id="tdfd00" class="no-fil"></td>
+					<td id="tdfd01" class="no-fil"></td>
+					<td id="tdfd02" class="no-fil"></td>
+					<td id="tdfd03" class="no-fil"></td>
+					<td id="tdfd04" class="no-fil"></td>
+					<td id="tdfd05" class="no-fil"></td>
+					<td id="tdfd06" class="no-fil"></td>
+					<td id="tdfd07" contenteditable onkeyup='Filtrar(this.id)'></td>
+					<td id="tdfd08" contenteditable onkeyup='Filtrar(this.id)'></td>
+					<td id="tdfd09" contenteditable onkeyup='Filtrar(this.id)'></td>
+					<td id="tdfd10" contenteditable onkeyup='Filtrar(this.id)'></td>
+					<td id="tdfd11" contenteditable onkeyup='Filtrar(this.id)'></td>
+					<td id="tdfd12" contenteditable onkeyup='Filtrar(this.id)'></td>
+					<td id="tdfd13" contenteditable onkeyup='Filtrar(this.id)'></td>
+					<td id="tdfd14" contenteditable onkeyup='Filtrar(this.id)'></td>
+					<td id="tdfd15" contenteditable onkeyup='Filtrar(this.id)'></td>
+					<td id="tdfd16" contenteditable onkeyup='Filtrar(this.id)'></td>
+					<td id="tdfd17" contenteditable onkeyup='Filtrar(this.id)'></td>
+					<td id="tdfd18" contenteditable onkeyup='Filtrar(this.id)'></td>
+					<td id="tdfd19" contenteditable onkeyup='Filtrar(this.id)'></td>
+					<td id="tdfd20" contenteditable onkeyup='Filtrar(this.id)'></td>
+					<td id="tdfd21" contenteditable onkeyup='Filtrar(this.id)'></td>
+					<td id="tdfd22" contenteditable onkeyup='Filtrar(this.id)'></td>
+					<td id="tdfd23" contenteditable onkeyup='Filtrar(this.id)'></td>
+					<td id="tdfd24" contenteditable onkeyup='Filtrar(this.id)'></td>
+					<td id="tdfd25" contenteditable onkeyup='Filtrar(this.id)'></td>
+					<td id="tdfd26" contenteditable onkeyup='Filtrar(this.id)'></td>
+					<td id="tdfd27" contenteditable onkeyup='Filtrar(this.id)'></td>
+					<td id="tdfd28" contenteditable onkeyup='Filtrar(this.id)'></td>
+					<td id="tdfd29" contenteditable onkeyup='Filtrar(this.id)'></td>
+					<td id="tdfd30" contenteditable onkeyup='Filtrar(this.id)'></td>
+					<td id="tdfd31" contenteditable onkeyup='Filtrar(this.id)'></td>
+					<td id="tdfd32" contenteditable onkeyup='Filtrar(this.id)'></td>
+					<td id="tdfd33" contenteditable onkeyup='Filtrar(this.id)'></td>
+					<td id="tdfd34" contenteditable onkeyup='Filtrar(this.id)'></td>
+					<td id="tdfd35" contenteditable onkeyup='Filtrar(this.id)'></td>
+					<td id="tdfd36" contenteditable onkeyup='Filtrar(this.id)'></td>
+					<td id="tdfd37" contenteditable onkeyup='Filtrar(this.id)'></td>
+				</tr>
+
+ 
+
+			</thead>
+			<tbody id="tab-body-fil">
+				{% for ob in object_list %}
+					<tr  id="tr_req{{ ob.id }}">
+						<!-- Editar/Eliminar -->
+						<td class="static" >
+							<a href="{% url 'req_editar' ob.id %}" data-toggle="tooltip" data-original-title="Editar"><i class="fa fa-edit"></i></a>
+							<a href="{% url 'req_duplic' ob.id %}" data-toggle="tooltip" data-original-title="Duplicar"><i class="fa fa-copy"></i></a> <br>
+							<a href="{% url 'req_eliminar' ob.id %}" data-toggle="tooltip" data-original-title="Eliminar"><i class="fa fa-trash"></i></a></td>
+
+						<!-- Estimación -->
+						<td style="background: #FFF1FC;">
+							<a href="#ModalEstimacion" class="estim" onclick="OpenModal({{ ob.id }})">
+								{% if ob.est_esf == None %}0{% else %}{{ ob.est_esf }}{% endif %} h</a> <br>
+							<a href="#ModalEstimacion" class="estim" onclick="OpenModal({{ ob.id }})">
+								{{ ob.est_tar }} t</a>
+							
+
+						<!-- Incidencias -->
+						<td style="background: #FCF6F6;">
+							<a href="{% url 'inc_xreq' %}?idr={{ ob.id }}" class="inc">{{ ob.cant_inc }}</a><br>
+							<a href="{% url 'inc_cre' ob.id %}" class="inc"><i class="fa fa-plus-circle"></i></a></td>
+
+						<!-- Riesgos -->
+						<td style="background: #F9F8F0;">
+							<a href="{% url 'rie_xreq' %}?idr={{ ob.id }}" class="rie">{{ ob.cant_rie }}</a><br>
+							<a href="{% url 'rie_cre' ob.id %}" class="rie"><i class="fa fa-plus-circle"></i></a></td>
+ 
+						<!-- DUDAS -->
+						<td style="background: #F5F6FB;">
+							<a href="{% url 'dud_xreq' %}?idr={{ ob.id }}" class="dud">{{ ob.cant_dud }}</a></td>
+
+						<!-- Task -->
+						<td style="background: #F7FCF8;">
+							<a href="{% url 'task_x_req' %}?idr={{ ob.id }}">{{ ob.cant_tsk }}</a> <br>
+							<!-- <a href="{% url 'task_crear1' ob.id %}"><i class="fa fa-plus-circle"></i></a> -->
+							<a href="#mCreateTask" class="task" onclick="OpenModalTask({{ ob.id }})">
+								<i class="fa fa-plus-circle"></i></a></td>
+
+						<!-- PEER REVIEW -->
+						<td style="background: #FEF5FD;">
+							<a href="{% url 'pr_lis' %}?idr={{ ob.id }}" class="prv">{{ ob.cant_peer }}</a> <br>
+							<a href="{% url 'pr_cre' ob.id %}" class="prv"><i class="fa fa-plus-circle"></i></a></td>
+
+						<td>{{ ob.pais }}</td>
+						<td style="font-weight: bold;">{{ ob.cliente }}</td>
+
+						<!-- PROY -->
+						<td style="font-weight: bold; background:{{ ob.pet_color }}">{{ ob.pet_nom }}</td>
+
+						<td style="font-weight: bold; background:#F4F7F5;">{{ ob.codigo }}</td>
+						<td class="td107" style="font-weight: bold; background:#F4F7F5;">{{ ob.breve_descripcion }}</td>
+						<td>{% if ob.descripcion == None %}{% else %}{{ ob.descripcion }}{% endif %}</td>
+
+						<!--td style="font-weight: bold;">{% if ob.RA == None %}{% else %}{{ ob.RA }}{% endif %}</td-->
+						<td>{{ ob.criticidad }}</td>
+						<td>{{ ob.modulo }}</td>
+						
+						<!-- ESTADO -->
+						<td style="font-weight: bold;background:{{ ob.est_col }};color: white; text-shadow: black 0.1em 0.1em 0.1em;">{{ ob.est_des }}</td>
+						<td>{{ ob.tipo_de_peticion }}</td>
+						<td>{{ ob.tipo_de_gestion }}</td>
+						<td>{{ ob.numero_peticion }}</td>
+						<td style="font-weight: bold;">{{ ob.responsable }}</td>
+						<td>{{ ob.contacto }}</td>
+
+						<!-- FECHAS
+						<td>{{ ob.fecha_solicitud }}</td>
+						<td>{{ ob.fecha_estimacion }}</td> -->
+						<td>{{ ob.fecha_inicio_planificada }}</td>
+
+						<td style="font-weight: bold;">{% if ob.tsk_rea_ini == None %}{% else %}{{ ob.tsk_rea_ini }}{% endif %}</td>
+
+						<td>{{ ob.fecha_fin_planificada }}</td>
+
+						<td style="font-weight: bold;">{% if ob.tsk_rea_fin == None %}{% else %}{{ ob.tsk_rea_fin }}{% endif %}</td>
+
+
+						<td>{{ ob.calidad_input }}</td>
+						<td>{{ ob.input_final }}</td><!-- grcl4 -->
+						<td>{{ ob.estimacion_alto_nivel }}</td>
+						<td>{{ ob.prioridad }}</td>
+
+						<!-- TOTALES -->
+						<td style="background: #FDFDF3;
+									font-weight: bold;">{% if ob.estimacion_acuerdo == None %}0{% else %}{{ ob.estimacion_acuerdo }}{% endif %}</td>
+						<td style="background: #FDFDE6;
+									font-weight: bold;">{% if ob.estimacion_fenix_h == None %}0{% else %}{{ ob.estimacion_fenix_h }}{% endif %}</td>
+
+						<td style="background: #F7FCF8;
+									font-weight: bold;">{% if ob.tsk_tot_pla == None %}0{% else %}{{ ob.tsk_tot_pla }}{% endif %}</td> <!--  -->
+						<td style="background: #EBFCEB;
+									font-weight: bold;">{% if ob.tsk_tot_inc == None %}0{% else %}{{ ob.tsk_tot_inc }}{% endif %}</td>
+						<td style="background: #FFEDFC;
+									font-weight: bold;">{% if ob.gnt_tot_inc == None %}0{% else %}{{ ob.gnt_tot_inc }}{% endif %}</td>
+
+						<!-- ETC -->
+						<td style="background: #F4FFFF;
+									font-weight: bold;">{% if ob.etc == None %}0{% else %}{{ ob.etc }}{% endif %}</td>
+
+						<td style="background: #FFF6F7;
+									font-weight: bold;">{% if ob.horas_adicionales == None %}0{% else %}{{ ob.horas_adicionales }}{% endif %}</td>
+
+						<td class="{% if ob.avanzado_porc < 100 %}etc-igual
+									{% elif ob.avanzado_porc == None %}etc-menos
+									{% elif ob.avanzado_porc > 100 %}etc-mas
+									{% elif ob.avanzado_porc == 100 %}etc-menos
+									{% else %}etc-p{% endif %}">{% if ob.avanzado_porc == None %}0{% else %}{{ ob.avanzado_porc }}{% endif %}%</td>
+
+						<td> {{ ob.comentarios }}</td>
+
+						<!--td> <textarea name="" id="" rows="2" class="form-control" readonly ondblclick="BitacoraReq({{ ob.id}})"
+							data-toggle="tooltip" data-original-title="Doble click para modificar">{{ ob.comentarios }}</textarea></td-->
+
+						<!--td> <textarea name="" id="" rows="2" class="form-control" readonly ondblclick="BitacoraReq({{ ob.id}})"
+							data-toggle="tooltip" data-original-title="Doble click para modificar">{{ ob.ot }}</textarea></td>
+							
+						<td> <textarea name="" id="" rows="2" class="form-control" readonly ondblclick="BitacoraReq({{ ob.id}})"
+							data-toggle="tooltip" data-original-title="Doble click para modificar">{{ ob.programas }}</textarea></td-->
+
+					</tr> 
+				{% endfor %}
+
+			</tbody>
+		</table>
+
+
+
+	</div>
+
+
+
+
+		<div>
+			 <div id="ModalEstimacion" class="modalDialog row">
+	            <div class="col-12 mx-auto">
+	                <a href="#close" title="Close" class="close" onclick="ClearMDL()">
+	                    <i class="fa fa-times-circle" style="line-height: 1.5em; font-size:1.3em;"></i> </a>
+	                    <input type="text" id="req_id" hidden value="0">
+	                <h3 style="color:#C7DDE5; font-style: italic;">Estimación</h3>
+	                <table class="table table-striped tab_modal">
+	                	<!-- Título -->
+	                	<tr><td id="mdl_tit" colspan="6" style="color:#497575;font-size:1.5em; font-style: italic;"></td></tr>
+
+	                	<!-- Agregar estimación -->
+	                	<tr><td colspan="6" style="line-height: 5px;"></td></tr>
+	                	<tr><td colspan="6">Gestionar las tareas de estimación</td></tr>
+						<input type="hidden" id="sel_tipo">
+						<input type="hidden" id="sel_tipo_descripcion">
+						<input type="hidden" id="sel_estimacion_aprobada">
+	                	<tr style="background:#EDFDF0;"> 
+	                		
+	                		<td id="">
+	                			<label for="sel_subtipo">SUBTIPO</label><br>
+	                			<select name="sel_subtipo" id="sel_subtipo" onchange="ChngEstim()">
+		                			{% if obj_fa %}
+		                					<option value="0" >---</option>
+		                				{% for fa in obj_fa %}
+		                					<option value="{{ fa.pk }}">{{ fa.fase_actividad }}</option>
+		                				{% endfor %}
+		                			{% else %}
+		                				<option value="0">-Err-</option>
+		                			{% endif %}
+	                			</select></td> 
+
+	                		<td id="">
+	                			<label for="sel_dificultad">DIFICULTAD</label><br>
+	                			<select name="sel_dificultad" id="sel_dificultad" onchange="ChngEstim()">
+		                			{% if obj_zdi %}
+		                					<option value="0" >---</option>
+		                				{% for zd in obj_zdi %}
+		                					<option value="{{ zd.pk }}">{{ zd.dificultad }}</option>
+		                				{% endfor %}
+		                			{% else %}
+		                				<option value="0">-Err-</option>
+		                			{% endif %}
+	                			</select></td>
+
+	                		<td id="" style="width:5%;">
+	                			<label for="esfuerzo">Esf.</label>
+	                			<input type="number" readonly name="esfuerzo" id="esfuerzo"
+	                				   style="width:60px; background:#E6F3F5"/></td> 
+
+	                		<td>
+	                			<!--label for="descripcion">Descrip..</label>
+	                			<input type="text" name="descripcion" placeholder="Vacío..." /--></td>
+
+	                		<td id="">
+	                			<!--a type="button" class="btn btn-xl"><i class="fa fa-plus-circle" style="font-size:1.5em;"></i></a-->
+	                			<button class="btn btn-xl btn-info" id="id_agregar" disabled onclick="BtnAddEstim()">
+	                				<i class="fa fa-plus-circle"></i>Agregar</button>
+								<button class="btn btn-xl btn-info" id="id_aprobar" onclick="BtnAprobeEstim()" style="visibility: hidden;">Aprobar</button>
+							</td> 
+
+	                		</tr>
+
+
+	                	<tr><td colspan="6" style="font-style: italic;">
+
+	                		<table class="table table-sm">
+	                			<thead style="background:#E7F2F5;color:#9CC7CB;">
+	                				<tr>
+		                				<td>Tipo</td>
+		                				<td>Subtipo</td> 
+		                				<td>Dificultad</td> 
+		                				<td>Esf.</td> 
+		                				<td>Coste</td> 
+		                				<td colspan="2">Ajute</td>
+		                				<td></td>
+		                			</tr></thead>
+
+	                			<tbody style="color:#595A5A;line-height:0.9em;font-size:0.8em;" id="id_estim_tbody"> </tbody>
+
+		                		<tfoot>
+		                			<tr style="background:#E7F2F5;color:#587E82;">
+		                				<td colspan="4" ></td>
+		                				<td style="line-height:0.7em;font-size:0.9em; " id="id_estim_total"></td>
+		                				<td></td><td></td><td></td></tr>
+		                		</tfoot>
+	                			
+	                		</table>
+
+
+	                		<input type="text" value="{% url 'etimdet_exp' %}" id="id_url" hidden>
+	                		<table class="table table-sm">
+	                			<tr>
+			                		<td> <a id="id_href" target="_blank"> <i class="fa fa-file-excel-o"></i> Exportar  </a></td> 
+			                		<td><!--Guardar en la ruta  <i class="fa fa-cloud-download"></i--></td>
+		                		</tr>
+		                	</table>
+	                		
+	                	</td></tr>
+	                </table>
+	                <p style="text-align:right;color:#C7DDE5; font-style: italic;"> <b> minifex.beta</b></p>
+	            </div>
+	        </div>
+        </div>
+		
+
+
+
+	<br><hr><br>
+
+
+		<!-- {+ amjo -->
+			<div id="mCreateTask" class="modalDialog row">
+				<div class="col-12 mx-auto">
+					<a href="#close" title="Close" class="close" onclick="ClearMDL()">
+						<i class="fa fa-times-circle" style="line-height: 1.5em; font-size:1.3em;"></i> </a>
+						<input type="text" id="req_id" hidden value="0">
+					<h3 id="titleReqModalTask" style="color:#7D9EC0; font-style: italic;">PENDIENTE CREACIÓN DE SERVICIO </h3>
+				 <table class="table table-striped tab_modal">
+					   <!-- Título -->
+					   <!--tr><td id="mdl_tit" colspan="6" style="color:#497575;font-size:1.5em; font-style: italic;"></td></tr>
+					   <tr><td colspan="6" style="line-height: 5px;"></td></tr-->
+					   <tr><td colspan="6" style="font-style:italic;color:#9BE2F2;">Agregar Task</td></tr>
+					   <tr style="background:#EDFDF0;"> 
+					 <tr>
+						 <td id="">
+							<div class="col-xs-6">
+								<label>Subtarea: </label> <input id="t_Subtarea" size="35" type="text" required>
+							</div>
+							<div class="col-xs-6">
+								<label>Fase actividad: </label>
+								<select  name="sel_subtipo" id="t_FaseActividad" onchange="ChngEstim()" required>
+									{% if obj_fa %}
+											<option value="0" >---</option>
+										{% for fa in obj_fa %}
+											{% if fa.fase_actividad == 'CODIFICACION' %}
+												<option value="{{ fa.pk }}" selected>{{ fa.fase_actividad }}</option>
+											{% else %}
+												<option value="{{ fa.pk }}">{{ fa.fase_actividad }}</option>
+											{% endif %}
+										{% endfor %}
+									{% else %}
+										<option value="0">-Err-</option>
+									{% endif %}
+								</select>
+							</div>
+							 
+						 </td>
+					 </tr>
+					 <tr hidden>
+						<td id="">
+						    <div class="col-xs-6">
+							   <label>Id Requerimiento: </label>
+							   <input name="t_IdRequerimiento" id="t_IdRequerimiento" value="abc" readonly>
+						   </div>
+							
+						</td>
+					</tr>
+					 <tr>
+						 <td>
+							<div class="col-xs-6">
+							 <label>Fecha inicio: </label>
+							 <input type="date" id="t_FechaInicio" required style="line-height:0.9em">
+							</div>
+							<div class="col-xs-6">
+							 <label>Fecha fin: </label>
+							 <input type="date" id="t_FechaFin" onChange="validarFecha()" required  style="line-height:0.9em">
+							</div>
+						 </td>
+					 </tr>
+					 <tr>
+						 <td id="">
+							<div class="col-xs-4">
+							 <label>Esfuerzo estimado: </label>
+							 <input type="number" id="t_EsfuerzTotalEstandar" step="0.25" required style="width:75px;" min="0">
+							</div>
+							<div class="col-xs-4">
+								<label>Esfuerzo real: </label>
+								<input type="number" id="t_EsfuerzoEjecutado" step="0.25" required style="width:75px;" min="0">
+							</div>	
+						<!--/td>
+					 </tr>
+					 <tr>
+						<td-->
+							<div class="col-xs-4">
+								<label>Colaborador: </label>
+								<select  id="t_idEmpleado"  required>
+								   {% if lst_usrs %}
+										   <option value="0" >---</option>
+									   {% for lstu in lst_usrs %}
+										   <option id="opt_{{ lstu.id }}" value="{{ lstu.id }}">{{ lstu.alias }}</option>
+									   {% endfor %}
+								   {% else %}
+									   <option value="0">-Err-</option>
+								   {% endif %}
+							   </select>
+							</div>	
+						 </td>
+					 </tr>
+					  <tr>
+						<td>
+							<div class="col-xs-5"></div>
+							<div class="col-xs-4">
+						
+							<button class="btn btn-xl btn-info" id="id_addTask" onclick="AgregarTask()">
+								<i class="fa fa-plus-circle"></i>   Agregar</button> 
+							<button class="btn btn-xl btn-info" id="id_updateTask" onclick="UpdateTask()" hidden>
+									<i class="fa fa-plus-circle"></i>   Editar</button> 
+							<input type="hidden" id="aTaskList_poss">
+							</div>
+						</td>
+					 </tr>
+				 </table>
+				 <div style=" max-height:250px; overflow: auto;">
+					<table id="listTask" class="table table-striped tab_modal">
+						<thead style="background:#e2e2e2;">
+						<!-- Título -->
+						
+						  <th>Código</th>
+						  <th>Subtarea</th>
+						  <th>Fase actividad</th>
+						  <th>Fecha inicio</th>
+						  <th>Fecha fin</th>
+						  <th>Esfuerzo estimado</th>
+						  <th>Esfuerzo real</th>
+						  <th>Empleado</th>
+						  <th>Action</th>
+						   
+					   </thead>
+					   <tbody id="m_taskAdded" style="font-weight: normal; font-style: italic; font-size: 0.9em; max-height:50px;  ">
+						   
+					   </tbody>
+				  </table>
+				 </div>
+			   <div class="col-xs-5"></div>
+							<div class="col-xs-4">
+					<button class="btn btn-xl btn-info" id="id_addTask" onclick="SaveTasks()">
+						<i class="fa fa-plus-circle"></i>   Guardar Tasks</button> </div>
+					<p style="text-align:right;color:#73ccec; font-style: italic;" id="msj_task_all"> <b> everboard.beta</b></p>
+					<br>
+				</div>
+			</div>
+
+		<!-- amjo + } -->
+
+
+
+
+
+	<div class="trj">	
+		<div >
+            <h5>Manual </h5>
+            <li> Click en  [ <b><i class="fa fa-edit"></i></b> para editar ] , [ <i class="fa fa-trash"></i> para eliminar] , [ <i class="fa fa-sitemap"></i> para ver las <b>task</b> asociadas ] , [ <b><i class="fa fa-plus-circle"></i> tsk</b> para registrar tarea ] , [ <b><i class="fa fa-filter"></i></b> para activar los filtros ] , [ <b><i class="fa fa-file-excel-o"></i></b> para descargar en hoja de cáculo ] .</li>
+            
+            <li> Doble click sobre la bitácora para actualizarla.</li>
+            <li>El sistema filtra en automático todo el presente mes.</li>
+            <li>Los cambios en incurrido en las Task asociadas hechas en otra pantalla se reflejaran aquí al actualizar la página.</li>
+        </div>
+	</div><br>
+
+ 
+
+
+
+<!-- USUARIOS PARA EL EQUIPO -->
+{% if lst_usrs %}
+<dir hidden>
+	{% for lstu in lst_usrs %}
+		<input type="text" id="id_inp_usr_{{ lstu.id }}" value="{{ lstu.alias }}">
+	{% endfor %}
+</dir>
+{% endif %}
+<!-- -->
+
+
+
+{% else %}
+	<p class="alert alert-warning"> {{ msj }} : No se encontraron datos.</p>
+{% endif %}
+
+
+{% endblock section_1 %}
+

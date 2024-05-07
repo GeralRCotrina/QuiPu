@@ -1,0 +1,189 @@
+{% extends "panel.html" %}
+
+
+{% block txt_lv1 %}{% endblock txt_lv1 %}
+{% block txt_lv2 %}{% endblock txt_lv2 %}
+}
+
+
+{% block section_1 %}
+
+	<input type="text" id="hide_panel" hidden> <!-- Ocultar el panel lateral -->
+
+	<div class="reporte1">
+		<a data-toggle="offcanvas" role="button"  onclick="MaximizarGant('MxmzGnt')">
+			<i id="MxmzGnt" class="fa fa-compress" style="font-size:1.5em; margin-right:20px;color:#3C70C6"></i>
+		</a>
+
+		<!--button type="buttom" onclick="CargarGant()">Cargar Gant</button-->
+	
+		<label for="sel_cliente">Cliente</label>
+		<select name="sel_cliente" id="sel_cliente">
+			{% if object_list %}
+				{% for ob in object_list  %}
+					<option value="{{ ob.pk }}">{{ ob }}</option>
+				{% endfor %}
+			{% else %}
+				<option value="CAL">ERROR AL TRAER LOS DATOS</option>
+			{% endif %}
+		</select>
+
+		<label for="sel_repet"> Repeticiones</label>
+		<select name="sel_repet" id="sel_repet">
+			<option value="3">3 fil.</option>
+			<option value="4">4 fil.</option>
+			<option value="5">5 fil.</option>
+			<option value="6" selected="selected">6 fil.</option>
+			<option value="7">7 fil.</option>
+			<option value="8">8 fil.</option>
+			<option value="9">9 fil.</option>
+			<option value="10">10 fil.</option>
+			<option value="11">11 fil.</option>
+			<option value="12">12 fil.</option>
+			<option value="13">13 fil.</option>
+			<option value="14">14 fil.</option>
+			<option value="15">15 fil.</option>
+		</select>
+
+		<label for="input_mes">fecha </label>
+		<input type="month" id="input_mes" name="input_mes"  min="2020-01" value="2020-01">
+
+		<i class="inv">__</i>
+		<button type="buttom" onclick="CargarGant()">Cargar<i class="inv">__</i><i class="fa fa-cloud-download"></i></button>
+
+		<i class="inv">__</i>
+		<button type="buttom" onclick="LimpiarGant()">Limpiar<i class="inv">__</i><i class="fa fa-trash"></i></button>
+
+		<i class="inv">__</i>
+		<button type="buttom" onclick="MdlDiasNL1()">Ajustes<i class="inv">__</i><i class="fa fa-cogs"></i></button>
+
+	</div>
+
+
+	<hr style="margin: 12px;">
+
+
+
+
+	<!--div class="tabla">
+		<!-- a class="desc" onclick="tableToExcel('gant', 'minifex')">Descargar..  <i class="fa fa-file-excel-o"></i></a 
+		<a class="desc" data-toggle="tooltip" title="Se puede usar doble click para ver detalle de incurrido" >
+			<i class="fa fa-info-circle"></i>               doble click</a>
+	</div-->
+
+
+
+
+	<div class="cont_gant">
+		<table class="gant" id="gant">
+		</table><br>
+	</div>
+
+
+
+
+
+
+	<hr>
+
+
+
+
+
+
+
+	<div class="trj">	
+		<div >
+            <h5>Manual </h5>
+			<li> Puede eliminar filas con doble click en una celda vacías, ( <b>Ctrl + doble click</b>  aún mas rápido).</li>
+            <li> Para que se le pueda planificar usted debe estar asignado al cliente, si no lo está y tiene que imputar en ese requerimiento, solicite a un líder que lo asigne al cliente con "asignación 0".</li>
+            <li>Utd. puede registrar las h de sus compañeros pero solo puede borrar sus imputaciones, de equivocarse, coloque la imputación en 0 y solicite al responsable que la elimine.</li>
+            <li>Si el Cliente tiene <b>FTEs =  0</b>, (No tiene asignaciones) no se motrará el gant.</li>
+            <li>Puede traer varios clientes, siempre y cuendo sea el mismo mes filtrado.</li>
+            <li>Para ver los cambios reflejados en los acumulados, limpie el gant y vuelva a hacer la consulta.</li>
+            <li>Doble click sobre el proyecto para ver un pequeño resumen</li>
+
+            <li> <i class="inv">__________</i> <b>AJUSTES DE HORAS ACUERDO</b></li>
+            <li>Doble click sobre los ajustes diarrios para realizar ajuste.</li>
+            <li>Se puede colocar como no modificable los días no laborables en <b>Ajustes  _ <i class="fa fa-cogs"></i></b></li>
+
+            <li> <i class="inv">__________</i> <b>CÁCULOS: </b></li>
+            <li><b>Horas acuerdo :</b> Sumatoria de todos las asignaciones de los colaboradores en ese cliente multiplicado por la cantidad de días laborables de esa semana [ ( Σ Asignación_por_colaborador ) <b>X</b> Días_de_la_semana ]. </li>
+            <li><b>Incurridos :</b> Sumatoria de incurridos ( Σ Incurridos ).</li>
+            <li><b>Disponibilidad : </b> Diferecia entre <b>Horas_acuerdo</b> y <b>Incurrido </b></li>
+        </div>
+	</div><br>
+
+
+
+
+
+	<!-- Modal Detalle de Gant  -->
+	<!--a href="#openModal">Lanzar el modal</a-->
+	<div id="openModal" class="modalDialog row">
+		<div class="col-11 mx-auto border">
+			<a href="#close" title="Close" class="close"><i class="fa fa-times-circle" style="line-height: 2.2em; font-size:1.5em;"></i> </a>
+			<h2  style="color:#D7D9D7; font-style: italic;">Detalle de Gant</h2>
+			<table class="table table-sm" id="tab_modal"></table> <hr>
+			<p style="text-align:right; color:#D7D9D7; font-style: italic;"> <b> IB-Board</b></p>
+		</div>
+	</div>
+
+
+
+
+
+
+
+	<!-- Modal Detalle de Gant  -->
+	<div id="MdlConfig" class="modalDialog row">
+		<div class="col-11 mx-auto border">
+			<a href="#close" title="Close" class="close"><i class="fa fa-times-circle" style="line-height: 2.2em; font-size:1.5em;"></i> </a>
+			<h2  style="color:#7D9E7D; font-style: italic;">Ajuste por día para horas acuerdo</h2>
+			<table class="table table-sm" id="tab_cog">	</table> 
+			<hr>
+			<p style="text-align:right; color:#7D9E7D; font-style: italic;"> <b> IB-Board</b></p>
+		</div>
+	</div>
+
+
+
+
+
+
+	<!-- Modal Detalle de Gant  -->
+	<div id="MdlDiasNL" class="modalDialog row">
+		<div class="col-11 mx-auto border">
+			<a href="#close" title="Close" class="close"><i class="fa fa-times-circle" style="line-height: 2.2em; font-size:1.5em;"></i> </a>
+			<h2  style="color:#7D9E7D; font-style: italic;">Días no laborables y comentario.</h2>
+			<table class="table table-sm" id="tab_cog">
+
+				<tr>
+					<td><input type="text" class="form-control" placeholder="2~3~15" id="id_td_dnl"></td>  
+					<td> <a class="btn btn-sm" style="background: #CAD2EA; color:#8200cd;" onclick="MdlDiasNL3()"><i class="inv">_</i><b>Crear ajuste<i class="inv">_</i><i class="fa fa-save"></i></b></a> <label for="" style="font-size:0.8em;color:#A2A8D4;font-style:italic;">Días no laborables ( Ejem:  5~23~24  )</label></td>
+				</tr>
+
+				<tr>
+					<td colspan="2"> 
+						<label for="n_hrd_text"  style="font-size:0.8em;color:#A2A8D4;font-style:italic;">Nota, máximo 200 caracteres <i class="inv">______________________</i> ( Caracteres no permitidos: ';' ) </label>
+						<textarea name="n_hrd_text" cols="30" rows="2" class="form-control" maxlength="200" id="id_tx_nota" ></textarea></td>
+				</tr>
+
+				<tr>
+					<td colspan="2"><a class="btn btn-sm" style="background: #E0EDFD; color:#878588;" onclick="MdlDiasNL5()"><i class="inv">_</i>Recalcular <b>Acumulados del mes<i class="inv">_</i><i class="fa fa-refresh"></i></b></a> <label for="" style="font-size:0.8em;color:#A2A8D4;font-style:italic;">Se recalculará para todo el mes, solo si ud es líder.</label></td>
+				</tr>
+
+			</table> 
+
+			<hr>
+			<p style="text-align:right; color:#7D9E7D; font-style: italic;"> <b> IB-Board</b></p>
+		</div>
+	</div>
+
+
+
+
+
+{% endblock section_1 %} 
+
+ 

@@ -1,0 +1,491 @@
+{% extends "panel.html" %}
+
+ 
+
+<!-- daily -->
+
+{% block blck_static_head %}
+	{% load staticfiles i18n %} 
+	<!-- CSS -->
+	<link href="{% static 'css/dail.css' %}" rel="stylesheet" type="text/css"/>
+	<!-- JS -->
+	<script src="{% static 'js/jquery.min.js' %}" type="text/javascript"> </script>
+ 	<script src="{% static 'js/dail.js' %}" type="text/javascript"> </script>
+	
+ 	<script src="{% static 'js/estim.js' %}" type="text/javascript"> </script>
+	<script src="{% static 'js/task.js' %}" type="text/javascript"> </script>
+{% endblock blck_static_head %}
+
+
+{% block txt_lv1 %}DAILY{% endblock txt_lv1 %}
+{% block txt_lv2 %}PLanificación{% endblock txt_lv2 %}
+
+{% block section_1 %}
+
+ 	<div class="reporte1">
+		<input id="input_url" type="text" value="{% url 'req_listar' %}" hidden>
+		<input type="date" id="fecha_desde1" class="input_d1">
+		<input type="date" id="fecha_hasta1" class="input_d2">
+		<select name="sel_equipo" id="sel_equipo" class="input_d2">
+			{% if lst_equs %}
+					<option value="0">- - -</option>
+				{% for ob in lst_equs  %}
+					<option value="{{ ob.pk }}">{{ ob }}</option>
+				{% endfor %}
+			{% else %}
+				<option value="CAL">ERROR AL TRAER LOS DATOS</option>
+			{% endif %}
+		</select>
+		<button onclick="ConsultarDaily()" class="input_d3">Consultar Equipo</button>
+	</div>
+	<hr>
+
+	{% if object_list %}
+
+
+	<div class="tabla">
+		<input type="text" id="hide_panel" hidden> <!-- Ocultar el panel lateral -->
+		<a class="desc" onclick="tableToExcel('tabla1', 'minifex')">Descargar..  <i class="fa fa-file-excel-o"></i></a><i class="inv">...</i>
+		<a class="desc" onclick="ActivarFiltros('fil-avz','in')" data-toggle="tooltip" data-original-title="Filtro Incluyente"><i class="fa fa-filter"><i class="inv">___</i>+</i></a><i class="inv">...</i>
+		<a class="desc" onclick="ActivarFiltros('fil-avz','ex')" data-toggle="tooltip" data-original-title="Filtro Excluyente"><i class="fa fa-filter"><i class="inv">___</i>-</i></a>
+		<!--a class="desc" onclick="ActivarFiltros('fil-avz')">Filtros.. <i class="fa fa-filter"></i></a-->
+	</div>
+
+
+	<div class="tabla">
+		<table id="tabla1">
+			<thead>
+				<tr style="background-color: #ABE2FF;
+							color: #0E3C7C;
+							font-weight: bold;
+							line-height: 1.5em;
+							height:35px;">
+					<td colspan="26" style=" text-align:left; padding-left:50px;">{{ msj }} </td>
+				</tr>
+
+				<tr style="background-color: #A6D6EF;
+							color: #0C274D;
+							line-height: 1.5em;
+							text-align: center;">
+					<td style="width: 1%"><i class="fa fa-edit"></i></td>	
+					<td style="width: 5%">Estim.</td>
+					<td style="width: 2%">Task</td>
+					<td style="width: 2%">Cliente</td>
+ 					<td style="width: 2%">Proy.</td>
+					<td style="width: 2%">Codigo</td>
+					<td style="width: 6%">Descripción</td>
+					<td style="width: 0%" hidden>Prioridad_0</td><!--  grcl4-1  hidden -->
+					<td style="width: 7%">Prioridad</td>
+					<td style="width: 0%" hidden>Estado_0</td><!--  grcl4-1  hidden -->
+					<td style="width: 12%">Estado</td>
+					<td style="width: 0%" hidden>Responsable CAR</td><!--  grcl4-1  hidden -->
+					<td style="width: 13%">Responsable CAR</td>
+					<td style="width: 7%">Contacto</td>
+					<td style="width: 2%">Inicio Planificado</td>
+					<td style="width: 4%">Fin Planificada</td>
+					<td style="width: 5%">Fecha Entrega</td>
+<!-- 				<td style="width: 0%" hidden>Calidad Input_0</td>  grcl4-1  hidden
+					<td style="width: 8%">Calidad Input</td> -->
+					<td style="width: 1%">Est. Acuerdo</td>
+					<td style="width: 2%">Incurrido Task</td>
+					<!-- <td style="width: 2%">Incurrido Gant</td> -->
+					<td style="width: 1%">ETC</td>
+					<td style="width: 1%">Avance %</td>
+					<td style="width: 25%" class="td131">Bitácora</td>
+				</tr>
+
+
+				<tr id="fil-avz" class="fil-avz" style="background: #4668A4;">
+					<td id="tdfd00" class="no-fil"></td>
+					<td id="tdfd01" class="no-fil"></td>
+					<td id="tdfd02" class="no-fil"></td>
+					<td id="tdfd03" contenteditable onkeyup='Filtrar(this.id)'></td>
+ 					<td id="tdfd04" contenteditable onkeyup='Filtrar(this.id)'></td>
+					<td id="tdfd05" contenteditable onkeyup='Filtrar(this.id)'></td>
+					<td id="tdfd06" contenteditable onkeyup='Filtrar(this.id)'></td>
+					<td id="tdfd08" class="no-fil" hidden></td> <!--  grcl4-2 -->
+					<td id="tdfd07" contenteditable onkeyup='Filtrar(this.id)'></td>
+					<td id="tdfd10" class="no-fil" hidden></td>
+					<td id="tdfd09" contenteditable onkeyup='Filtrar(this.id)'></td>
+					<td id="tdfd12" class="no-fil" hidden></td>
+					<td id="tdfd11" contenteditable onkeyup='Filtrar(this.id)'></td>
+					<td id="tdfd13" contenteditable onkeyup='Filtrar(this.id)'></td>
+					<td id="tdfd14" contenteditable onkeyup='Filtrar(this.id)'></td>
+					<td id="tdfd15" contenteditable onkeyup='Filtrar(this.id)'></td>
+				<!--<td id="tdfd17" contenteditable onkeyup='Filtrar(this.id)'></td>
+					<td id="tdfd16" class="no-fil" hidden></td> -->
+					<td id="tdfd16" contenteditable onkeyup='Filtrar(this.id)'></td>
+					<td id="tdfd17" contenteditable onkeyup='Filtrar(this.id)'></td>
+					<td id="tdfd18" contenteditable onkeyup='Filtrar(this.id)'></td>
+<!-- 					<td id="tdfd21" contenteditable onkeyup='Filtrar(this.id)'></td>
+-->					<td id="tdfd19" contenteditable onkeyup='Filtrar(this.id)'></td>
+					<td id="tdfd20" contenteditable onkeyup='Filtrar(this.id)'></td>
+					<td id="tdfd21" contenteditable onkeyup='Filtrar(this.id)'></td>
+				</tr>
+
+ 
+
+			</thead>
+			<tbody id="tab-body-fil">
+				{% for ob in object_list %}
+					<tr id="tr_req{{ ob.id }}">
+						<!-- Editar/Eliminar -->
+						<td style="background-color: #FFF1FC;">
+							<a href="{% url 'req_editar' ob.id %}" data-toggle="tooltip" data-original-title="Editar" ><i class="fa fa-edit"></i></a>
+							<a href="{% url 'req_duplic' ob.id %}" data-toggle="tooltip" data-original-title="Duplicar" ><i class="fa fa-copy"></i></a>
+							<a href="{% url 'req_eliminar' ob.id %}" data-toggle="tooltip" data-original-title="Eliminar"><i class="fa fa-trash"></i></a></td>
+
+						<!-- Estimación -->
+						<td style="background: #FFF1FC;">
+							<a class="estim" onclick="OpenModal({{ ob.id }})">{% if ob.est_esf == None %}0{% else %}{{ ob.est_esf }}{% endif %} h</a> 
+							<br><a class="estim" onclick="OpenModal({{ ob.id }})">{{ ob.est_tar }} t</a>
+
+						<!-- Task -->
+						<td  style="background: #F7FCF8;">
+							<a href="{% url 'task_x_req' %}?idr={{ ob.id }}">{{ ob.cant_tsk }}</a> <br>
+							<!-- <a href="{% url 'task_crear1' ob.id %}"><i class="fa fa-plus-circle"></i></a> -->
+							<a href="#mCreateTask" class="task" onclick="OpenModalTask({{ ob.id }}, '1')">
+								<i class="fa fa-plus-circle"></i></a></td>
+						</td>
+							
+						<!-- PEER REVIEW 
+						<td style="background: #FEF5FD;">
+							<a href="{% url 'pr_lis' %}?idr={{ ob.id }}" class="prv">{{ ob.cant_peer }}</a> <br>
+							<a href="{% url 'pr_cre' ob.id %}" class="prv"><i class="fa fa-plus-circle"></i></a></td>-->
+
+						<!-- PAIS -->
+						<!-- <td style="background: #fff;">{{ ob.pais }}</td> -->
+
+						<td style="font-weight: bold; background: #fff;">{{ ob.cliente }}</td>
+
+						<td style="font-weight: bold; background:{{ ob.pet_col }}"> {% if ob.codigo != 'None' %}{{ ob.pet_nom }}{% endif %} </td>
+						<td style="font-weight: bold; background:#F4F7F5;">{{ ob.codigo }}</td>
+						<td class="td107" style="font-weight: bold; background:#F4F7F5; text-align: left;">{{ ob.breve_descripcion }}</td>
+
+
+						<!--  PRIORIDAD  grcl4-3 -->
+						<td hidden>{{ ob.prioridad }}</td> 
+
+						<td style="background:{{ ob.prio_col }}"  id="td_sel_prio_{{ ob.id }}">
+							<select  id="sel_prio_{{ ob.id }}" class="form-control" style=" color: #2C562F;" 
+									 onchange="ChngClr({{ ob.id }},'prio',this.value)">
+								<option value="{{ ob.prio_id }}" style="background:{{ ob.prio_col }};" selected  >{{ ob.prioridad }}</option>
+								{% if lst_prio %}
+									{% for prio in lst_prio %}
+										<option value="{{ prio.idreq_prioridad }}" style="background:{{ prio.color2 }};">{{ prio.descripcion }}</option>
+									{% endfor %}
+								{% else %}
+									<option value="0">Err</option>
+								{% endif %}
+							</select>
+						</td>
+
+
+						<!-- ESTADO grcl4-3 --> 
+						<td hidden>{{ ob.est_des }}</td>
+						<td style="font-weight: bold;background:{{ ob.est_col }};" id="td_sel_est_{{ ob.id }}"> 
+							<select  id="sel_est_{{ ob.id }}" class="form-control" style="color: white; text-shadow: black 0.1em 0.1em 0.1em;" 
+									 onchange="ChngClr({{ ob.id }},'est',this.value)">
+								<option value="{{ ob.est_pk }}" style="background:{{ ob.est_col }};" selected  >{{ ob.est_des }}</option>
+								{% if lst_pes %}
+									{% for pes in lst_pes %}
+										<option value="{{ pes.pk }}" style="background:{{ pes.col_str }};">{{ pes.descripcion_fenix }}</option>
+									{% endfor %}
+								{% else %}
+									<option value="0">Err</option>
+								{% endif %}
+							</select>
+						</td>
+
+
+						<!-- RESPONSABLE -->
+						<td hidden>{{ ob.resp_alias }}</td>
+						<td style="font-weight: bold;" id="td_sel_resp_{{ ob.id }}"> 
+							<select  id="sel_resp_{{ ob.id }}" class="form-control" style="color: #4A4A51;" 
+									 onchange="ChngClr({{ ob.id }},'resp',this.value)">
+								<option value="{{ ob.resp_id }}" selected  >{{ ob.resp_alias }}</option>
+								{% if lst_usrs %}
+									{% for usr in lst_usrs %}
+										<option value="{{ usr.id }}">{{ usr.alias }}</option>
+									{% endfor %}
+								{% else %}
+									<option value="0">Err</option>
+								{% endif %}
+							</select>
+						</td>
+
+
+						<!-- CONTACTO --> 
+						<td id="td_cont_{{ ob.id }}"> 
+							<input  style="width : 100%;"type="text" value="{% if ob.contacto != None %}{{ ob.contacto }}{% endif %}" 
+									onkeyup="ChngClr({{ ob.id }},'cont',this.value)">
+						</td>
+
+
+						<!-- INICIO PLANIFICADO  -->
+						<td id="td_f_ini_{{ ob.id }}"><input type="date" value="{{ ob.fecha_inicio_planificada }}"  style="width: 100%" 
+							onchange="ChngClr({{ ob.id }},'f_ini',this.value)" class="form-control"></td>
+
+
+						<!-- <td><b>{% if ob.tsk_rea_ini != None %}{{ ob.tsk_rea_ini }}{% endif %}</b></td> -->
+
+						<td>{{ ob.fecha_fin_planificada }}</td>
+
+						<td><b>{% if ob.tsk_rea_fin != None %}{{ ob.tsk_rea_fin }}{% endif %}</b></td>
+
+
+						<!-- CALIDAD DEL INPUT  -->
+						<!-- <td hidden>{{ ob.cld_cal }}</td>
+						<td style="font-weight: bold; background:#F9F9F9;" id="td_sel_cld_{{ ob.id }}"> 
+							<select  id="sel_cld_{{ ob.id }}" class="form-control" style="color: #252528;" 
+									 onchange="ChngClr({{ ob.id }},'cld',this.value)">
+								<option value="{{ ob.cld_id }}" selected  >{{ ob.cld_cal }}</option>
+								{% if lst_cld %}
+									{% for cld in lst_cld %}
+										<option value="{{ cld.pk }}">{{ cld.calidad }}</option>
+									{% endfor %}
+								{% else %}
+									<option value="0">Err</option>
+								{% endif %}
+							</select>
+						</td> -->
+
+
+						<!-- TOTALES -->
+						<td style="background: #FDFDF3;
+									font-weight: bold;">{% if ob.estimacion_acuerdo == None %}0{% else %}{{ ob.estimacion_acuerdo }}{% endif %}</td>
+
+						<td style="background: #EBFCEB;
+									font-weight: bold;">{% if ob.tsk_tot_inc == None %}0{% else %}{{ ob.tsk_tot_inc }}{% endif %}</td>
+
+						<!-- <td style="background: #FFEDFC;
+									font-weight: bold;">{% if ob.gnt_tot_inc == None %}0{% else %}{{ ob.gnt_tot_inc }}{% endif %}</td>
+ -->
+						<!-- ETC -->
+						<td style="background: #F4FFFF;
+									font-weight: bold;">{% if ob.etc == None %}0{% else %}{{ ob.etc }}{% endif %}</td>
+
+						<td class="{% if ob.avanzado_porc < 100 %}etc-igual
+									{% elif ob.avanzado_porc == None %}etc-menos
+									{% elif ob.avanzado_porc > 100 %}etc-mas
+									{% elif ob.avanzado_porc == 100 %}etc-menos
+									{% else %}etc-p{% endif %}">{% if ob.avanzado_porc == None %}0{% else %}{{ ob.avanzado_porc }}{% endif %}%</td>
+
+
+						<!-- BITÁCORA --> 
+						<td id="td_bit_{{ ob.id }}" style="width: 350px;" ><textarea id="" rows="2" class="form-control" onblur="ChngClr({{ ob.id }},'bit',this.value)">{% if ob.comentarios == None %}{% else %}{{ ob.comentarios }}{% endif %}</textarea></td>
+
+
+					</tr> 
+				{% endfor %}
+
+			</tbody>
+		</table>
+
+
+
+	</div>
+
+	<br><hr><br>
+
+
+	<input type="text" value="{% url 'etimdet_exp' %}" id="id_url" hidden>
+	<table class="table table-sm" hidden>
+		<tr>
+			<td> <a id="id_href" target="_blank"> <i class="fa fa-file-excel-o"></i> Exportar  </a></td> 
+		</tr>
+	</table>
+
+		<!-- {+ amjo : CREAR TASK POR REQUERIMIENTO -->
+			<div id="mCreateTask" class="modalDialog row">
+				<div class="col-12 mx-auto">
+					<a href="#close" title="Close" class="close" onclick="ClearMDL('1')">
+						<i class="fa fa-times-circle" style="line-height: 1.5em; font-size:1.3em;"></i> </a>
+						<input type="text" id="req_id" hidden value="0">
+					<h3 id="titleReqModalTask" style="color:#7D9EC0; font-style: italic;">PENDIENTE CREACIÓN DE SERVICIO </h3>
+				 <table class="table table-striped tab_modal">
+					   <!-- Título -->
+					   <tr hidden><td id="mdl_tit" colspan="6" style="color:#497575;font-size:1.5em; font-style: italic;"></td></tr>
+					   <tr hidden><td colspan="6" style="line-height: 5px;"></td></tr-->
+					   <tr><td colspan="6" style="font-style:italic;color:#9BE2F2;">Agregar Task</td></tr>
+					   <tr style="background:#EDFDF0;"> 
+					 <tr>
+						<td id="">
+							<div class="col-xs-6">
+								<label>Subtarea: </label> <input id="t_Subtarea" size="35" type="text" required>
+							</div>
+							<div class="col-xs-6">
+								<label>Fase actividad: </label>
+								<select  name="sel_subtipo" id="t_FaseActividad" onchange="ChngEstim()" required>
+									{% if obj_fa %}
+											<option value="0" >---</option>
+										{% for fa in obj_fa %}
+											{% if fa.fase_actividad == 'CODIFICACION' %}
+												<option value="{{ fa.pk }}" selected>{{ fa.fase_actividad }}</option>
+											{% else %}
+												<option value="{{ fa.pk }}">{{ fa.fase_actividad }}</option>
+											{% endif %}
+										{% endfor %}
+									{% else %}
+										<option value="0">-Err-</option>
+									{% endif %}
+								</select>
+							</div>
+							 
+						 </td>
+					 </tr>
+					 <tr hidden>
+						<td id="">
+						    <div class="col-xs-6">
+							   <label>Id Requerimiento: </label>
+							   <input name="t_IdRequerimiento" id="t_IdRequerimiento" value="abc" readonly>
+						   </div>
+							
+						</td>
+					</tr>
+					 <tr>
+						 <td>
+							<div class="col-xs-6">
+							 <label>Fecha inicio: </label>
+							 <input type="date" id="t_FechaInicio" required onChange="enableFechaFin()" style="line-height:0.9em">
+							</div>
+							<div class="col-xs-6">
+							 <label>Fecha fin: </label>
+							 <input type="date" id="t_FechaFin" onChange="validarFecha()" required style="line-height:0.9em">
+							</div>
+						 </td>
+					 </tr>
+					 <tr>
+						<td id="">
+							<div class="col-xs-4">
+							<label>Esfuerzo estimado: </label>
+							<input type="number" id="t_EsfuerzTotalEstandar" step="0.25" required style="width:75px;" min="0">
+							</div>
+							<div class="col-xs-4">
+								<label>Esfuerzo real: </label>
+								<input type="number" id="t_EsfuerzoEjecutado" step="0.25" required style="width:75px;" min="0">
+							</div>	
+						<!--/td>
+					 </tr>
+					<tr>
+						 <td id=""-->
+							<div class="col-xs-4">
+								<label>Colaborador: </label>
+								<select  id="t_idEmpleado"  required>
+								   {% if lst_usrs %}
+										   <option value="0" >---</option>
+									   {% for lstu in lst_usrs %}
+										   <option id="opt_{{ lstu.id }}" value="{{ lstu.id }}">{{ lstu.alias }}</option>
+									   {% endfor %}
+								   {% else %}
+									   <option value="0">-Err-</option>
+								   {% endif %}
+							   </select>
+							   </div>	
+						 </td>
+					 </tr>
+					  <tr>
+						<td>
+							<div class="col-xs-5"></div>
+							<div class="col-xs-4">
+						
+							<button class="btn btn-xl btn-info" id="id_addTask" onclick="AgregarTask()">
+								<i class="fa fa-plus-circle"></i>   Agregar</button> 
+							<button class="btn btn-xl btn-info" id="id_updateTask" onclick="UpdateTask()" hidden>
+									<i class="fa fa-plus-circle"></i>   Editar</button> 
+							<input type="hidden" id="aTaskList_poss">
+							</div>
+						</td>
+					 </tr>
+				 </table>
+				 <div style=" max-height:250px; overflow: auto;">
+					<table id="" class="table table-striped tab_modal">
+						<thead style="background:#e2e2e2;">
+						<!-- Título -->
+						
+						  <th>Código</th>
+						  <th>Subtarea</th>
+						  <th>Fase actividad</th>
+						  <th>Fecha inicio</th>
+						  <th>Fecha fin</th>
+						  <th>Esfuerzo estimado</th>
+						  <th>Esfuerzo real</th>
+						  <th>Empleado</th>
+						  <th>Action</th>
+						   
+					   </thead>
+					   <tbody id="m_taskAdded" style="font-weight: normal; font-style: italic; font-size: 0.9em; max-height:50px;  ">
+						   
+					   </tbody>
+				  </table>
+				 </div>
+			   <div class="col-xs-5"></div>
+							<div class="col-xs-4">
+					<button class="btn btn-xl btn-info" id="id_addTask" onclick="SaveTasks()">
+						<i class="fa fa-plus-circle"></i>   Guardar Tasks</button> </div>
+					<p style="text-align:right;color:#73ccec; font-style: italic;" id="msj_task_all"> <b> everboard.beta</b></p>
+					<br>
+				</div>
+			</div>
+
+		<!-- amjo + } -->
+
+	{% if lst_pes %}
+		<!-- MAPEO DE COLORES DE LOS ESTADOS PARA LEER CON JS Y ACUALIZAR DINÁMICAMENTE -->
+		{% for pes in lst_pes %}
+			<input type="text" id="inp_sel_est_{{ pes.pk }}"  value="{{ pes.col_str }}" hidden />
+		{% endfor %}
+	{% endif %}
+
+
+	{% if lst_prio %}
+		<!-- MAPEO DE COLORES DE LAS PRIORIDADES PARA LEER CON JS Y ACUALIZAR DINÁMICAMENTE -->
+		{% for prio in lst_prio %}
+			<input type="text" id="inp_sel_prio_{{ prio.pk }}"  value="{{ prio.color2 }}" hidden />
+		{% endfor %}
+	{% endif %}
+		
+<!-- USUARIOS PARA EL EQUIPO -->
+{% if lst_usrs %}
+<dir hidden>
+	{% for lstu in lst_usrs %}
+		<input type="text" id="id_inp_usr_{{ lstu.id }}" value="{{ lstu.alias }}">
+	{% endfor %}
+</dir>
+{% endif %}
+<!-- -->
+
+
+
+	<br><hr><br>
+
+
+
+
+
+	<div class="trj">	
+		<div >
+            <h5>Manual </h5>
+            <li><b>Resumen de requerimientos entre entre las fechas indicadas para todos los clientes asociando al equipo.</b></li>
+            <li> Click en  [ <b><i class="fa fa-edit"></i></b> para editar ] , [ <i class="fa fa-trash"></i> para eliminar] , [ <b>#</b> para ver las <b>task</b> asociadas ] , [ <b><i class="fa fa-plus-circle"></i> tsk</b> para registrar tarea ] , [ <b><i class="fa fa-filter"></i></b> para activar los filtros ].</li>
+            
+            <li>Campos editables</li>
+            <li>Si se desea reporte de un solo cliente se recomeinda crearle un equipo para ese cliente exclusivamente.</li>
+        </div>
+	</div><br>
+
+ 
+
+
+
+
+
+
+
+{% else %}
+	<p class="alert alert-warning"> {{ msj }} : No se encontraron datos.</p>
+{% endif %}
+
+
+
+{% endblock section_1 %}

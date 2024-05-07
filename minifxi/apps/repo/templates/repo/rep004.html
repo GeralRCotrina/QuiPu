@@ -1,0 +1,57 @@
+{% extends "panel.html" %}
+
+
+{% block txt_lv1 %}Acotamiento de error{% endblock txt_lv1 %}
+{% block txt_lv2 %}REP004{% endblock txt_lv2 %}
+
+{% block section_1 %}
+
+<div class="rep-graf">
+
+
+
+    <div class="reporte1">
+        <input id="input_url" type="text" value="{% url 'rep004' %}" hidden>
+
+        <label for="pet_cod"> Petición </label>
+        <input type="number" id="pet_cod" class="input" maxlength="8" value="{{ pet_cod }}">
+
+        <label for="fecha_desde1"> intervalo </label>
+        <input type="date" id="fecha_desde1" class="input_d1">
+        <input type="date" id="fecha_hasta1"class="input_d2">
+        <button onclick="ConsultaRep004()" class="input_d3">Consultar</button>
+                   
+    </div>
+
+<hr> 
+
+    <div class="reporte1" style="color:#4B5D49;">
+        <b><p>{{ pet }}</p>
+        <p>{{ msj }}</p></b>
+        <hr>
+        <table>
+            <tr> <td>Horas acuerdo</td> <td> .... </td> <td>{{ pet_hac }}</td> </tr>
+            <tr><td colspan="3"> <hr></td></tr>
+
+            <tr> <td>Planificado en task   .</td> <td> </td>  <td>{{ tsk_pla }}</td> </tr>
+            <tr><td colspan="3"> <hr></td></tr>
+
+            <tr> <td>Incurrido en task </td> <td>  </td>  <td>{{ tsk_inc }}</td> </tr>
+            <tr><td colspan="3"> <hr></td></tr>
+
+            <tr> <td>Incurrido en gant </td> <td>  </td>  <td>{{ gnt_inc }}</td> </tr>
+            <tr><td colspan="3"> <hr></td></tr>
+
+            <tr> <td>ETC planificado task/incurrido task  </td> <td> </td>  <td>{{ etc_tsk }}</td> </tr>
+            <tr><td colspan="3"> <hr></td></tr>
+
+            <tr> <td>ETC planificado task/incurrido gant .</td> <td> </td>  <td>{{ etc_gnt }}</td> </tr>
+            <tr><td colspan="3"> <hr></td></tr>
+        </table>       
+
+    </div>
+
+		
+</div>
+
+{% endblock section_1 %}

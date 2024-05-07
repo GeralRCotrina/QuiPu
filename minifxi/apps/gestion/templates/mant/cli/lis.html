@@ -1,0 +1,77 @@
+{% extends "panel.html" %}
+
+
+{% block txt_lv1 %}CLIENTE{% endblock txt_lv1 %}
+{% block txt_lv2 %}Listar{% endblock txt_lv2 %}
+
+{% block section_1 %}
+
+
+ 
+
+
+{% if object_list %}
+
+
+	<div class="tabla tab_mant">
+		<a class="desc" onclick="tableToExcel('tabla1', 'minifex')">Descargar..  <i class="fa fa-file-excel-o"></i></a>
+		<a class="desc" onclick="ActivarFiltros('fil-avz')">Filtros.. <i class="fa fa-filter"></i></a>
+		<a href="{% url 'cli_cre' %}" class="desc">Registrar.. <i class="fa fa-plus-circle"></i></a>
+
+		<table id="tabla1">
+			<thead>
+				<tr style="background-color: #9EA665;color: white;
+							line-height: 1.5em; text-align:center;">
+					<td><i class="fa fa-edit"></i></td>
+					<td>Codigo</td>
+					<td>Cliente</td>
+					<td>Correlativo</td>
+					<td>FTEs</td>
+					<td>Equipo</td>
+					<td>Pais</td>
+					<td>Descripción</td>
+					<td>WI ID</td>
+				</tr>
+
+			<tr id="fil-avz" class="fil-avz" style="background: #9EA665;">
+				<td id="tdfd00" class="no-fil"></td>
+				<td id="tdfd01" contenteditable onkeyup='Filtrar(this.id)'></td>
+				<td id="tdfd02" contenteditable onkeyup='Filtrar(this.id)'></td>
+				<td id="tdfd03" contenteditable onkeyup='Filtrar(this.id)'></td>
+				<td id="tdfd04" contenteditable onkeyup='Filtrar(this.id)'></td>
+				<td id="tdfd05" contenteditable onkeyup='Filtrar(this.id)'></td>
+				<td id="tdfd06" contenteditable onkeyup='Filtrar(this.id)'></td>
+				<td id="tdfd07" contenteditable onkeyup='Filtrar(this.id)'></td>
+				<td id="tdfd08" contenteditable onkeyup='Filtrar(this.id)'></td>
+			</tr>
+ 
+			</thead>
+			<tbody id="tab-body-fil">
+				{% for ob in object_list %}
+					<tr>
+						<td>
+							<a href="{% url 'cli_edi' ob.pk %}"><i class="fa fa-edit"></i></a>
+							<a href="{% url 'cli_eli' ob.pk %}"><i class="fa fa-trash"></i></a><br>
+						</td>
+						<td>{{ ob.codigo }}</td>
+						<td> <b> {{ ob.cliente }}</b></td>
+						<td>{{ ob.correlativo }}</td>
+						<td> {{ ob.ftes }}</td>
+						<td>{{ ob.equipo }}</td>
+						<td>{{ ob.idpais }}</td>
+						<td> {% if ob.descripcion != None %}{{ ob.descripcion }}{% endif %} </td>
+						<td>{{ ob.wi_id }}</td>
+					</tr> 
+				{% endfor %}
+
+			</tbody>
+		</table>
+	</div>
+{% else %}
+	<p class="alert alert-warning"> No se encontraron datos.</p>
+{% endif %}
+
+
+{% endblock section_1 %}
+
+

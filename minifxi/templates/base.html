@@ -1,0 +1,138 @@
+{% load staticfiles i18n %} 
+
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>QUIPU Dev</title>
+        <link rel="icon" type="image/ico" href="{% static 'img/ico-quipu.png' %}">
+        <meta content='width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no' name='viewport'>
+        {% load static %}      
+<!--         <link href="{% static 'css/zlogin.css' %}" rel="stylesheet" type="text/css"/>    -->
+        
+          <!-- Bootstrap 3.3.7 -->
+        <link rel="stylesheet" href="../static/css/bootstrap.min.css">
+        <!-- Font Awesome -->
+        <link rel="stylesheet" href="../static/css/font-awesome.min.css">
+        <!-- Ionicons -->
+        <link rel="stylesheet" href="../static/css/ionicons.min.css">
+        <!-- Theme style -->
+        <link rel="stylesheet" href="../static/css/AdminLTE.min.css">
+
+        <style>
+          .equipo{
+            float: right;
+            margin-right: 5px;
+            margin-bottom: 0%;
+            font-style: italic;
+            widows: 700px;
+            color: #c9ced7;
+            line-height: 1.1em;
+          }
+
+         .equipo i{
+            line-height: 0.5em !important;
+            margin-bottom: 0px;
+          }
+
+        </style>
+        
+    </head>
+    <body class="login-page"> 
+<!--         <div class="guia p_uno" id="guia" mouseenter="QuitarDiv()"></div>
+        <div class="guia p_dos" id="guia1"></div>
+        <div class="guia p_tres" id="guia2"></div>
+ -->
+<!--         <div class="div2">
+
+
+            <form enctype = "multipart/form-data" method="POST"> 
+              {% csrf_token %} 
+
+                    <label for="username">usuario corto<br>sin "@" ni dominio</label>
+                    <input type = "text" class = "form-control" id = "username" name= "username" />
+                    
+                    <br>
+                    <label class = "control-label">código de empleado</label>
+                    <input type = "password" class = "form-control" id = "password" name="password"/>
+
+                    <br> 
+                    <button type="submit" id = "login">Iniciar sesión </button>  
+                    <hr>
+                    <a href="{% url 'panel' %}" >Panel</a> 
+
+                    {% if messages %}
+                        <hr>
+                          {% for message in messages %}
+                            <small>{{ message }}</small>
+                        {% endfor %}      
+                    {% endif %}                
+              </form>
+
+                    
+
+
+        </div> -->
+        <div class="login-box">
+            <div class="login-logo">
+              <a ><b>IB</b>Board</a>
+            </div>
+
+            <!-- /.login-logo -->
+            <div class="login-box-body">        
+              <form enctype = "multipart/form-data" method="POST">
+                {% csrf_token %} 
+                <div class="form-group">
+                <label>Usuario corto: </label>
+                <p class="login-box-msg" style="font-style:italic;">Sin "@" ni dominio </p>
+                  <input type="text" class="form-control" placeholder="" id = "username" name= "username">
+                  <span class="glyphicon glyphicon-envelope form-control-feedback"></span>
+
+                </div>
+                <div class="form-group">
+                    <label>Contraseña: </label>
+                  <input type="password" class="form-control" placeholder="" id = "password" name="password">
+                  <span class="glyphicon glyphicon-lock form-control-feedback"></span>
+
+                </div>
+                <div class="row">
+                   <!-- /.col -->
+                   <div class="col-xs-7"></div>
+                  <div class="col-xs-5">
+                    <button button type="submit" id = "login" class="btn btn-primary btn-block btn-flat">Iniciar sesión</button>
+                  </div>
+                  <!-- /.col -->
+                </div>
+
+                {% if request.user.pk == None %}{% else %}<a href="{% url 'panel' %}" >Panel</a>{% endif %} 
+                 
+
+                {% if messages %}
+                    <hr>
+                      {% for message in messages %}
+                        <small style="color: red;">{{ message }}</small>
+                    {% endfor %}      
+                {% endif %}       
+              </form>
+            </div>
+            <!-- /.login-box-body -->
+          </div>
+          <!-- /.login-box -->
+
+
+
+          <div class="equipo">
+            <i>Development</i><br>
+            <i>________________________________</i><br>
+            Geral R. Cotrina Lezama <br> 
+            <i>_________________________v0.1___</i>     
+          </div>
+          
+          <!-- jQuery 3 -->
+          <script src="../static/js/jquery.min.js"></script>
+          <!-- Bootstrap 3.3.7 -->
+          <script src="../static/js/bootstrap.min.js"></script>
+  
+        <script src="{% static 'js/login.js' %}"></script>
+    </body>
+</html>

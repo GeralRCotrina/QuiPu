@@ -1,0 +1,32 @@
+{% extends "panel.html" %}
+
+
+{% block txt_lv1 %}PETICIÓN{% endblock txt_lv1 %}
+{% block txt_lv2 %}Eliminar{% endblock txt_lv2 %}
+
+
+
+{% block section_1 %}
+
+<p class="alert alert-danger"> <b>¡CUIDADO!</b> <br>
+	<i style="font-style:italic;"><mark><b>Solo puede eliminar peticiones sin REQUERIMIENTO</b></mark>, 
+	de ser necesario primero elimine los requerimientos.</i> <br>
+	además se registrará su usuario, fecha y hora en un LOG de modificación. 
+</p>
+
+<div class="container border">
+	<div class="row">
+		<div class="col-6 mx-auto">
+			<form method="post">
+			{% csrf_token %}
+			<h2>¿Seguro que desea eliminar la petición "{{ object.id_pet_fenix }} : {{ object.nombre }}" ?</h2>
+			<h4>al borrar la petición se borraran todos los requerimiento asociados y su vez las tareras asociadas a los mismos.</h4>
+			<a href="javascript:history.back()" class="btn btn-info">Cancelar</a>
+			<button class="btn  btn-danger" type="submit">Sí, eliminar</button>		
+		</form><br>
+		</div>
+	</div>
+
+</div>
+{% endblock section_1 %}
+ 

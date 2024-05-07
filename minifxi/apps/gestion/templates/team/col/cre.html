@@ -1,0 +1,58 @@
+{% extends "panel.html" %}
+
+
+{% block txt_lv1 %}COLABORADOR{% endblock txt_lv1 %}
+{% block txt_lv2 %}Creación{% endblock txt_lv2 %}
+
+{% block section_1 %}
+<div class="container border">
+	<div class="row">
+		<div class="col-6 mx-auto">
+			<form method="post" enctype = "multipart/form-data"> 
+				{% csrf_token %}
+				<table class="">
+			        {{ form.as_table }}
+			    </table><hr>
+				<a href="{% url 'col_edif' user.pk %}" class="btn btn-success">ACTUALIZAR MI FOTO </a>
+				<a href="javascript:history.back()" class="btn btn-danger">CANCELAR</a>
+				<button type="submit" class="btn btn-info">GUARDAR</button>
+			</form>
+			<hr>
+			<div id="set_priemro" hidden="hidden">
+				<br>
+				<label for="ps10">Contraseña actual</label>
+				<input id="ps10" name="ps10" type="password"><br>
+				<br>
+				<label for="ps11">Nueva contraseña</label>
+				<input id="ps11" name="ps11" type="password">
+				<br>
+				<label for="ps12">Repita contraseña</label>
+				<input id="ps12" name="ps12" type="password"><br>	
+			</div>
+			<button class="btn btn-warning" onclick="CambiarPass()">CAMBIAR CONTRASEÑA</button>
+		</div>
+	</div>
+
+
+
+
+	{% if perms.gestion.es_manager %}
+	<div class="row" style="width:200px;">
+		<div class="col-4">
+			<hr>
+			<p>Vista excusiva de líder de equipo, ud puede cambiar la contraseña de cualquier colaborador solo con el código de empleado.</p>
+
+			<label for="col_cod1">Código</label>
+			<input name="col_cod1" type="text" id="col_cod1" class="form-control"><br>
+
+			<label for="col_pss1">Nueva contraseña</label>
+			<input type="password" id="col_pss1" name="col_pss1" class="form-control"><br>
+
+			<button class="btn btn-danger" onclick="CambiarPass2()">CAMBIAR CONTRASEÑA</button>
+		</div>
+	</div>
+			
+	{% endif %}
+			
+</div> 
+{% endblock section_1 %}

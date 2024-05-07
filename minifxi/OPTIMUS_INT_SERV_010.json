@@ -1,0 +1,39 @@
+ODATA: ZSDGS_PERIODO_SRV
+URI: /sap/opu/odata/SAP/ZSDGS_PERIODO_SRV/Ent_DataSet
+Method: POST
+Entidad: Ent_DataSet
+{
+    "Ent_inputSet": [
+        {
+            "TipoOperacion": "C",
+            "Type": "ABCD",
+            "Idnumber": "1000015",
+            "Vkorg": "PE11",
+            "Vtweg": "20",
+            "Spart": "31",
+            "Codcarrera": "DERECH01",
+            "Codyear": "",
+            "Codperid": "",
+            "Condicion": "",
+            "Estado": "",
+            "Tipst": "",
+            "Ppacum": "",
+            "Ppperid": "",
+            "Cracusc": "",
+            "Crperid": "",
+            "Crmaxum": "",
+            "Creales": "",
+            "Desmalla": "",
+            "Segurost": "",
+            "Matrianu": "",
+            "Segacadem": "",
+            "Curinic": "",
+            "Cureales": "",
+            "Curapro": "",
+            "Gradost": "",
+            "Fendda": "",
+            "Ubicacion": ""
+        }
+    ],
+    "Ent_outputSet": []
+}

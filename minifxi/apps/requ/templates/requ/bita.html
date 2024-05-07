@@ -1,0 +1,38 @@
+{% extends "panel.html" %}
+
+
+{% block txt_lv1 %}REQUERIMIENTO{% endblock txt_lv1 %}
+{% block txt_lv2 %}Bitácora{% endblock txt_lv2 %}
+
+{% block section_1 %}
+<hr>
+
+<div class="container">
+	<div class="row">
+		<div class="col-6 mx-auto">
+			<p>Seguimiento diario</p>
+			<form method="post">
+				<table>
+				{% csrf_token %}
+			        {{ form.as_table }}
+			    </table>
+			    <hr>
+				<a href="javascript:history.back()" class="btn btn-danger">CANCELAR</a>
+				<button type="submit" class="btn btn-info">GUARDAR</button>
+			</form>
+		</div>
+	</div>
+			
+</div>
+
+<hr>
+
+<div class="trj">	
+	<div>
+        <h5>Manual </h5>
+        <li> Usar fecha con formato <b>01.01.2020</b> para que aparezca en el estátus generado.</li>
+        <li> Usar fecha con formato <b>01/01/2020</b> para no mostrar en el estatus generado.</li>
+    </div>
+</div>
+
+{% endblock section_1 %}

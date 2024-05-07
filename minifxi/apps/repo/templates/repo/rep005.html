@@ -1,0 +1,227 @@
+{% extends "panel.html" %}
+
+
+
+
+
+{% block blck_static_head %}
+
+    {% load staticfiles i18n %} 
+    
+    <!-- CSS -->
+    <!--link href="" rel="stylesheet" type="text/css"/-->
+
+    <!-- JS -->
+    <script src="{% static 'js/repo.js' %}"> </script>
+
+{% endblock blck_static_head %}
+
+
+
+
+
+
+
+
+{% block txt_lv1 %}GRÁFICOS{% endblock txt_lv1 %}
+{% block txt_lv2 %}REP005{% endblock txt_lv2 %}
+
+{% block section_1 %}
+<div class="rep-graf">
+
+
+
+    <div class="reporte1">
+        <input id="input_url" type="text" value="{% url 'req_listar' %}" hidden>
+        <input type="date" id="fecha_desde1" class="input_d1">
+        <input type="date" id="fecha_hasta1" class="input_d2">
+        <select name="sel_equipo" id="sel_equipo" class="input_d2">
+            {% if lst_equs %}
+                    <option value="0">- - -</option>
+                {% for ob in lst_equs  %}
+                    <option value="{{ ob.pk }}">{{ ob }}</option>
+                {% endfor %}
+            {% else %}
+                <option value="CAL">ERROR AL TRAER LOS DATOS</option>
+            {% endif %}
+        </select>
+        <button onclick="ConsultarRepo(5)" class="input_d3">Consultar Equipo</button>
+    </div>
+    <hr>
+
+
+
+
+
+
+
+
+<div id="rep005" class="rep005" style="min-width: 310px; height: 400px; margin: 0 auto"> </div>
+        <script type="text/javascript">
+            Highcharts.chart('rep005', {
+    chart: {
+        type: 'column'
+    },
+    title: {
+        text: '<small><b>{{ msj }}</b><small>'
+    },
+    /* subtitle: {
+        text: 'ayuda visual...'
+    }, */
+    xAxis: {
+        categories: [ {% for cl in cli_nomb %}'{{ cl }}',{% endfor %} ],
+        crosshair: true
+    },
+    yAxis: {
+        min: 0,
+        title: {
+            text: 'Horas'
+        }
+    },
+    tooltip: {
+        headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
+        pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
+            '<td style="padding:0"><b>{point.y:.1f} h</b></td></tr>',
+        footerFormat: '</table>',
+        shared: true,
+        useHTML: true
+    },
+
+
+    plotOptions: {
+        column: {
+            pointPadding: 0.2,
+            borderWidth: 0
+        }
+    },
+
+
+    series: [
+    	{
+	    		name:'H.Acu.Peticiones',
+	    		data: [ {% for hap in pet_hac %} parseFloat('{{ hap }}'),  {% endfor %}]
+	    },
+    	{
+	    		name:'Estimado',
+	    		data: [ {% for est in estm_esf %} parseFloat('{{ est }}'), {% endfor %}]
+	    },
+        {
+                name:'H.Acu.Requerimietnos',
+                data:  [ {% for har in req_hac %} parseFloat('{{ har }}'), {% endfor %}]
+        },
+        {
+                name:'Task.Planificado',
+                data:  [ {% for tpl in tsk_pla %} parseFloat('{{ tpl }}'), {% endfor %}]
+        },
+        {
+                name:'Task.Ejecutado',
+                data:  [ {% for tej in tsk_eje %} parseFloat('{{ tej }}'), {% endfor %}]
+        },
+        {
+                name:'Planificado Gant',
+                data:  [ {% for gn in gnt_inc %} parseFloat('{{ gn }}'), {% endfor %}]
+        },
+        {
+                name:'ETC',
+                data:  [ {% for etc in etc_lst %} parseFloat('{{ etc }}'), {% endfor %}]
+        },
+    	
+    ]
+});
+        </script>
+
+       
+
+
+
+
+
+
+
+
+
+<br>
+<hr>
+
+
+
+
+
+<table class="table ">
+    {% for cl in cli_res %}
+        <tr>
+            <td width="60%">
+
+ <div id="rep005_{{ cl.cont }}" style="min-width: 310px; height: 400px; max-width: 600px; margin: 0 auto"></div>
+
+        <script type="text/javascript">
+
+Highcharts.chart('rep005_{{ cl.cont }}', {
+    chart: {
+        plotBackgroundColor: null,
+        plotBorderWidth: null,
+        plotShadow: false,
+        type: 'pie'
+    },
+    title: {
+        text:  'Acumulados <b>{{ cl.clie }}</b> |  {{ cl.fd1}} - {{ cl.fh1 }}. '
+    },
+    tooltip: {
+        //pointFormat: '{series.name}: <b>{point.percentage:.1f}h</b>'
+        pointFormat: '<b>{point.y}h</b>'
+    },
+    plotOptions: {
+        pie: {
+            allowPointSelect: true,
+            cursor: 'pointer',
+            dataLabels: {
+                enabled: true,
+                //format: '<b>{point.name}</b>: {point.percentage:.1f} %',
+                format: '<b>{point.name}</b>: {point.y} h',
+                style: {
+                    color: (Highcharts.theme && Highcharts.theme.contrastTextColor) || 'black'
+                }
+            }
+        }
+    },
+    series: [{
+        name: 'Brands',
+        colorByPoint: true,
+       data: [ { name: 'Pet.Horas Acuerdo', y: parseFloat('{{ cl.pet_hac }}'), sliced: true, selected: true },
+               { name: 'Estimación', y: parseFloat('{{ cl.estm_esf }}') },
+               { name: 'Req.Horas Acuerdo', y: parseFloat('{{ cl.req_hac }}') },
+               { name: 'Planificado en Task', y: parseFloat('{{ cl.tsk_pla }}') },
+               { name: 'Ejecutado en Task', y: parseFloat('{{ cl.tsk_eje }}') },
+               { name: 'Planificado en Gant', y: parseFloat('{{ cl.gnt_inc }}') },
+               { name: 'ETC', y: parseFloat('{{ cl.etc_lst }}') } 
+            ]
+    }]
+});
+</script>
+            </td> <td width="40%"></td>
+        </tr> <!--tr><td colspan="2"><hr></td></tr-->
+    {% endfor %}
+</table>
+
+<br> <hr>
+
+
+
+
+
+
+		
+</div>
+
+<br> <hr> <br>
+
+<div class="trj">   
+        <div>
+            <h5>Manual</h5> 
+            <li> Reporte de acumulados por clientes pertenecientes al equipo seleccionado en el rango de fechas.</li>
+            <li> Para un cliente en particular, configure un equipo para ese único cliente, en <b>ADMINISTRACIÓN / EQUIPOS /Registrar ... <i class="fa fa-plus-circle"></i></b> </li>
+        </div>
+    </div>
+
+
+{% endblock section_1 %}

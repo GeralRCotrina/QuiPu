@@ -1,0 +1,109 @@
+{% extends "panel.html" %}
+
+
+{% block txt_lv1 %}PESOS DES ESTIMACIÓN{% endblock txt_lv1 %}
+{% block txt_lv2 %}Exportar{% endblock txt_lv2 %}
+
+{% block section_1 %}
+
+	 
+{% if object_list %}
+
+
+	<div class="tabla">
+		<input type="text" id="hide_panel" hidden> <!-- Ocultar el panel lateral -->
+		<a class="desc" onclick="tableToExcel('tabla1', 'minifex')">Descargar..  <i class="fa fa-file-excel-o"></i></a>
+		<a class="desc" onclick="ActivarFiltros('fil-avz')">Filtros.. <i class="fa fa-filter"></i></a>
+	</div>
+
+
+	<div class="tabla tab_req">
+		<table id="tabla1">
+			<thead>
+				<tr style="background-color: #567CBE;
+							color: white;
+							font-weight: bold;
+							line-height: 1.5em;
+							height:35px;">
+					<td colspan="40" style=" text-align:left; padding-left:50px;">{{ msj }} </td>
+				</tr>
+
+				<tr style="background-color: #7697D1;
+							color: white;
+							line-height: 1.5em;
+							text-align: center;">
+					<td>ID ACC</td>
+					<td>OT ASOCIADA</td>
+					<td>ID TICKET</td>
+					<td>CLIENTE</td>
+					<td>Nº CAMBIO ALCANCE</td>
+					<td>NOMBRE TAREA</td>
+					<td>DESCRIPCIÓN</td>
+					<td>TAREA ESPECÍFICA</td>
+					<td>TIPO</td>
+					<td>SUBTIPO</td>
+					<td>DIFICULTAD</td>
+					<td>ESFUERZO</td>
+					<td>RESPONSABLE</td>
+					<td>FECHA CREACION</td>
+					<td>FECHA ENTREGA</td>
+				</tr>
+
+
+				<tr id="fil-avz" class="fil-avz" style="background: #7697D1;">
+					<td id='tdfd00' contenteditable onkeyup='Filtrar(this.id)'></td>
+					<td id='tdfd01' contenteditable onkeyup='Filtrar(this.id)'></td>
+					<td id='tdfd02' contenteditable onkeyup='Filtrar(this.id)'></td>
+					<td id='tdfd03' contenteditable onkeyup='Filtrar(this.id)'></td>
+					<td id='tdfd04' contenteditable onkeyup='Filtrar(this.id)'></td>
+					<td id='tdfd05' contenteditable onkeyup='Filtrar(this.id)'></td>
+					<td id='tdfd06' contenteditable onkeyup='Filtrar(this.id)'></td>
+					<td id='tdfd07' contenteditable onkeyup='Filtrar(this.id)'></td>
+					<td id='tdfd08' contenteditable onkeyup='Filtrar(this.id)'></td>
+					<td id='tdfd09' contenteditable onkeyup='Filtrar(this.id)'></td>
+					<td id='tdfd10' contenteditable onkeyup='Filtrar(this.id)'></td>
+					<td id='tdfd11' contenteditable onkeyup='Filtrar(this.id)'></td>
+					<td id='tdfd12' contenteditable onkeyup='Filtrar(this.id)'></td>
+					<td id='tdfd13' contenteditable onkeyup='Filtrar(this.id)'></td>
+					<td id='tdfd14' contenteditable onkeyup='Filtrar(this.id)'></td>
+				</tr>
+
+ 
+
+			</thead>
+			<tbody id="tab-body-fil">
+				{% for ob in object_list %}
+					<tr>
+						<td style="background: #EEEAEA;">{{  ob.pk }}</td>
+						<td>{{  ob.ot }}</td>
+						<td>{{  ob.req }}</td>
+						<td>{{  ob.cli }}</td>
+						<td>{{  ob.camb_alc }}</td>
+						<td>{{  ob.nom_tarea }}</td>
+						<td>{{  ob. }}</td>
+						<td>{{  ob. }}</td>
+						<td>{{  ob.tipo }}</td>
+						<td>{{  ob.subtipo }}</td>
+						<td>{{  ob.dificultad }}</td>
+						<td>{{  ob.esfuerzo }}</td>
+						<td>{{  ob.responsable }}</td>
+						<td>{{  ob.fecha }}</td>
+						<td>{{  ob.fecha }}</td>
+
+					</tr> 
+				{% endfor %}
+
+			</tbody>
+		</table>
+
+
+
+	</div>
+
+
+{% else %}
+	<p class="alert alert-warning"> {{ msj }} : No se encontraron datos.</p>
+{% endif %}
+
+
+{% endblock section_1 %}

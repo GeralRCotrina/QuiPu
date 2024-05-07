@@ -1,0 +1,161 @@
+{% extends "panel.html" %}
+{% load staticfiles %}
+
+
+
+
+
+
+{% block blck_static_head %} 
+<!-- XLSX -->
+<script src="{% static 'xlsx/xlsx.full.min.js' %}"> </script>
+<script src="{% static 'xlsx/FileSaver.min.js' %}"> </script>
+<script src="{% static 'xlsx/tableexport.min.js' %}"> </script>
+
+{% endblock blck_static_head %}
+
+
+
+
+
+{% block txt_lv1 %}PLANTILA DE CARGA MASIVA DE ACC{% endblock txt_lv1 %}
+{% block txt_lv2 %}Exportar{% endblock txt_lv2 %}
+
+
+
+
+
+
+
+{% block section_1 %}
+
+
+	
+{% if object_list %}
+
+ 
+	<div class="tabla">
+		<input type="text" id="hide_panel" hidden> <!-- Ocultar el panel lateral -->
+
+		<a class="desc" onclick="tableToExcel('tabla', 'minifex')">Descargue, guarde como <b>.XLSX</b>  y cargue a fénix _<i class="fa fa-file-excel-o"></i></a>
+		<!--a id="btnExportar" class="desc" >Descargar .XLSX..   <i class="fa fa-file-excel-o"></i></a-->
+		<input type="text" id="nom_xlsx" value="Plantilla_de_carga_de_Acc" hidden>
+		<input type="text" id="nom_hoja" value="Repositorio ACC" hidden>
+	</div>
+
+
+	<div class="tabla tab_acc">
+		<table id="tabla">
+			<thead>
+				<tr style="background-color: #6A7E2D;color: white;font-weight: bold;
+							font-size: 1.1em; line-height: 2.0em;font-size: 0.9em;
+							border-bottom: solid #433C3C 2px;border-right: solid #433C3C 2px;"> 
+					<td class="td201">ID ACC</td>
+					<td class="td202">Nombre</td>
+					<td class="td203">Código Petición Cliente</td>
+					<td class="td204">Descripción</td>	
+					<td class="td205">Estado</td>		
+					<td class="td206">Tipo</td>
+					<td class="td207">Pet/Ot. Asociada</td>
+					<td class="td208">Responsable</td>
+					<td class="td209">Subtipo</td>
+					<td class="td210">Rechazos Entrega</td>
+					<td class="td211">Criticidad</td>
+					<td class="td212">Esfuerzo</td>
+					<td class="td213">Esfuerzo Cliente</td>
+					<td class="td214">Fecha Creación</td>
+					<td class="td215">Fecha Solicitud Cliente</td>
+					<td class="td216">Fecha Prevista Proyecto</td>
+					<td class="td217">Fecha Entrega</td>
+					<td class="td218">Fecha Cierre</td>
+					<td class="td219">Fecha Desestimación</td>
+					<td class="td220">Fecha Inicio Centro</td>
+					<td class="td221">Resultado Testing</td>
+					<td class="td222">Puntos Historia</td>
+					<td class="td223">Historia Usuario</td>
+					<td class="td224">Épica</td>
+				</tr>
+			</thead>
+<!--
+			ID ACC	Nombre	Código Petición Cliente	Descripción	Estado	Tipo	Pet/Ot. Asociada	Responsable	Subtipo	Rechazos Entrega	Criticidad	Esfuerzo	Esfuerzo Cliente	Fecha Creación	Fecha Solicitud Cliente	Fecha Prevista Proyecto	Fecha Entrega	Fecha Cierre	Fecha Desestimación	Fecha Inicio Centro	Resultado Testing	Puntos Historia	Historia Usuario	Épica
+
+
+		id_acc,nombre,cod_pet_cliente, descripcion, estado, tipo, pet_ot_asociada, responsable, subtipo,
+    rechazo_entrega, criticida, esfuerzo, esfuerzo_cliente, fecha_creacion, fecha_solicitud_cli, fecha_prevista_proy, fecha_entrega, fecha_cierre, fecha_desestimacion, fecha_inicio_centro,  resultado_testing, puntos_historia, historia_usuario, epica
+-->
+			<tbody>
+				{% for ob in object_list %}
+					<tr>
+						<td class="td201">{{ ob.id_acc }}</td>
+						<td class="td202">{{ ob.nombre}}</td>
+						<td class="td203">{{ ob.cod_pet_cliente }}</td>
+						<td class="td204">{{ ob.descripcion }}</td>
+						<td class="td205">{{ ob.estado }}</td>
+						<td class="td206">{{ ob.tipo }}</td>
+						<td class="td207">{{ ob.pet_ot_asociada }}</td>
+						<td class="td208">{{ ob.responsable }}</td>
+						<td class="td209">{{ ob.subtipo }}</td>
+						<td class="td210">{{ ob.rechazo_entrega }}</td>
+						<td class="td211">{{ ob.criticida }}</td>
+						<td class="td212">{{ ob.esfuerzo }}</td>
+						<td class="td213">{{ ob.esfuerzo_cliente }}</td>
+						<td class="td214">{{ ob.fecha_creacion }}</td>
+						<td class="td215">{{ ob.fecha_solicitud_cli }}</td>
+						<td class="td216">{{ ob.fecha_prevista_proy }}</td>
+						<td class="td217">{{ ob.fecha_entrega }}</td>
+						<td class="td218">{{ ob.fecha_cierre }}</td>
+						<td class="td219">{{ ob.fecha_desestimacion }}</td>
+						<td class="td220">{{ ob.fecha_inicio_centro }}</td>
+						<td class="td221">{{ ob.resultado_testing }}</td>
+						<td class="td222">{{ ob.puntos_historia }}</td>
+						<td class="td223">{{ ob.historia_usuario }}</td>
+						<td class="td224">{{ ob.epica }}</td>
+					</tr>
+				{% endfor %}
+
+			</tbody>
+		</table>
+
+	</div>
+
+
+
+
+
+	<br><hr><br>
+
+
+
+
+	<div class="trj">	
+		<div >
+            <h5>Manual </h5>
+            <li><b>1°</b> Descargue archivo <b>.XLS</b></li>
+            <li><b>2°</b> Abra el archivo y acepte la adertencia de formato y extención luego guardelo con extención <b>.XLSX</b></li>
+            <li><b>3°</b> Cargue la platilla a fénix he incurra.</li>
+        </div>
+	</div><br>
+
+
+
+
+
+
+{% else %}
+	<p class="alert alert-warning"> {{msj}}</p>
+{% endif %}
+
+
+
+{% endblock section_1 %}
+
+
+
+
+{% block blck_static_foot %} 
+<!-- XLSX -->
+<script src="{% static 'xlsx/script.js' %}"> </script>
+
+{% endblock blck_static_foot %}
+
+

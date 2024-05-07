@@ -1,0 +1,69 @@
+{% extends "panel.html" %}
+
+
+{% block txt_lv1 %}PESOS DES ESTIMACIÓN{% endblock txt_lv1 %}
+{% block txt_lv2 %}Listar{% endblock txt_lv2 %}
+
+{% block section_1 %}
+
+
+
+<div class="tabla tab_team">
+		<a class="desc" onclick="tableToExcel('tabla1', 'minifex')">Descargar..  <i class="fa fa-file-excel-o"></i></a>
+		<a class="desc" onclick="ActivarFiltros('fil-avz')">Filtros.. <i class="fa fa-filter"></i></a>
+		{% if perms.gestion.es_leader %}
+		<a href="{% url 'estim_cre' %}" class="desc">Registrar.. <i class="fa fa-plus-circle"></i></a>
+		{% endif %}
+	<table id="tabla1">
+		<thead> 
+
+			<tr style="background-color: #9EA665;color: white;
+							line-height: 1.5em; text-align:center;">
+				{% if perms.gestion.es_leader %} <td><i class="fa fa-edit"></i></td> {% else %} <td></td> {% endif %}
+				<td>TIPO</td>
+				<td>SUBTIPO</td>
+				<td>DIFICULTAD</td>
+				<td>PESO</td>
+				<td>PESO HIST.</td>
+				<td>FECHA</td>
+				<td>ALTA</td>
+			</tr>
+
+			<tr id="fil-avz" class="fil-avz" style="background: #9EA665;">
+				<td id="tdfd00" class="no-fil"></td>
+				<td id="tdfd01" contenteditable onkeyup='Filtrar(this.id)'></td>
+				<td id="tdfd02" contenteditable onkeyup='Filtrar(this.id)'></td>
+				<td id="tdfd03" contenteditable onkeyup='Filtrar(this.id)'></td>
+				<td id="tdfd04" contenteditable onkeyup='Filtrar(this.id)'></td>
+				<td id="tdfd05" contenteditable onkeyup='Filtrar(this.id)'></td>
+				<td id="tdfd06" contenteditable onkeyup='Filtrar(this.id)'></td>
+				<td id="tdfd07" contenteditable onkeyup='Filtrar(this.id)'></td>
+			</tr>
+ 
+		</thead>
+		<tbody id="tab-body-fil" >
+			{% for ob in object_list %}
+				<tr>
+
+			{% if perms.gestion.es_leader  %}
+					<td>
+						<a href="{% url 'estim_edi' ob.id %}"><i class="fa fa-edit"></i></a>
+						<a href="{% url 'estim_eli' ob.id %}"><i class="fa fa-trash"></i></a>
+					</td>
+			{% else %}<td></td>{% endif %}
+					<td>{{ ob.tarea_tipo }} </td>
+					<td> {{ ob.tarea_subtipo }}</td>
+					<td> {{ ob.dificultad }}</td>
+					<td> {{ ob.peso }}</td>
+					<td> {{ ob.peso_hist }}</td>
+					<td> {{ ob.fecha }} </td>
+					<td> {{ ob.alta }}</td>
+				</tr>
+			{% endfor %}
+		</tbody>
+	</table>
+</div>
+
+
+
+{% endblock section_1 %}

@@ -1,0 +1,560 @@
+
+{% extends "panel.html" %}
+
+{% load staticfiles i18n %} 
+
+
+{% block txt_lv1 %}
+
+<!--small>'<b>Ctrl + Shift + R</b>' al menos una vez.</small>  
+<span class="badge" style="background-color: rgb(39, 146, 25);"> -->
+<!--span> <small>  Dominio oficial</small> <b><a href="http://www.nttboard.com" target="blanc"style="color: white;">www.nttboard.com</a></span-->
+    
+
+    {{ msj }} 
+    
+    <!--i class="inv">---</i><span class="badge" style="background-color: rgb(117, 171, 236);">
+        <a href="http://www.nttboard.com" target="blanc"style="color: white;">www.nttboard.com <i class="inv">_</i><i class="fa fa-hand-o-up"></i></a>
+    </span-->
+
+{% endblock txt_lv1 %}
+
+{% block txt_lv2 %}Panel de bienvenida{% endblock txt_lv2 %}
+
+
+{% block section_1 %}
+
+
+
+
+
+
+
+
+    <!--p class="alert alert-success"> Dominio oficial  <b><a href="http://www.nttboard.com" target="blanc">www.nttboard.com</a> </b> 
+        <i class="inv">_</i> <i class="fa fa-smile-o"></i>  <i class="fa fa-thumbs-o-up"></i><i class="inv">_</i> </p-->
+
+    <!--p class="alert alert-danger">  <i class="fa fa-warning"></i> <i class="inv">_</i><b>¡ALERTA!</b> 
+        <BR>La información de los días <b>1, 2 y 3 del mes</b> se encuentran en el <b><a href="http://3.134.96.224/" target="blank">servidor de pruebas antiguo <i class="fa fa-hand-o-up"></i></a></b>
+             <mark> el cual dejará de funcionar el <b>08.09.2021 23:59</b></mark>, replicar aquí lo que considere necesario.
+            <br> <mark>Debe continuar aquí su gestión</mark>, ya que este será desplegado en el entorno de <b>NTT DATA Company</b>.
+            </p-->
+
+
+
+
+
+<!--  TABLA DE LAS TAREAS  -->
+
+
+{% if obj_lst %}
+
+    <input type="text" id="hide_panel" hidden>  <!-- Ocultar el panel lateral -->
+
+
+    <!--div class="trj">   
+        <div>
+            <h5>{{ msj }}</h5>
+        </div>
+    </div-->
+    
+        
+    <div class="tabla">
+        <table class="table tab_res" id="tabla1">
+            <thead>
+                <tr style="background: #E4EEFF;">
+                    <td></td>
+                    <td>Sf</td>
+                    <td>Proy.</td>
+                    <td colspan="3"  style="background: #D3E2FF;">Requerimiento</td>
+                    <td>Subtarea</td>
+                    <td>Tip.</td>
+                    <td>E. Pla.</td>
+                    <td>E. Eje.</td>
+                    <td>Etc</td>
+                    <td>F. Inicio</td>
+                    <td>F. Fin</td>
+                </tr>
+            </thead>
+
+            <tbody id="tab-body-fil">
+            
+            {% for ob in obj_lst %}                
+                 <tr>
+                    <td> <a href="#openModal_{{ ob.tsk_id }}"><i class="fa fa-list-alt"></i></a> </td>
+
+                     <td class="{% if ob.tsk_sf == '1' %}sf-y{% else %}sf-n{% endif %}" 
+                        onclick="ActualizarTSf({{ ob.tsk_id }})" id="sf_{{ ob.tsk_id }}"></td>
+
+
+                    <!-- PROY -->
+                    <td style="font-weight: bold; text-align: center; background:{{ ob.pet_col }}">{{ ob.pet_proy }}</td>
+
+                    <td style="font-weight: bold; text-align: center;"> {{ ob.req_cod }} </td>
+
+
+                    <td> {{ ob.req_desc }} </td>
+                    <td id="td_sel_est_P{{ ob.req_id }}" style="background:{{ ob.pte_col }};">{{ ob.pte_est }}</td> <!-- grcl4-->
+
+                    <td><b>{{ ob.tsk_sub }}</b></td>
+                    <td>{{ ob.tsk_tip }}</td>
+
+                    <td class="tdedit" id="tdet{{ ob.tsk_id }}" onclick="ActTask(this.id,{{ ob.tsk_id }},1)">{{ ob.tsk_epl }}</td>
+                    <td class="tdedit" id="tdee{{ ob.tsk_id }}" onclick="ActTask(this.id,{{ ob.tsk_id }},2)">{{ ob.tsk_eej }}</td>
+                    <td id="tdet{{ ob.tsk_id }}_et">{{ ob.tsk_etc }}</td>
+                    <td>{{ ob.tsk_ini }}</td>
+                    <td>{{ ob.tsk_fin }}</td> 
+                </tr>
+            {% endfor %}
+
+            </tbody>
+
+            <tfoot> 
+                <tr>    
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td id="idges_tot_pla">{{ tot_pla }}</td>
+                    <td id="idges_tot_inc">{{ tot_inc }}</td>
+                    <td id="idges_tot_etc">{{ tot_etc }}</td>
+                    <td></td>
+                    <td></td>
+                </tr>
+            </tfoot>
+               
+          
+        </table>
+        
+    </div>
+
+
+
+
+
+
+
+
+    {% if obj_est %} <!-- Para seleccionar los colores de los estados grcl4 -->
+        {% for est in obj_est %}
+            <input type="text" id="inp_sel_est_{{ est.pk }}" value="{{ est.col_str }}" hidden>
+            <input type="text" id="inp_sel_est_T{{ est.pk }}" value="{{ est.descripcion }}" hidden>
+        {% endfor %}
+    {% endif%}
+
+
+
+<!--  MODAL DE LAS TAREAS  -->
+
+
+ <div>      
+
+    <!--a href="#openModal">Lanzar el modal</a-->
+
+    {% for ob in obj_lst  %}
+        
+        <div id="openModal_{{ ob.tsk_id }}" class="modalDialog row">
+            <div class="col-12 mx-auto">
+                <a href="#close" title="Close" class="close">
+                    <i class="fa fa-times-circle" style="line-height: 1.2em; font-size:2.0em;"></i> </a>
+                <h3 style="color:#D7D9D7; font-style: italic;">Detalle del requerimiento y tarea</h3>
+                <table class="table table-striped tab_modal">
+                    <tr><td colspan="4">{{ ob.pet_nom }}
+                        <span style="float:right">
+                            <a href="{% url 'task_eliminar' ob.tsk_id %}" class="tsk" data-toggle="tooltip" data-original-title="Eliminar tarea">
+                               <i class="fa fa-trash"></i></a></span>
+                        <span style="float:right; margin-right:20px;">
+                            <a href="{% url 'task_editar' ob.tsk_id %}" class="tsk" data-toggle="tooltip" data-original-title="Editar tarea" >
+                               <i class="fa fa-edit"></i></a></span>
+                    </td> </tr>
+
+
+                    <tr><td colspan="4">{{ ob.mod_sap }} : {{ ob.req_cod }} @ {{ ob.req_desc }} 
+                        <span style="float:right">
+                            <a href="{% url 'task_x_req' %}?idr={{ ob.req_id }}" class="req" data-toggle="tooltip" data-original-title="Tareas del requerimiento">
+                                <i class="fa fa-sitemap"></i></a></span>
+                        <span style="float:right; margin-right:20px;">
+                            <a href="{% url 'req_editar' ob.req_id %}" class="req" data-toggle="tooltip" data-original-title="Modificar requerimiento">
+                                <i class="fa fa-edit"></i></a></span>
+                    </td></tr>
+
+
+
+                    <!-- Descripción -->
+                     {% if ob.descr != None %}
+                        <tr><td colspan="4" style="font-size:0.8em;font-style:italic;">{{ ob.descr }}</td></tr>
+                    {% endif %}
+
+
+
+
+                    <tr>
+                        <td>
+                            <a href="/dud_xreq/?idr={{ ob.tsk_id }}" class="dud">Dudas {{ ob.dud_cant }}</a>
+                            <a href="/dud_cre1/{{ ob.tsk_id }}/" class="dud"><i class="fa fa-plus-circle"></i></a>
+
+                        <td><a href="/inc_xreq/?idr={{ ob.req_id }}" class="inc">Inc.  {{ ob.inc_cant }}</a>
+                            <a href="/inc_cre/{{ ob.req_id }}/" class="inc"><i class="fa fa-plus-circle"></i></a></td>
+
+                        <td><a href="/task_x_req/?idr={{ ob.req_id }}" class="tsk">Tsk.  {{ ob.tsk_cant }}</a>
+                            <a href="/task_crear1/{{ ob.req_id }}/" class="tsk"><i class="fa fa-plus-circle"></i></a></td>
+
+                        <td><a href="/pr_lis/?idr={{ ob.req_id }}" class="prv">Peer R. {{ ob.peer_cant }}</a>
+                            <a href="/pr_cre/{{ ob.req_id }}/" class="prv"><i class="fa fa-plus-circle"></i></a></td>
+                    </tr>
+                    <tr>
+                        <td id="td_sel_est_{{ ob.req_id }}" style="background-color: {{ ob.pte_col }};">
+                             {% if obj_est %} <!-- grcl4 -->
+
+                             <select id="sel_est_{{ ob.req_id }}" class="form-control" 
+                                                                    style="outline: none;color: white; 
+                                                                            text-shadow: black 0.1em 0.1em 0.1em; 
+                                                                            background-color: rgba(0, 0, 0, 0);" 
+                                                                    onchange="ChngClr({{ ob.req_id }},'est',this.value)">
+                                <option value="">{{ ob.pte_est }}</option>
+                                 {% for est in obj_est %}
+                                 <option value="{{ est.pk }}" style="background-color: {{ est.col_str }};">{{ est.descripcion_fenix }}</option>
+                                 {% endfor %}
+                             </select>
+                             {% endif%}
+
+                        </td>
+                        <td>Hrs. Acuedo {{ ob.req_hacu }}</td> 
+                        <td>Inc. Task {{ ob.tsk_tot_inc }}</td>
+                        <td>Inc. Gant {{ ob.gnt_inc }}</td>
+                    </tr>
+
+                    <tr>
+                        <td colspan="2">Responsable: {{ ob.req_resp }}</td>
+                        <td colspan="2">{% if ob.req_cont != None %}Contacto: {{ ob.req_cont }}{% endif %} </td>
+                    </tr>
+
+                <!--input type="text" value="{% url 'req_upd_bit' ob.req_id %}" id="REQ_FORM_URL_{{ ob.req_id }}" hidden-->
+                    <form method="post" id="REQ_FORM_BITA_{{ ob.req_id }}" >
+
+                        {% csrf_token %}
+
+                    <tr> <td colspan="4">OT
+                            <textarea  name="ordent" id="id_ordent"
+                                        rows="2" class="form-control"  style="background-color: #f6f9ff;"
+                                        data-toggle="tooltip" data-original-title="Ahora se actualiza en tiempo real"
+                                        onblur="ReqUpdBit('{{ ob.req_id }}')"
+                            >{% if ob.req_ot != None %}{{ ob.req_ot }}{% endif %}</textarea></td>
+                    </tr>
+                     
+                     <tr> 
+                        <td colspan="2">Bitácora
+                             <textarea  name="seguimiento_diario" id="id_seguimiento_diario" 
+                                        rows="6" class="form-control"  style="background-color: #f6f9ff;"
+                                        data-toggle="tooltip" data-original-title="Ahora se actualiza en tiempo real"
+                                        onblur="ReqUpdBit('{{ ob.req_id }}')"
+                            >{% if ob.req_bit != None %}{{ ob.req_bit }}{% endif %}</textarea></td>
+
+                        <td colspan="2">Programas involucrados 
+                            <textarea   name="programas"  id="id_programas" 
+                                        rows="6" class="form-control"  style="background-color: #f6f9ff;"                                        
+                                        data-toggle="tooltip" data-original-title="Ahora se actualiza en tiempo real"
+                                        onblur="ReqUpdBit('{{ ob.req_id }}')"
+                            >{% if ob.req_prog != None %}{{ ob.req_prog }}{% endif %}</textarea></td>
+                    </tr>
+                </form>
+
+                </table> 
+                <p style="text-align:right;color:#D7D9D7; font-style: italic;"> <b> minifex.beta</b></p>
+            </div>
+        </div>
+    {% endfor %}
+
+</div>
+
+{% else %}
+    <p class="alert alert-warning"> {{ msj }} : No se encontraron datos.</p>
+{% endif %}
+
+
+
+<div class="reporte1">
+    <i class="inv">----</i>
+    <input id="input_url" type="text" value="{% url 'panel' %}" hidden="">
+    <input type="date"   id="fecha_hasta1" class="input_d1">
+    <input type="number" id="cod_col" class="input_d2" placeholder="código de emp..">        
+    <button onclick="ConsultarPanel()" class="input_d3"  data-toggle="tooltip" data-original-title="Colsultar fecha">Consultar</button>
+
+    <i class="inv">-----</i>
+    <input type="text" class="input_d1" id="input_req"/>
+    <button onclick="ConsulReq()" class="input_d3" data-toggle="tooltip" data-original-title="Filtra requerimientos de tu equipo por Código, Descripción o Programas modificados."><i class="fa fa-search"></i></button>
+
+</div>
+
+<hr>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- TABLA DE LOS REQUES -->
+
+
+{% if obj_lst2 %}
+
+<h5 style="background-color: #BACEF3; margin-left: -5px; margin-right: -5px; margin-bottom:5px ; padding: 5px;
+color: white;font-style: italic;">{{ msj2 }}</h5>
+
+<!--div class="trj">   
+    <div >
+        <h5>{{ msj2 }} </h5>
+    </div>
+</div-->
+
+
+
+<div class="tabla" style="height:450px; overflow-y: auto;">
+    <a class="desc" onclick="tableToExcel('tabla2', 'minifex')">Descargar..  <i class="fa fa-file-excel-o"></i></a><i class="inv">...</i>
+    <a class="desc" onclick="ActivarFiltros('fil-avz1','in')" data-toggle="tooltip" data-original-title="Filtro Incluyente"><i class="fa fa-filter"><i class="inv">__</i>+</i></a><i class="inv">...</i>
+    <a class="desc" onclick="ActivarFiltros('fil-avz1','ex')" data-toggle="tooltip" data-original-title="Filtro Excluyente"><i class="fa fa-filter"><i class="inv">__</i>-</i></a>
+    <!--a class="desc" onclick="ActivarFiltros('fil-avz1')">Filtros.. <i class="fa fa-filter"></i></a-->
+
+    <table class="table tab_res" id="tabla2">
+
+        <thead>
+            <tr style="background: #ff8b55;">
+                <td></td>
+                <td>Proy.</td>
+                <td colspan="4" style="background: #ff6737;">Requerimiento</td>
+                <td>F.Est.</td>
+                <td>Últ. Inc.</td>
+            </tr>
+
+            <tr id="fil-avz1" class="fil-avz" > <!-- style="background: #9EA665;"-->
+                <td id="tdgd00" class="no-fil"></td>
+                <td id="tdgd01" contenteditable onkeyup='Filtrar(this.id)'></td>
+                <td id="tdgd02" contenteditable onkeyup='Filtrar(this.id)'></td>
+                <td id="tdgd03" contenteditable onkeyup='Filtrar(this.id)'></td>
+                <td id="tdgd04" contenteditable onkeyup='Filtrar(this.id)'></td>
+                <td id="tdgd05" contenteditable onkeyup='Filtrar(this.id)'></td>
+                <td id="tdgd06" contenteditable onkeyup='Filtrar(this.id)'></td>
+                <td id="tdgd07" contenteditable onkeyup='Filtrar(this.id)'></td>
+            </tr>
+
+        </thead>
+
+        <tbody id="tab-body-fil1">
+
+            {% for ob in obj_lst2 %}
+                <tr>
+                    <td> <a href="#openModal_r{{ ob.req_id }}"><i class="fa fa-list-ul"></i></a> </td>
+                    <td style="background: {{ ob.pet_col }};">{{ ob.pet_nom }}</td>
+                    <td>{{ ob.req_cod }}</td>
+                    <td>{{ ob.req_des }}</td>
+                    <td>{{ ob.funcional }}</td>
+                    <!--td id="td_sel_est_{{ ob.req_id }}" style="background: {{ ob.pte_col }};">{{ ob.pte_est }}</td-->
+                    <td id="td_sel_est_P{{ ob.req_id }}" style="background: {{ ob.pte_col }};">{{ ob.pte_est }}</td> <!-- grcl4 -->
+                    <td>{{ ob.req_fec }}</td>
+                    <td style="font-weight:bold;">{{ ob.tsk_fec }}</td>
+                </tr>
+            {% endfor %}
+
+        </tbody>
+
+        <tfoot><tr><td colspan="8"></td> </tr></tfoot>
+
+    </table>
+</div>
+
+
+
+
+
+
+<!--  MODAL DE LOS REQUES -->
+
+
+<div>
+{% for ob in obj_lst2 %}
+
+ <div id="openModal_r{{ ob.req_id }}" class="modalDialog row">
+            <div class="col-11 mx-auto">
+                <a href="#close" title="Close" class="close">
+                    <i class="fa fa-times-circle" style="line-height: 1.2em; font-size:2.0em;"></i> </a>
+
+                <h3 style="color:#D7D9D7; font-style: italic;">Requerimiento</h3>
+
+
+                <table class="table table-striped tab_modal">
+
+                    <tr><td colspan="4">{{ ob.mod_sap }} : {{ ob.req_cod }} @ {{ ob.req_des }}
+
+                        <span style="float:right">
+                            <a href="{% url 'req_eliminar' ob.req_id %}" class="req" data-toggle="tooltip" data-original-title="Eliminar requerimiento">
+                               <i class="fa fa-trash"></i></a></span>
+
+                        <span style="float:right; margin-right:20px;">
+                            <a href="{% url 'req_editar' ob.req_id %}" class="req" data-toggle="tooltip" data-original-title="Editar requerimiento" >
+                               <i class="fa fa-edit"></i></a></span>
+
+                       <span style="float:right; margin-right:20px;">
+                            <b><a href="{% url 'req_duplic' ob.req_id %}" class="req" data-toggle="tooltip" data-original-title="Duplicar requerimiento">
+                               <i class="fa fa-copy"></i></a></b></span> 
+
+                    </td> </tr>
+
+
+
+                    <!-- Descripción -->
+                    <tr> <td colspan="4" style="font-size:0.8em;font-style:italic;">{{ ob.descr }}</td></tr>
+
+                    
+
+                    <tr style="text-align: center;">
+
+                        <td id="td_sel_est_{{ ob.req_id }}" style="background-color: {{ ob.pte_col }};">
+                            {% if obj_est %} <!-- grcl4 -->
+                            <select id="sel_est_{{ ob.req_id }}" class="form-control" 
+                                                                   style="outline: none;color: white; 
+                                                                           text-shadow: black 0.1em 0.1em 0.1em; 
+                                                                           background-color: rgba(0, 0, 0, 0);" 
+                                                                   onchange="ChngClr({{ ob.req_id }},'est',this.value)">
+                               <option value="">{{ ob.pte_est }}</option>
+                                {% for est in obj_est %}
+                                <option value="{{ est.pk }}" style="background-color: {{ est.col_str }};">{{ est.descripcion_fenix }}</option>
+                                {% endfor %}
+                            </select>
+                            {% endif%}
+
+                       </td>
+
+                        <td></td>
+
+                        <td style="background: #F7FCF8;">
+                            <a href="{% url 'task_x_req' %}?idr={{ ob.req_id }}" class="req"  data-toggle="tooltip" data-original-title="Listar">Task  </a> 
+                            <i class="inv">----</i>
+                            <a href="{% url 'task_crear1' ob.req_id %}" class="req" data-toggle="tooltip" data-original-title="Crear task" >crear _ <i class="fa fa-plus-circle"></i></a>
+                        </td>
+
+                        <td style="background: #FAF4F5;"  >
+                            <a href="{% url 'inc_xreq' %}?idr={{ ob.req_id }}" class="inc" data-toggle="tooltip" data-original-title="Listar" > Incidencias</a>
+                            <i class="inv">----</i>
+                            <a href="{% url 'inc_cre' ob.req_id %}" class="inc" data-toggle="tooltip" data-original-title="Crear incidencia" >  crear _ <i class="fa fa-plus-circle"></i></a>
+                        </td>
+
+                    </tr>
+
+
+
+                    <tr> <td colspan="4">OT <i class="inv">________</i> <small>Funcional: {{ ob.funcional }}</small>
+                         <textarea name="" id="" rows="1" class="form-control" readonly
+                         ondblclick="BitacoraReq({{ ob.req_id }})"
+                        data-toggle="tooltip" data-original-title="Doble click para modificar">{{ ob.req_ord }}</textarea>
+                     </td></tr>
+
+
+
+                    <tr> <td colspan="2">Bitácora
+                             <textarea name="" id="" rows="5" class="form-control" readonly
+                             ondblclick="BitacoraReq({{ ob.req_id }})"
+                            data-toggle="tooltip" data-original-title="Doble click para modificar">{{ ob.req_bit }}</textarea>
+
+                        <td colspan="2">Programas involucrados
+                             <textarea name="" id="" rows="5" class="form-control" readonly
+                             ondblclick="BitacoraReq({{ ob.req_id }})"
+                            data-toggle="tooltip" data-original-title="Doble click para modificar">{{ ob.req_pro }}</textarea>
+                    </tr>
+
+                </table> 
+                <p style="text-align:right;color:#D7D9D7; font-style: italic;"> <b> minifex.beta</b></p>
+            </div>
+        </div>
+
+{% endfor %}
+</div>
+
+
+
+
+
+
+{% else %}
+    <p class="alert alert-warning"> {{ msj2 }} </p>
+{% endif %}
+
+<br><hr>
+
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+    
+
+<div class="trj">   
+	<div >
+        <h5>General: BIENVENIDO A MINIFEX, EL SISTEMA QUE EMULA EL FUNCIONAMIENTO DEL EXCEL DE GESTIÓN </h5>
+        <li>El presente sistema se encuantra en entrenamiento, por lo que debe ser cuidado con los procedimientos realizados.</li>
+        <li>Debe reportar todos los bots encontrados.</li>
+        <li>Los filtros del FRONT ahora son acumulativos, ya no excluyentes; es decir si en una columna existe esta línia se mostrará aunque en otra columna el filtro no cumpla, para excluir valores se debe colocar la pestaña <b>~</b>  delante de la cadena.</li>
+        <li><b>Ejem:</b> si quiero filtra los entregado y cerrado pero excluir los en ejecucón sería así <b>ENTR%CER%~EN EJEC</b></li>
+    </div>
+
+    <!--img id="img1" style="width:95%; height:auto !important;" src="/static/img/fnd/fondo_1.jpg"-->
+
+	<div>
+        <h5 >Manual de usuario</h5>
+        <li>Se replicó la funcionalidad del excel para que pueda ser contrastado y validado con mayor facilidad.</li>
+        <li>Puede gestionar sus <b>PETICIONES, REQUERIMIENTOS, TASK, INCIDENCIAS, RIESGOS Y DUDAS</b> con la mitad del trabajo y la misma efectividad.</li>
+        <li>Se puede exportar plantillas de carga masiva de <b>ACC</b>, (construcción <b>incidencias, riesgos y dudas</b>.)</li>
+        <li>Llevar a cabo su gestión diaria en un resumen <b>DAILY</b> y la matríz de trabajo <b>GANT</b>. </li>
+    </div>
+
+    <!--img id="img2" style="width:95%; height:auto !important;" src="/static/img/fnd/fondo_3.jpg"-->
+
+	<div>
+        <h5>Recomendaciones</h5>
+        <li>Al estar en entrenamiento recuerde siempre validar sus datos guardados recargando la página.</li>
+        <li>El ícono de cargando tiene una demora adicional de 0.4s para notar la actualización de la base de datos.</li>
+    </div>
+
+    <!--img id="img3" style="width:95%; height:auto !important;" src="/static/img/fnd/fondo_0.jpg"-->
+
+</div>
+
+
+	
+{% endblock section_1 %}
+
+
+
+{% block blck_static_foot %} 
+<script src="{% static 'js/requ.js' %}"></script>
+<script src="{% static 'js/dail.js' %}"></script>
+{% endblock blck_static_foot %}
+
+

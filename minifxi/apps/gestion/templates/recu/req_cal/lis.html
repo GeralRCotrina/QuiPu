@@ -1,0 +1,44 @@
+{% extends "panel.html" %}
+
+
+{% block txt_lv1 %}CALIDAD DEL IMPUT{% endblock txt_lv1 %}
+{% block txt_lv2 %}Listar{% endblock txt_lv2 %}
+
+{% block section_1 %}
+
+
+<div class="tabla tab_team">
+	<a href="#" class="desc" onclick="tableToExcel('tabla1', 'minifex')">Descargar..  <i class="fa fa-file-excel-o"></i></a>
+	<a href="{% url 'req_cal_cre' %}" class="desc">Registrar.. <i class="fa fa-plus-circle"></i></a>
+	
+	<table id="tabla1">
+		<thead> 
+			<tr style="background-color: #9EA665;color: white;
+							line-height: 1.5em; text-align:center;">
+				<td><i class="fa fa-edit"></i></td>
+				<td>PK</td>
+				<td>CODIGO</td>
+				<td>CALIDAD</td>
+				<td>DESCRIPCIÓN</td>
+			</tr>
+		</thead>
+		<tbody>
+			{% for ob in object_list %}
+				<tr>
+					<td>
+						<a href="{% url 'req_cal_edi' ob.pk %}"><i class="fa fa-edit"></i></a>
+						<a href="{% url 'req_cal_eli' ob.pk %}"><i class="fa fa-trash"></i></a>
+					</td>
+					<td>[{{ ob.pk }}] </td>
+					<td>{{ ob.codigo }} </td>
+					<td>{{ ob.calidad }} </td>
+					<td>{{ ob.descripcion }}</td>
+				</tr>
+			{% endfor %}
+		</tbody>
+	</table>
+</div>
+
+
+
+{% endblock section_1 %}

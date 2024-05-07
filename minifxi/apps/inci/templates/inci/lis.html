@@ -1,0 +1,161 @@
+{% extends "panel.html" %}
+
+
+{% block txt_lv1 %}INCIDENCIA{% endblock txt_lv1 %}
+{% block txt_lv2 %}Listar{% endblock txt_lv2 %}
+
+{% block section_1 %}
+
+	<div class="reporte1">
+		<i>Consultar   :      </i>
+		<input id="input_url" type="text" value="{% url 'inc_lis' %}" hidden>
+		<input type="date" id="fecha_desde1" class="input_d1">
+		<input type="date" id="fecha_hasta1" class="input_d2">
+		<select name="sel_cliente" id="sel_cliente" class="input_d2">
+			{% if obj2 %}
+					<option value="0">- - -</option>
+				{% for ob in obj2  %}
+					<option value="{{ ob.pk }}">{{ ob }}</option>
+				{% endfor %}
+			{% else %}
+				<option value="CAL">ERROR AL TRAER LOS DATOS</option>
+			{% endif %}
+		</select>
+		<button onclick="Consultar()" class="input_d3">Consultar</button> 
+
+		<br> <hr>
+
+		<input id="input_url2" type="text" value="{% url 'inc_exp' %}" hidden>
+		<i>Exportar  no SF  :   </i>
+
+		<!--label for="sel_cliente">Cliente</label-->
+		<select name="sel_cliente1" id="sel_cliente1">
+			{% if obj2 %}
+				{% for ob2 in obj2  %}
+					<option value="{{ ob2.pk }}">{{ ob2 }}</option>
+				{% endfor %}
+			{% else %}
+				<option value="CAL">ERROR AL TRAER LOS DATOS</option>
+			{% endif %}
+		</select>
+		<label for="cod_col">Colaborador</label>
+		<input type="number" id="cod_col" maxlength="7" />
+		<button  onclick="Exportar()">Exportar</button>
+
+	</div>
+	<hr>
+
+
+
+{% if object_list %}
+
+<div class="tabla tab_req">
+	<input type="text" id="hide_panel" hidden> <!-- Ocultar el panel lateral -->
+	<a class="desc" onclick="tableToExcel('tabla1', 'minifex')">Descargar..  <i class="fa fa-file-excel-o"></i></a>
+	<a class="desc" onclick="ActivarFiltros('fil-avz')">Filtros.. <i class="fa fa-filter"></i></a>
+	<table id="tabla1">
+		<thead> 
+			<tr style="background-color: #FF5D31;
+						color: white;
+						font-weight: bold;
+						line-height: 1.5em;
+						height:35px;">
+					<td colspan="22" style="text-align:left;padding-left:50px;">{{ msj }} </td>
+				</tr>
+
+			<tr style="background-color: #4668A4;color: white;line-height: 1.5em; text-align:center;">
+				<td><i class="fa fa-edit"></i></td>
+				<td>SF</td>
+				<td>BUG #</td>
+				<td>PAÍS</td>
+				<td>CLIENTE</td>
+				<td>REQUERIMIENTO</td>
+				<td>DESCRIPCIÓN</td>
+				<td>IDENTIFICADOR</td>
+				<td>CATEGORÍA</td>
+				<td>LOCALIZADA EN</td>
+				<td>TIPO DE INC.</td>
+				<td>CRITICIDAD</td>
+				<td>FECHA IDENTIFICACIÓN</td>
+				<td>Resp. Origen CAR Trujillo</td>
+				<td>Resp. Solución CAR Trujillo</td>
+				<td>CATEGORÍA INC.</td>
+				<td>FECHAS INC.</td>
+				<td>FECHAS FIN</td>
+				<td>ESTADO CAR.</td>
+				<td>ESFUERZO</td>
+				<td>Pet/OT</td>
+				<td>COMENTARIO CAR</td>
+			</tr>
+
+
+			<tr id="fil-avz" class="fil-avz" style="background: #4668A4;">
+				<td id="tdfd00" class="no-fil"></td>
+				<td id="tdfd01" class="no-fil"></td>
+				<td id="tdfd02" contenteditable onkeyup='Filtrar(this.id)'></td>
+				<td id="tdfd03" contenteditable onkeyup='Filtrar(this.id)'></td>
+				<td id="tdfd04" contenteditable onkeyup='Filtrar(this.id)'></td>
+				<td id="tdfd05" contenteditable onkeyup='Filtrar(this.id)'></td>
+				<td id="tdfd06" contenteditable onkeyup='Filtrar(this.id)'></td>
+				<td id="tdfd07" contenteditable onkeyup='Filtrar(this.id)'></td>
+				<td id="tdfd08" contenteditable onkeyup='Filtrar(this.id)'></td>
+				<td id="tdfd09" contenteditable onkeyup='Filtrar(this.id)'></td>
+				<td id="tdfd10" contenteditable onkeyup='Filtrar(this.id)'></td>
+				<td id="tdfd11" contenteditable onkeyup='Filtrar(this.id)'></td>
+				<td id="tdfd12" contenteditable onkeyup='Filtrar(this.id)'></td>
+				<td id="tdfd13" contenteditable onkeyup='Filtrar(this.id)'></td>
+				<td id="tdfd14" contenteditable onkeyup='Filtrar(this.id)'></td>
+				<td id="tdfd15" contenteditable onkeyup='Filtrar(this.id)'></td>
+				<td id="tdfd16" contenteditable onkeyup='Filtrar(this.id)'></td>
+				<td id="tdfd17" contenteditable onkeyup='Filtrar(this.id)'></td>
+				<td id="tdfd18" contenteditable onkeyup='Filtrar(this.id)'></td>
+				<td id="tdfd19" contenteditable onkeyup='Filtrar(this.id)'></td>
+				<td id="tdfd20" contenteditable onkeyup='Filtrar(this.id)'></td>
+				<td id="tdfd21" contenteditable onkeyup='Filtrar(this.id)'></td>
+			</tr>
+
+		</thead>
+		<tbody id="tab-body-fil" >
+			{% for ob in object_list %}
+			{% if ob.categoria_inc == "EXTERNA" %}
+				<tr style="background:#FFC8C8;">
+			{% else %}
+				<tr>				
+			{% endif %}
+					<td>
+						<a href="{% url 'inc_edi' ob.id %}"><i class="fa fa-edit"></i></a>
+						<a href="{% url 'inc_eli' ob.id %}"><i class="fa fa-trash"></i></a>
+					</td>
+					<td class="{% if ob.sf == '1' %}sf-y{% else %}sf-n{% endif %}" onclick="ActualizarSf('i',{{ ob.id }})" id="sf_{{ ob.id }}"></td>
+					<td>{{ ob.num_bug }}</td>
+					<td>{{ ob.pais }} </td>
+					<td>{{ ob.cliente }} </td>
+					<td>{{ ob.requerimiento }}</td>
+					<td>{{ ob.descripcion }}</td>
+					<td>{{ ob.indentificador }}</td>
+					<td>{{ ob.categoria }}</td>
+					<td>{{ ob.localizada_en }}</td>
+					<td>{{ ob.inc_tipo }}</td>
+					<td>{{ ob.criticidad }}</td>
+					<td>{{ ob.fecha_ident }}</td>
+					<td>{{ ob.rep_origen_car }}</td>
+					<td>{{ ob.rep_soluc_car }}</td>
+					<td>{{ ob.categoria_inc }}</td>
+					<td>{{ ob.fecha_ini }}</td>
+					<td>{{ ob.fecha_fin }}</td>
+					<td>{{ ob.estado_inc_car }}</td>
+					<td>{{ ob.esfuerzo }} </td>
+					<td>{{ ob.pet_ot }} </td>
+					<td>{% if ob.comentario == None %} {% else %}{{ ob.comentario }} {% endif %}</td>
+				</tr>
+			{% endfor %}
+		</tbody>
+	</table>
+</div>
+{% else %}
+	<p class="alert alert-warning"> {{ msj }} : No se encontraron datos.</p>
+{% endif %}
+
+
+
+{% endblock section_1 %}

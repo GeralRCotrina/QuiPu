@@ -1,0 +1,147 @@
+{% extends "panel.html" %}
+
+
+
+
+
+{% block blck_static_head %}
+	{% load staticfiles i18n %} 
+ 	<script src="{% static 'js/equi.js' %}"> </script>
+{% endblock blck_static_head %}
+
+
+
+
+
+
+{% block txt_lv1 %}EQUIPO{% endblock txt_lv1 %}
+{% block txt_lv2 %}Listar{% endblock txt_lv2 %}
+
+
+
+
+
+
+{% block section_1 %}
+
+ 
+
+{% if object_list %}
+
+
+	<div class="tabla tab_mant">
+		<a class="desc" onclick="tableToExcel('tabla1', 'minifex')">Descargar..  <i class="fa fa-file-excel-o"></i></a>
+		<a class="desc" onclick="ActivarFiltros('fil-avz')">Filtros.. <i class="fa fa-filter"></i></a>
+		{% if perms.gestion.es_leader %}
+		<a href="{% url 'equ_cre' %}" class="desc">Registrar.. <i class="fa fa-plus-circle"></i></a>
+		{% endif %}
+		<table id="tabla1">
+			<thead>
+				<tr style="background-color: #61699B;color: white;
+							line-height: 1.5em; text-align:center;">
+					<td><i class="fa fa-edit"></i></td>
+					<td>Codigo</td>
+					<td>Nombre</td>
+					<td>Dominio</td>
+					<td>Responsable</td>
+					<td>Descripción</td>
+				</tr>
+
+			<tr id="fil-avz" class="fil-avz" style="background: #61699B;">
+				<td id="tdfd00" class="no-fil"></td>
+				<td id="tdfd01" contenteditable onkeyup='Filtrar(this.id)'></td>
+				<td id="tdfd02" contenteditable onkeyup='Filtrar(this.id)'></td>
+				<td id="tdfd03" contenteditable onkeyup='Filtrar(this.id)'></td>
+				<td id="tdfd04" contenteditable onkeyup='Filtrar(this.id)'></td>
+				<td id="tdfd05" contenteditable onkeyup='Filtrar(this.id)'></td>
+			</tr>
+ 
+			</thead>
+			<tbody id="tab-body-fil" >
+				{% for ob in object_list %}
+					<tr id="tr_{{ ob.pk }}">
+			{% if perms.gestion.es_leader  %}
+						<td>
+							<a href="{% url 'equ_edi' ob.pk %}"><i class="fa fa-edit"></i></a>
+							<a href="{% url 'equ_eli' ob.pk %}"><i class="fa fa-trash"></i></a>
+							<!-- a href="{% url 'cli_lis2' %}?equ={{ ob.pk }}"><i class="fa fa-sitemap"></i></a-->
+							<a href="#ModalEquipoDetalle" onclick="OpenModalEqui({{ ob.pk }})"><i class="fa fa-sitemap"></i></a>
+						</td>
+			{% else %}<td></td>{% endif %}
+						
+						<td>{{ ob.codigo }}</td>
+						<td>{{ ob.nombre }}</td>
+						<td>{{ ob.dominio }}</td>
+						<td>{{ ob.responsable }}</td>
+						<td>{{ ob.descripcion }}</td>
+					</tr> 
+				{% endfor %}
+
+			</tbody>
+		</table>
+	</div>
+
+
+
+
+
+
+<!--  { + grcl4  MODAL -->
+		
+	<div id="ModalEquipoDetalle" class="modalDialog ">
+		<input id="id_equ" type="text" value="" hidden/>
+		<div class="col-11 mx-auto border">
+			<a href="#close" title="Close" class="close">
+				<i class="fa fa-times-circle" style="line-height: 2.2em; font-size:1.5em;"></i> </a>
+			<h2  style="color:#899CC2; font-style: italic;" id="h3_tit">Detalle del equipo</h2>
+			<hr>
+
+				<div>
+					<select name="sel_cli" id="sel_cli" class="btn">
+						{% if lst_cli %}
+							{% for cli in lst_cli %}
+									<option value="{{ cli.pk }}">{{ cli }}</option>					
+							{% endfor %}
+						{% else %}
+						<option value="0">---Err en el srv---</option>
+						{% endif %}
+					</select>
+					<button type="button" class="btn btn-sm btn-info" onclick="AgregarCliente()" id="2">
+						<i class="fa fa-plus-circle"></i>  Agregar</button>
+				</div>
+
+			<hr>
+			<table class="table table-striped table-sm" id="tab_modal">
+
+			</table> <hr>
+			<p style="text-align:right; color:#899CC2; font-style: italic;"> <b> minifex.beta</b></p>
+		</div>
+	</div>
+
+<!-- grcl4 + } -->
+
+
+
+
+
+
+{% else %}
+	<p class="alert alert-warning"> No se encontraron datos.</p>
+{% endif %}
+
+
+<br><hr>
+
+<div class="trj">	
+		<div>
+            <h5>Manual</h5> 
+            <li> <i class="fa fa-edit"></i><i class="inv">__</i>  Editar </li>
+            <li> <i class="fa fa-trash"></i> <i class="inv">__</i>  Eliminar </li>
+            <li> <i class="fa fa-sitemap"></i> <i class="inv">__</i>  <b>VER / ASIGANAR / RETIRAR</b> los clientes del equipo.</li>
+        </div>
+	</div>
+
+
+{% endblock section_1 %}
+
+

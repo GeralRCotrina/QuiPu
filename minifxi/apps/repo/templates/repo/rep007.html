@@ -1,0 +1,94 @@
+{% extends "panel.html" %}
+
+{% block blck_static_head %}
+{% load staticfiles i18n %} 
+{% endblock blck_static_head %}
+
+{% block txt_lv1 %}Reporte Semanal{% endblock txt_lv1 %}
+{% block txt_lv2 %}REP007{% endblock txt_lv2 %}
+
+{% block section_1 %}
+<div class="reporte1">
+    <i class="inv">----</i>
+    <input id="input_url" type="text" value="/panel/" hidden="">
+    <input type="date" id="fecha_desde1" class="input_d1">
+    <input type="date" id="fecha_hasta1" class="input_d2">
+    <input type="number" id="cod_col" class="input_d2" placeholder="código de emp..">        
+    <button onclick="ConsultarRepo(7)" class="input_d3" data-toggle="tooltip" data-original-title="Colsultar fecha">Consultar</button>
+</div>
+
+
+
+{% if object_list %}
+
+<br>
+<hr>
+    
+<div class="tabla tab_task">
+
+    <h2>{{ msj }}<i class="inv">___</i><small>Recordar que solo salen las SF = Rojo.</small></h2> 
+    
+
+    <a class="desc" onclick="tableToExcel('tabla1', 'minifex')">Descargar..  <i class="fa fa-file-excel-o"></i></a>
+    <table class="table" id="tabla1">
+        <thead>
+            <tr style="background-color: #170d74;
+                        color: #e1ff01;
+                        font-weight: bold;
+                        line-height: 1.5em;
+                        font-size: 1.3em;">
+                <td>PROYECTO</td>
+                <td>W/N</td>
+                <td>MÓDULO</td>
+                <td>CÓDIGO</td>
+                <td>DESCRIPCIÓN</td>
+                <td>N° HORAS</td>
+                <td>CLASE</td>
+                <td>NOMBRE</td>
+                <td>S/N</td>
+                <td>SEMANA</td>
+                <td>TIPO</td>
+                <td>DIA</td>
+                <td>OBSERVACIONES</td>
+            </tr>
+
+        </thead>
+        <tbody>
+            {% for ob in object_list %}
+                <tr style="border: 1px rgb(40, 11, 173);">
+                    <td>{{ ob.proyecto }}</td>
+                    <td>{{ ob.wi }}</td>
+                    <td>{{ ob.modulo }}</td>
+                    <td>{{ ob.codigo }}</td>
+                    <td>{{ ob.descripcion }}</td>
+                    <td {% if ob.horas == '0' %} style="background-color: rgb(236, 103, 85);"{% endif %}>{{ ob.horas }}</td>
+                    <td>{{ ob.clase }}</td>
+                    <td>{{ ob.nombre }}</td>
+                    <td>{{ ob.sn }}</td>
+                    <td>{{ ob.fecha }}</td>
+                    <td>{{ ob.tipo }}</td>
+                    <td>{{ ob.dia }}</td>
+                    <!--td>{{ ob.tarea_Actividad }}</td-->
+                    <td>{{ ob.comentario }}</td>                    
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% else %}
+    <p class="alert alert-warning"> {{ msj }} </p>
+{% endif %}
+
+
+
+
+{% endblock section_1 %}
+
+
+
+
+
+{% block blck_static_foot %}
+<script src="{% static 'js/repo.js' %}"></script>
+{% endblock blck_static_foot %}
+

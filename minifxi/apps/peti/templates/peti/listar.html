@@ -1,0 +1,243 @@
+{% extends "panel.html" %}
+
+
+{% block txt_lv1 %}PETICIÓN{% endblock txt_lv1 %}
+{% block txt_lv2 %}Listar{% endblock txt_lv2 %}
+
+
+{% block section_1 %}
+
+
+	<div class="reporte1">
+		<hr>
+		<input id="input_url" type="text" value="{% url 'pet_listar' %}" hidden>
+		<input type="date" id="fecha_desde1" class="input_d1">
+		<input type="date" id="fecha_hasta1" class="input_d2">
+		<select name="sel_cliente" id="sel_cliente" class="input_d2">
+			{% if lst_cliente %}
+					<option value="0">- - -</option>
+				{% for ob in lst_cliente  %}
+					<option value="{{ ob.pk }}">{{ ob }}</option>
+				{% endfor %}
+			{% else %}
+				<option value="CAL">ERROR AL TRAER LOS DATOS</option>
+			{% endif %}
+		</select>
+		<button onclick="Consultar()" class="input_d3">Consultar</button>
+		<hr>
+	</div>
+
+	
+{% if object_list %}
+
+
+	<div class="tabla">
+		<input type="text" id="hide_panel" hidden> <!-- Ocultar el panel lateral -->
+		<a class="desc" onclick="tableToExcel('tabla1', 'minifex')">Descargar..  <i class="fa fa-file-excel-o"></i></a>
+		<a href="{% url 'pet_crear' %}" class="desc" > Crear..  <i class="fa fa-plus-circle"></i></i></a><i class="inv">...</i>
+		<a class="desc" onclick="ActivarFiltros('fil-avz','in')" data-toggle="tooltip" data-original-title="Filtro Incluyente"><i class="fa fa-filter"><i class="inv">___</i>+</i></a><i class="inv">...</i>
+		<a class="desc" onclick="ActivarFiltros('fil-avz','ex')" data-toggle="tooltip" data-original-title="Filtro Excluyente"><i class="fa fa-filter"><i class="inv">___</i>-</i></a>
+		<!--a class="desc" onclick="ActivarFiltros('fil-avz')">Filtros.. <i class="fa fa-filter"></i></a-->
+	</div>
+
+	<div class="tabla">
+		<table id="tabla1">
+			<thead> 
+				<tr style="background-color: #82A2BE;
+							color: white;
+							font-weight: bold;
+							line-height: 1.5em;
+							height:35px;">
+					<td colspan="29" style="text-align:left;padding-left:50px;"> {{ msj }} </td>
+				</tr>
+				<tr style="background-color: #6788A4;color: white;
+							line-height: 1.5em; text-align:center;"> 
+					<td style="width: 5%"><i class="fa fa-edit"></i></td>
+
+					<!-- <td>Efi/Ret</td> -->
+					<td style="width: 2%">Inci.</td>
+					<!-- <td>Ries.</td> -->
+					<td style="width: 2%">Dud.</td>
+					<td style="width: 4.5%">Reqs.</td>
+					<!-- <td>Task</td> -->
+
+					<!-- <td>Código Int.</td> -->
+					<td style="width: 4%">ID Pet.</td>
+					<td style="width: 4%">WI ID</td>
+					<td style="width: 10%">Nombre</td>
+					<td style="width: 4%">Color</td>
+					<td style="width: 10%">Responsable</td>
+					<!-- <td>Tipo</td>
+					<td>Gestión</td> -->
+					<td style="width: 6%">Estado</td>
+					<td style="width: 3.5%">Contenedora</td>
+					<!-- <td>F. Solicitud</td> -->
+					<td style="width: 5%">F. Fin Acuerdo</td>
+					<td style="width: 5%">F. Ini. Real</td>
+					<td style="width: 5%">F. Entrega</td>
+					<!--td style="width: 5%">H. Acuerdo</td-->
+
+					<td style="width: 4%">Plan. Task</td>
+					<td style="width: 4%">Inc. Task</td>
+					<td style="width: 4%">Inc. Gant</td>
+					<td style="width: 4%">Etc</td>
+					<td style="width: 4%">H. Adic.</td>
+					<td style="width: 4%">Avance %</td>
+
+					<td></td>
+				</tr>
+
+
+				<tr id="fil-avz" class="fil-avz" style="background: #9EA665;">
+					<td id="tdfd00" class="no-fil"></td>
+					<td id="tdfd01" class="no-fil"></td>
+					<td id="tdfd02" class="no-fil"></td>
+					<td id="tdfd03" class="no-fil"></td>
+					<td id="tdfd04" contenteditable onkeyup='Filtrar(this.id)'></td>
+					<td id="tdfd05" contenteditable onkeyup='Filtrar(this.id)'></td>
+					<td id="tdfd06" contenteditable onkeyup='Filtrar(this.id)'></td>
+					<td id="tdfd07" class="no-fil"></td>
+					<td id="tdfd08" contenteditable onkeyup='Filtrar(this.id)'></td>
+					<td id="tdfd09" contenteditable onkeyup='Filtrar(this.id)'></td>
+					<td id="tdfd10" contenteditable onkeyup='Filtrar(this.id)'></td>
+					<td id="tdfd11" contenteditable onkeyup='Filtrar(this.id)'></td>
+					<td id="tdfd12" contenteditable onkeyup='Filtrar(this.id)'></td>
+					<td id="tdfd13" contenteditable onkeyup='Filtrar(this.id)'></td>
+					<td id="tdfd14" contenteditable onkeyup='Filtrar(this.id)'></td>
+					<td id="tdfd15" contenteditable onkeyup='Filtrar(this.id)'></td>
+					<td id="tdfd16" contenteditable onkeyup='Filtrar(this.id)'></td>
+					<td id="tdfd17" contenteditable onkeyup='Filtrar(this.id)'></td>
+					<td id="tdfd18" contenteditable onkeyup='Filtrar(this.id)'></td>
+					<td id="tdfd19" contenteditable onkeyup='Filtrar(this.id)'></td>
+					<td id="tdfd20" class="no-fil"></td>
+				</tr>
+
+
+			</thead>
+			<tbody id="tab-body-fil">
+				{% for ob in object_list %}
+					<tr>
+						<td><a href="{% url 'pet_editar' ob.id %}"><i class="fa fa-edit"></i></a></a>
+							<a href="{% url 'pet_eliminar' ob.id %}"><i class="fa fa-trash"></i></a>
+						</td>
+
+						<!-- EFICIENCIA / RETRABAJO / Ok -->
+						<!-- {% if ob.horas_adicionales > 0  %}
+							<td style="background: #FF5A5A; color:white; font-weight: bold;">RETRABAJO</td>
+						{% elif ob.etc > 0  %}
+							<td style="background: #42DA75; color:white; font-weight: bold;">EFICIENCIA</td>
+						{% else %}
+							<td style="background: #F6FCF8;">Ok</td>
+						{% endif %} -->
+						
+						<!-- INCIDENCIA -->
+						<td style="background: #FBEBEB;">
+							<a href="{% url 'inc_xpet' %}?idp={{ ob.id }}" class="inc">{{ ob.cant_inc }}</a></td>
+
+						<!-- RIESGOS -->
+						<!-- <td style="background: #F9F8F0;">
+							<a href="{% url 'rie_xpet' %}?idp={{ ob.id }}" class="rie">{{ ob.cant_rie }}</a></td>
+  -->
+						<!-- DUDAS -->
+						<td style="background: #F5F6FB;">
+							<a href="{% url 'dud_xpet' %}?idp={{ ob.id }}" class="dud">{{ ob.cant_dud }}</a></td>
+
+						<!-- REQUES -->
+						<td style="background: #FBFDF3;">
+							<a href="{% url 'req_x_pet' %}?idp={{ ob.id }}" class="req">{{ ob.cant_req }}</a>
+							<a href="{% url 'req_crear1' ob.id %}" class="req"><i class="fa fa-plus-circle"></i></a></td>
+
+						<!-- TASK -->
+						<!-- <td style="background: #F7FCF8;">
+							<a href="{% url 'task_x_pet' %}?idp={{ ob.id }}">{{ ob.cant_tsk }}</a></td> -->
+ 
+ 						<!-- CÓDIGO INTERNO -->
+						<!-- <td>{{ ob.codigo_interno }}</td> -->
+
+						<td style="font-weight: bold;">{{ ob.id_peticion }}</td>
+
+						<td style="font-weight: bold;">{{ ob.id_ot }}</td>
+
+						<td style="background: #F5F9F9;
+									font-weight: bold;">{{ ob.nombre }}</td>
+
+						<td style="background: {{ ob.color }};"></td>
+						<td style="font-weight: bold;">{{ ob.responsable }}</td>
+						<!-- <td>{{ ob.tipo }}</td>
+						<td>{{ ob.gestion }}</td> -->
+
+						<!-- ESTADO -->
+						<td style="font-weight: bold;background:{{ ob.est_col }};"> {{ ob.est_des }}</td> 
+
+						<!-- CONTENEDORA -->
+						<td style="text-align:center;"> {% if ob.contenedora == None or ob.contenedora == '' %} 
+							{% else %} <input type="checkbox" checked="checked">{% endif %}</td> 
+
+						<!-- Fechas de solicitud-->
+						<!-- <td>{{ ob.fecha_solicitud }}</td> -->
+
+						<!-- Fechas de fin acordada-->
+						<td>{{ ob.fecha_acuerdo_fin }}</td>
+
+						<!-- Fechas inicio real-->
+						<td style="font-weight: bold;">{% if ob.tsk_rea_ini == None %} {% else %}{{ ob.tsk_rea_ini }}{% endif %}</td>
+
+						<!-- Fechas fin real-->
+						<td style="font-weight: bold;">{% if ob.tsk_rea_fin == None %} {% else %}{{ ob.tsk_rea_fin }}{% endif %}</td>
+
+						<!--td>{% if ob.horas_acuerdo == None %}0,0{% else %}{{ ob.horas_acuerdo }}{% endif %}</td-->
+
+						<!-- TOTAL INCURRIDOS -->
+						<td style="background: #F7FCF8;
+									font-weight: bold;">{% if ob.tsk_tot_pla == None %}0{% else %}{{ ob.tsk_tot_pla }}{% endif %}</td> <!--  -->
+						<td style="background: #EBFCEB;
+									font-weight: bold;">{% if ob.tsk_tot_inc == None %}0{% else %}{{ ob.tsk_tot_inc }}{% endif %}</td>
+						<td style="background: #FFEDFC;
+									font-weight: bold;">{% if ob.gnt_tot_inc == None %}0{% else %}{{ ob.gnt_tot_inc }}{% endif %}</td>
+
+						<!-- ETC -->
+						<td style="background: #F4FFFF;
+									font-weight: bold;">{% if ob.etc == None or ob.etc <= 0 %}0{% else %}{{ ob.etc }}{% endif %}</td>
+
+						<td style="background: #FFF6F7;
+									font-weight: bold;">{% if ob.horas_adicionales == None %}0{% else %}{{ ob.horas_adicionales }}{% endif %}</td>
+						<!-- % -->	
+						<td class="{% if ob.avanzado_porc < 100 %}etc-igual
+									{% elif ob.avanzado_porc == None %}etc-menos
+									{% elif ob.avanzado_porc > 100 %}etc-mas
+									{% elif ob.avanzado_porc == 100 %}etc-menos
+									{% else %}etc-p{% endif %}">{% if ob.avanzado_porc == None %}0{% else %}{{ ob.avanzado_porc }}{% endif %}%</td>
+
+						<td></td>
+					</tr>
+				{% endfor %}
+
+			</tbody>
+			<tfoot>
+				<tr style="background:#F0F0F0;font-weight:bold;font-size: 0.9em;">							
+					<td colspan="21"><i class="inv">_</i> </td>
+				</tr>
+			</tfoot>
+		</table>
+	</div>
+
+
+<br><hr><br>
+
+	<div class="trj">	
+		<div >
+            <h5>Manual </h5> 
+            <li> Click en  [ <b><i class="fa fa-edit"></i></b> para editar ] , [ <i class="fa fa-trash"></i> para eliminar] , [ <i class="fa fa-sitemap"></i> para ver los <b>requerimientos</b> asociados ] , [ <b><i class="fa fa-plus-circle"></i> req</b> para registrar requrimiento ] , [ <b><i class="fa fa-filter"></i></b> para activar los filtros ] , [ <b><i class="fa fa-file-excel-o"></i></b> para descargar en hoja de cáculo ] .</li>
+            <li>Los cambios en incurrido en las Task asociadas hechas en otra pantalla se reflejaran aquí al actualizar la página.</li>
+        </div>
+	</div><br>
+
+
+
+{% else %}
+	<p class="alert alert-warning"> {{ msj }} : No se encontraron datos.</p>
+{% endif %}
+
+
+{% endblock section_1 %}
+

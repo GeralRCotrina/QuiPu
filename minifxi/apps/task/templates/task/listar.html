@@ -1,0 +1,168 @@
+{% extends "panel.html" %}
+
+
+{% block txt_lv1 %}TAREAS{% endblock txt_lv1 %}
+{% block txt_lv2 %}Listar{% endblock txt_lv2 %}
+
+{% block section_1 %}
+
+
+ 
+	<div class="reporte1">
+		<hr>
+		<input id="input_url" type="text" value="{% url 'task_listar' %}" hidden>
+		<input type="date" id="fecha_desde1" class="input_d1">
+		<input type="date" id="fecha_hasta1" class="input_d2">
+		<select name="sel_cliente" id="sel_cliente" class="input_d2">
+			{% if lst_cliente %}
+					<option value="0">- - -</option>
+				{% for ob in lst_cliente  %}
+					<option value="{{ ob.pk }}">{{ ob }}</option>
+				{% endfor %}
+			{% else %}
+				<option value="CAL">ERROR AL TRAER LOS DATOS</option>
+			{% endif %}
+		</select>
+		<button onclick="Consultar()" class="input_d3">Consultar</button>
+		  <br><hr>
+		 <input type="number" id="cod_col" placeholder="código de emp..">
+		<button onclick="TaskXCodigo(0)">No subidas a fenix</button>
+		<button onclick="TaskXCodigo(1)">Todas</button>
+		<button onclick="GenerarACC()"> Generar ACC</button>
+		<hr><br>
+			
+	</div>
+
+{% if object_list %}
+
+	<div class="tabla">
+		<input type="text" id="hide_panel" hidden> <!-- Ocultar el panel lateral -->
+		<a class="desc" onclick="tableToExcel('tabla1', 'minifex')" >Descargar.. <i class="fa fa-file-excel-o"></i></a><i class="inv">...</i>
+		<a class="desc" onclick="ActivarFiltros('fil-avz','in')" data-toggle="tooltip" data-original-title="Filtro Incluyente"><i class="fa fa-filter"><i class="inv">___</i>+</i></a><i class="inv">...</i>
+		<a class="desc" onclick="ActivarFiltros('fil-avz','ex')" data-toggle="tooltip" data-original-title="Filtro Excluyente"><i class="fa fa-filter"><i class="inv">___</i>-</i></a>
+	</div>
+
+	<div class="tabla tab_task">
+		<table id="tabla1">
+			<thead>
+				<tr style="background-color: #4668A4;
+							color: white;
+							font-weight: bold;
+							line-height: 1.5em;
+							height:35px;">
+					<td colspan="19" style="text-align:left;padding-left:50px;"> {{ msj }} </td>
+				</tr>
+				<tr style="background-color: #4668A4;color: white;
+							line-height: 1.5em; text-align:center;"> 
+					<td><i class="fa fa-edit"></i></td>
+					<td>SF</td>
+					<td>Id Interno</td>
+					<td>Pais</td>
+					<td>Cliente</td>
+					<td>Proyecto </td>
+					<td>Requerimiento</td>
+					<td>T. Petición</td>
+					<td>T. Gestión</td>
+					<td>Responsable</td>
+					<td>Subtarea</td>
+					<td>Fase Actividad</td>
+					<td>F. Inicio</td>
+					<td>F. Fin</td>
+					<td>Esfuerzo T. Estandar</td>
+					<td>Etc</td>
+					<td>Esfuerzo Ejecutado</td>
+					<td>Estado</td>
+				</tr>
+
+
+
+				<tr id="fil-avz" class="fil-avz" style="background: #4668A4;">
+					<td id="tdfd00" class="no-fil"></td>
+					<td id="tdfd01" class="no-fil"></td>
+					<td id="tdfd02" contenteditable onkeyup='Filtrar(this.id)'></td>
+					<td id="tdfd03" contenteditable onkeyup='Filtrar(this.id)'></td>
+					<td id="tdfd04" contenteditable onkeyup='Filtrar(this.id)'></td>
+					<td id="tdfd05" contenteditable onkeyup='Filtrar(this.id)'></td>
+					<td id="tdfd06" contenteditable onkeyup='Filtrar(this.id)'></td>
+					<td id="tdfd07" contenteditable onkeyup='Filtrar(this.id)'></td>
+					<td id="tdfd08" contenteditable onkeyup='Filtrar(this.id)'></td>
+					<td id="tdfd09" contenteditable onkeyup='Filtrar(this.id)'></td>
+					<td id="tdfd10" contenteditable onkeyup='Filtrar(this.id)'></td>
+					<td id="tdfd11" contenteditable onkeyup='Filtrar(this.id)'></td>
+					<td id="tdfd12" contenteditable onkeyup='Filtrar(this.id)'></td>
+					<td id="tdfd13" contenteditable onkeyup='Filtrar(this.id)'></td>
+					<td id="tdfd14" contenteditable onkeyup='Filtrar(this.id)'></td>
+					<td id="tdfd15" contenteditable onkeyup='Filtrar(this.id)'></td>
+					<td id="tdfd16" contenteditable onkeyup='Filtrar(this.id)'></td>
+					<td id="tdfd17" contenteditable onkeyup='Filtrar(this.id)'></td>
+				</tr>
+
+ 
+			</thead>
+			<tbody id="tab-body-fil">
+				{% for ob in object_list %}
+					<tr class="{% if ob.etc == 0 %}etc-igual{% elif ob.etc > 0 %}etc-mas{% elif ob.etc < 0 %}etc-menos{% else %}etc-p{% endif %}">
+
+						<td>
+							<a href="{% url 'task_editar' ob.id %}"><i class="fa fa-edit"></i></a>
+							<a href="{% url 'task_eliminar' ob.id %}"><i class="fa fa-trash"></i></a>
+							<a href="{% url 'dud_cre1' ob.id %}" class="dud"><i class="fa fa-plus-circle"> duda</i></a> 
+						</td>
+						<td class="{% if ob.sf == '1' %}sf-y{% else %}sf-n{% endif %}" onclick="ActualizarTSf({{ ob.idtask }})" id="sf_{{ ob.idtask }}"></td>
+						<td>{{ ob.id_interno }}</td>
+						<td>{{ ob.pais }}</td>
+						<td style="font-weight: bold;">{{ ob.cliente }}</td>
+						<td style="font-weight: bold; background:{{ ob.pet_color }}; text-align: center;">{{ ob.pet_nom }}</td>
+						<td style="font-weight: bold;">{{ ob.id_interno2 }}</td>
+						<td>{{ ob.tipo_peticion }}</td>
+						<td>{{ ob.tipo_gestion }}</td>
+						<td style="font-weight: bold;">{{ ob.reponsable }}</td>
+						<td style="font-weight: bold;">{{ ob.subtarea }}</td>
+						<td style="font-weight: bold;">{{ ob.fase_actividad }}</td>
+						<td>{{ ob.inicio }}</td>
+						<td>{% if ob.fin == None %} {% else %}{{ ob.fin }}{% endif %}</td>
+						<td class="tdedit" id="tdet{{ ob.idtask }}" onclick="ActTask(this.id,{{ ob.id }},1)">{{ ob.esfuerzo_total_estandar }}</td>
+						<td>{{ ob.etc }}</td>
+						<td class="tdedit" id="tdee{{ ob.idtask }}" onclick="ActTask(this.id,{{ ob.id }},2)">{{ ob.esfuerzo_ejecutado }}</td>
+						<td>{{ ob.estado }}</td>
+					</tr>
+				{% endfor %}
+
+			</tbody>
+		</table>
+	</div>
+
+
+
+
+<br><hr><br>
+
+
+
+	<div class="trj">	
+		<div >
+            <h5>Manual </h5>
+            <li> Click en  [ <b><i class="fa fa-edit"></i></b> para editar ] , [ <i class="fa fa-trash"></i> para eliminar ] , [ <b><i class="fa fa-filter"></i></b> para activar los filtros ] , [ <i class="fa fa-plus-circle"> duda</i> para registrar duda ] , [ <b><i class="fa fa-file-excel-o"></i></b> para descargar en hoja de cáculo ].</li>
+            <li>Click sobre <b style="background-color:#FB5454;">SF</b> para cambiar el estado de SUBIDA A FENIX.</li>
+            <li>Click en las columnas <b>"Esfuerzo T. Estandar"</b> y <b>"Esfuerzo Ejecutado"</b> para volverlas editables
+            (ícono de guardando en la barra superior inica la actualización en la base de datos). </li>
+            <li>Puede filtrar las Task por un rango de fechas, con su código de empleado todas o solo las aún no subidas a fenix.</li>
+            <li>Con su código puede generar la plantilla de carga masiva de ACC (solo las que tienen estado "No subidas a fenix").</li>
+        </div>
+	</div><br>
+
+
+
+
+
+
+
+
+{% else %}
+	<p class="alert alert-warning"> {{ msj }} : No se encontraron datos.</p>
+{% endif %}
+
+
+
+{% endblock section_1 %}
+

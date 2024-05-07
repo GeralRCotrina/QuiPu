@@ -1,0 +1,138 @@
+{% extends "panel.html" %}
+
+
+
+
+
+{% block blck_static_head %}
+
+    {% load staticfiles i18n %} 
+    
+    <!-- CSS -->
+    <!--link href="" rel="stylesheet" type="text/css"/-->
+
+    <!-- JS -->
+    <script src="{% static 'js/repo.js' %}"> </script>
+
+{% endblock blck_static_head %}
+
+
+
+
+
+
+
+
+{% block txt_lv1 %}GRÁFICOS{% endblock txt_lv1 %}
+{% block txt_lv2 %}REP006{% endblock txt_lv2 %}
+
+{% block section_1 %}
+<div class="rep-graf">
+
+
+
+    <div class="reporte1">
+        <input id="input_url" type="text" value="{% url 'req_listar' %}" hidden>
+        <input type="date" id="fecha_desde1" class="input_d1">
+        <input type="date" id="fecha_hasta1" class="input_d2">
+        <select name="sel_equipo" id="sel_equipo" class="input_d2">
+            {% if lst_equs %}
+                    <option value="0">- - -</option>
+                {% for ob in lst_equs  %}
+                    <option value="{{ ob.pk }}">{{ ob }}</option>
+                {% endfor %}
+            {% else %}
+                <option value="CAL">ERROR AL TRAER LOS DATOS</option>
+            {% endif %}
+        </select>
+        <button onclick="ConsultarRepo(6)" class="input_d3">Consultar Equipo</button>
+    </div>
+    <hr>
+
+
+
+
+
+<!-- div id="rep005" class="rep005" style="min-width: 310px; height: 400px; margin: 0 auto"> </div -->
+<div id="rep006" style="min-width: 310px; max-width: 800px; height: 400px; margin: 0 auto"></div>
+
+<script type="text/javascript">
+
+Highcharts.chart('rep006', {
+    chart: {
+        type: 'bar'
+    },
+    title: {
+        text: '{{ msj }}'
+    }, /*
+    subtitle: {
+        text: 'Source: <a href="https://en.wikipedia.org/wiki/World_population">Wikipedia.org</a>'
+    }, */
+    xAxis: {
+        categories:  [ {% for xx in lst_fe %} '{{ xx }}' , {% endfor %}],
+        //categories:  [ 'DAM-03/05','DAM-04/05','DAM-05/05','DAM-06/05','DAM-07/05','DAM-10/05',],
+        title: {
+            text: null
+        }
+    },
+    yAxis: {
+        min: 0,
+        title: {
+            text: '(horas)',
+            align: 'high'
+        },
+        labels: {
+            overflow: 'justify'
+        }
+    },
+    tooltip: {
+        valueSuffix: ' Horas'
+    },
+    plotOptions: {
+        bar: {
+            dataLabels: {
+                enabled: true
+            }
+        }
+    },
+    legend: {
+        layout: 'vertical',
+        align: 'right',
+        verticalAlign: 'top',
+        x: -40,
+        y: 80,
+        floating: true,
+        borderWidth: 1,
+        backgroundColor: ((Highcharts.theme && Highcharts.theme.legendBackgroundColor) || '#FFFFFF'),
+        shadow: true
+    },
+    credits: {
+        enabled: false
+    },
+    series: [ 
+        { name: 'Incurrido',        data: [ {% for zi in cad_zi %}parseFloat('{{ zi }}'),{% endfor %} ] }, 
+        { name: 'Disponibilidad',   data: [ {% for zd in cad_zd %}parseFloat('{{ zd }}'),{% endfor %} ] }, 
+        { name: 'Horas Acuerdo',    data: [ {% for za in cad_za %}parseFloat('{{ za }}'),{% endfor %}] } 
+    ]
+});
+        </script>
+
+
+
+
+		
+</div>
+
+<br> <hr> <br>
+
+<div class="trj">   
+    <div>
+        <h5>Manual</h5> 
+        <li> Reporte de <b>Horas Acuerdo, Incurrido y disponibilidad</b> para el rango de fechas y equipo seleccionado.</li>
+        <li> Para un cliente en particular, configure un equipo para ese único cliente, en <b>ADMINISTRACIÓN / EQUIPOS /Registrar ... <i class="fa fa-plus-circle"></i></b> </li>
+    </div>
+</div>
+
+
+
+{% endblock section_1 %}

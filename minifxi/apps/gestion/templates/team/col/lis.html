@@ -1,0 +1,70 @@
+{% extends "panel.html" %}
+
+
+{% block txt_lv1 %}TEAM{% endblock txt_lv1 %}
+{% block txt_lv2 %}Listar{% endblock txt_lv2 %}
+
+{% block section_1 %}
+
+
+
+<div class="tabla tab_team">
+		<a class="desc" onclick="tableToExcel('tabla1', 'minifex')">Descargar..  <i class="fa fa-file-excel-o"></i></a>
+		{% if perms.gestion.es_leader %}
+		<a href="{% url 'col_cre' %}" class="desc">Registrar.. <i class="fa fa-plus-circle"></i></a>
+		{% endif %}<i class="inv">...</i>
+		<a class="desc" onclick="ActivarFiltros('fil-avz','in')" data-toggle="tooltip" data-original-title="Filtro Incluyente"><i class="fa fa-filter"><i class="inv">___</i>+</i></a><i class="inv">...</i>
+		<a class="desc" onclick="ActivarFiltros('fil-avz','ex')" data-toggle="tooltip" data-original-title="Filtro Excluyente"><i class="fa fa-filter"><i class="inv">___</i>-</i></a>
+		<!--a class="desc" onclick="ActivarFiltros('fil-avz')">Filtros.. <i class="fa fa-filter"></i></a-->
+		
+	<table id="tabla1">
+		<thead> 
+			<tr style="background-color: #6788A4;color: white;
+							line-height: 1.5em; text-align:center;">
+				{% if perms.gestion.es_leader %} <td><i class="fa fa-edit"></i></td> {% else %} <td></td> {% endif %}
+				<td>CÓDIGO</td>
+				<td>USUARIO</td>
+				<td>ALIAS</td>
+				<td>NOMBRE COMPLETO</td>
+				<td>EMAIL</td>
+				<td>CELULAR</td>
+				<td>CATEGORIA</td>
+			</tr>
+
+			<tr id="fil-avz" class="fil-avz" >
+				<td id="tdfd00" class="no-fil"></td>
+				<td id="tdfd01" contenteditable onkeyup='Filtrar(this.id)'></td>
+				<td id="tdfd02" contenteditable onkeyup='Filtrar(this.id)'></td>
+				<td id="tdfd03" contenteditable onkeyup='Filtrar(this.id)'></td>
+				<td id="tdfd04" contenteditable onkeyup='Filtrar(this.id)'></td>
+				<td id="tdfd05" contenteditable onkeyup='Filtrar(this.id)'></td>
+				<td id="tdfd06" contenteditable onkeyup='Filtrar(this.id)'></td>
+				<td id="tdfd07" contenteditable onkeyup='Filtrar(this.id)'></td>
+			</tr>
+ 
+		</thead>
+		<tbody id="tab-body-fil" >
+			{% for ob in object_list %}
+				<tr>
+					
+			{% if perms.gestion.es_leader  %}
+					<td>
+						<a href="{% url 'col_edi' ob.id %}"><i class="fa fa-edit"></i></a> <!--a href="{% url 'col_eli' ob.id %}"><i class="fa fa-trash"></i></a-->
+					</td>
+			{% else %}<td></td>{% endif %}
+					<td>{{ ob.codigo }} </td>
+					<td> {{ ob.username }}</td>
+					<td> {{ ob.alias }}</td>
+					<td> {{ ob.first_name }} {{ ob.last_name }}</td>
+					<td> {{ ob.email }}</td>
+					<td> {% if ob.celular == None %} {% else %}{{ ob.celular }} {% endif %} </td>
+					<td> {{ ob.categoria.variable }}{{ ob.categoria }}</td>
+				</tr>
+			{% endfor %}
+		</tbody>
+	</table>
+</div>
+
+
+
+{% endblock section_1 %}

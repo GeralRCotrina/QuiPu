@@ -1,0 +1,27 @@
+{% extends "panel.html" %}
+
+
+{% block txt_lv1 %}REQUERIMIENTO{% endblock txt_lv1 %}
+{% block txt_lv2 %}Eliminar{% endblock txt_lv2 %}
+
+{% block section_1 %}
+<p class="alert alert-danger"> <b>¡CUIDADO!</b> <br>
+	<i class="inv">_</i> <i style="font-style:italic;">Al eliminar el requerimiento también borrará: tareas,
+		incidencias, dudas, gant y otros relacionados; <br>
+		además se registrará su usuario, fecha y hora en un <mark><b>LOG</b></mark> de modificación.</i>
+</p>
+
+<div class="container">
+	<div class="row">
+		<div class="col-6 mx-auto">
+			<form method="post">
+				{% csrf_token %}
+				<h2>¿Seguro que desea eliminar el requerimiento: " {{ object.codigo }} : {{object.breve_descripcion}}" ?</h2>
+				<h4>al borrar este requerimiento se borraran todas las tareras asociadas al mismo.</h4>
+				<a href="javascript:history.back()" class="btn btn-info">Cancelar</a>
+				<button class="btn  btn-danger" type="submit">Sí, eliminar</button>
+			</form><br>
+		</div>
+	</div>
+</div>
+{% endblock section_1 %}

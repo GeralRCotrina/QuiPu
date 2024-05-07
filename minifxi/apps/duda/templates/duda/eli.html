@@ -1,0 +1,22 @@
+{% extends "panel.html" %}
+
+
+{% block txt_lv1 %}DUDAS{% endblock txt_lv1 %}
+{% block txt_lv2 %}Eliminar{% endblock txt_lv2 %}
+
+{% block section_1 %}
+
+<div class="container border">
+	<div class="row">
+		<div class="col-6 mx-auto">
+			<form method="post">
+			{% csrf_token %}
+			<h2>¿Seguro que desea eliminar duda "{{ object.descripcion }}"</h2>
+			<a href="javascript:history.back()" class="btn btn-info">Cancelar</a>
+			<button class="btn  btn-danger" type="submit">Sí, eliminar</button>		
+		</form><br>
+		</div>
+	</div>
+</div>
+{% endblock section_1 %}
+ 

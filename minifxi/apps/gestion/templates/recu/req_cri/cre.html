@@ -1,0 +1,23 @@
+{% extends "panel.html" %}
+
+
+{% block txt_lv1 %}CRITICIDAD DE REQUERIMIENTO{% endblock txt_lv1 %}
+{% block txt_lv2 %}Creación{% endblock txt_lv2 %}
+
+{% block section_1 %}
+<div class="container border">
+	<div class="row">
+		<div class="col-6 mx-auto">
+			<form method="post"> 
+				{% csrf_token %}
+				<table class="">
+			        {{ form.as_table }}
+			    </table><hr>
+				<a href="{% url 'req_cri_lis' %}" class="btn btn-danger">CANCELAR</a>
+				<button type="submit" class="btn btn-info">GUARDAR</button>
+			</form>
+		</div>
+	</div>
+			
+</div> 
+{% endblock section_1 %}

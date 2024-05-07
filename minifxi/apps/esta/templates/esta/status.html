@@ -1,0 +1,302 @@
+{% extends "panel.html" %}
+
+
+
+
+
+{% block blck_static_head %}
+	{% load staticfiles i18n %} 
+	<!-- CSS -->
+	<!-- JS -->
+ 	<script src="{% static 'js/dail.js' %}" type="text/javascript"> </script>
+{% endblock blck_static_head %}
+
+
+
+
+
+{% block txt_lv1 %}ESTATUS{% endblock txt_lv1 %}
+{% block txt_lv2 %}Creación{% endblock txt_lv2 %}
+
+{% block section_1 %}
+<div class="container border">
+	
+	<div class="reporte1">
+		<input type="text" value="{% url 'est_cre' %}" id="input_url" hidden>
+		<select name="sel_cliente" id="sel_cliente">
+			{% if cli_lst %}
+				{% for ob in cli_lst %}
+					<option value="{{ ob.pk }}">{{ ob }}</option>				
+				{% endfor %}
+			{% else %}
+				<option value="val">ERROR AL TRAER LOS DATOS</option>
+			{% endif %}
+		</select>
+		<input type="date" id="fecha_desde1" class="input_d1">
+		<button onclick="CrearStatus()">CREAR ESTATUS <i class="inv">__</i><i class="fa fa-camera"></i></button>
+		<i class="inv">____</i>
+		<button href="#ModalExcluir" onclick="CrgrFltrs()">Filtros <i class="inv">__</i><i class="fa fa-filter"></i></button>
+		<i class="inv">__________</i>
+		<span class="float-rigth">Copie, modifique y envíe.</span>
+	</div>
+
+	<hr>
+
+
+
+
+
+
+<!-- {+ grcl4      MODAL DE FILTROS   -->
+<div>
+
+
+	<!--ID del cliente -->
+	<input type="text" id="id_cliente" value="{{ idc }}" hidden>
+
+	 <div id="ModalExcluir" class="modalDialog row">
+        <div class="col-12 mx-auto">
+            <a href="#close" title="Close" class="close" onclick="ClearMDL()">
+                <i class="fa fa-times-circle" style="line-height: 1.5em; font-size:1.3em;"></i> </a>
+                <input type="text" id="req_id" hidden value="0">
+            <h3 style="color:#79A7C2; font-style: italic;">Filtros</h3>
+
+            <table class="table table-sm">
+            	<tr>
+            		<td width="50%">
+						<div>
+							<select name="id_sel_sta_excl" id="id_sel_sta_excl" class="btn">
+								{% if lst_sta %}
+									{% for sta in lst_sta %}
+											<option value="{{ sta.pk }}"  style="background:{{ sta.col_lig }};">{{ sta }}</option>					
+									{% endfor %}
+								{% else %}
+								<option value="0">---Err en el srv---</option>
+								{% endif %}
+							</select>
+							<button type="button" class="btn btn-sm btn-warning" onclick="AgrgrExcl()" id="2">
+								<i class="fa fa-minus-circle"></i>  Excluir estado</button>
+						</div>
+            		</td>
+
+
+            		<td width="45%">
+						<div>
+							<select name="sel_cli" id="sel_cli" class="btn">
+								<option value="0">Otro filtro</option>
+							</select>
+							<button type="button" class="btn btn-sm btn-warning" onclick="AgregarCliente()" id="2">
+								<i class="fa fa-minus-circle"></i>  Otro-Filtro </button>
+						</div>
+            		</td>
+
+            	</tr>
+
+
+            	<tr>
+            		<!--  COLUMNA 1 -->
+            		<td id="id_sta_excl">
+            			{% if lst_sta_excl %}
+	            			{% for q in lst_sta_excl  %}
+	            				<i style="border-radius:2px;border:solid #DAD8D8 1px; background:#{{ q.val03 }};" id="tab_sta_excl_{{ q.val01 }}">
+	            					{{ q.val02 }}<i class="inv">_</i><a onclick="ElimStaExc({{ q.pk }})">
+	            				<i class="fa fa-trash" style="color: red;"></i></a></i><i class="inv">__</i>
+	            			{% endfor %}
+            			{% endif %}
+            		</td>
+
+            		<!--  COLUMNA 2 -->
+            		<td></td>
+            	</tr>
+            	
+            </table>
+            <p style="text-align:right;color:#79A7C2; font-style: italic;"> <b> minifex.beta</b></p>
+        </div>
+    </div>
+</div>
+
+
+
+<!-- Lista de nombres y colores  -->
+{% if lst_sta %}
+	<div hidden>
+	{% for sta in lst_sta %}	
+			<input type="text" value="{{ sta }}" id="id_status_nomre_{{ sta.pk }}" >				
+			<input type="text" value="{{ sta.col_lig }}" id="id_status_color_{{ sta.pk }}">			
+	{% endfor %}
+	</div>
+{% endif %}
+<!-- grcl4 + } -->
+
+ 
+
+
+<div style="height: 60%; 
+			width: 90%; 
+			border: solid 2px;
+			border-color: #D4EBE3;
+			border-radius: 5px 0 0 5px;
+			color: #4885B5;
+			font-style: italic;
+			padding: 10px;
+			background: #FBFBF9;
+			font-size: 0.9em;
+			padding: 10px;">
+
+<br>
+<p style="margin:2px;"><b>Status {{ fecha }} - HPC Trujillo - {{ cliente.descripcion }}</b></p>
+<hr style="margin:0px;">
+<p>Estimados:<br>
+
+<b style="font-size: 1.2em;">&nbsp;&nbsp;&nbsp;&nbsp;Por la presente comparto el status diario del servicio Abap con corte al {{ fecha }} a las {{ hora }} hora Perú.</b>
+<br><br>
+
+Hechos relevantes:</p>
+
+
+{% for pet in pet_lst %}
+	<p style="margin-top:3px;margin-bottom:1px;">En <b>{{ pet.nombre }}</b> : </p>
+
+	{% for req in req_lst_hoy %}
+		{% if pet.pk == req.pet %}
+			<ul type=”A” style="margin-top:0px;margin-bottom:0px;"><li><b>{{ req.codigo }}</b> : {{ req.bitacora }} </li></ul>
+		{% endif %}
+	{% endfor %}
+	
+{% endfor %}
+
+<br>
+
+<b>Detalles de Requerimiento: </b> <br><br>
+
+
+
+<b>Planificación {{ semana }}: </b><br><br>
+
+
+</div>
+
+
+
+
+
+
+
+
+
+<hr>
+
+
+
+
+
+
+
+<div class="status">
+	<input type="text" id="hide_panel" hidden> <!-- Ocultar el panel lateral -->
+	<table id="TabCpy">
+		<thead>
+			<tr style="height: 100px; 
+					text-align: center; 
+					background: #B3CCFF;
+					color: #4A4569; 
+					font-weight: bold;">
+
+
+				<td>CLIENTE</td>
+				<td>PROYECTO</td>
+				<td>PETICIÓN</td>
+				<td>MÓDULO</td>
+				<td>CÓDIGO REQ</td>
+				<td>DESCRIPCIÓN</td>
+				<td>PRIORIDAD</td>
+				<td>ESTADO</td>
+				<td>RESPONSABLE CAR</td>
+				<td>CONTACTO</td>
+				<td>INICIO PLAN</td>
+				<!--td>INICIO REAL</td-->
+				<td>FIN PLAN</td>
+				<td>FIN REAL</td>
+				<td>CALIDAD INPUT</td>
+				<td>EST. ACUERDO</td>
+				<td>ESTIMACIÓN</td>
+				<td>INCURRIDO</td>
+				<!--td>GANT</td-->
+				<td>ETC</td>
+				<td>AVANCE</td>
+				<td>BITÁCORA</td>
+			</tr>
+		</thead>
+		<TBODY style="text-align: center;">
+			{% for req in req_lst_tot %}
+			<tr>
+
+				<!-- ############################## -->
+				<td><b>{{ req.cliente }}</b></td>
+				<td style="background: {{ req.pet_color }};"><b>{{ req.proyecto }}</b></td>
+				<td style="background: {{ req.pet_color }};"><b>{{ req.peticion }}</b></td>
+				<td><b>{{ req.modulo }}</b></td>
+				<td><b>{{ req.codigo_req }}</b></td>
+				<td style="text-align:left;">{{ req.descripcion }}</td>
+				<td>{{ req.prioridad }}</td>
+				<td style="background:{{ req.esta_color }};" class="let-somb">{{ req.estado }}</td>
+				<td><b>{{ req.responsable_car }}</b></td>
+				<td>{% if req.contacto == None %}{% else %}<b>{{ req.contacto }}</b>{% endif %}</td>
+				<td>{{ req.inicio_plan }}</td>
+				<!--td><b>{{ req.inicio_real }}</b></td>-->
+				<td>{{ req.fin_plan }}</td>
+				<td>{% if req.fin_real == None %}{% else %}<b>{{ req.fin_real }}</b>{% endif %}</td>
+				<td>{{ req.calidad_input }}</td>
+				<td style="background: #E4E8E5;"><b>{% if req.est_acuerdo == None %}0{% else %}{{ req.est_acuerdo }}{% endif %}</b></td>
+				<td style="background: #EEF3EF;"><b>{% if req.estimacion == None %}0{% else %}{{ req.estimacion }}{% endif %}</b></td>
+				<td style="background: #EAEBEA;">{% if req.incurrido == None %}{% else %}<b>{{ req.incurrido }}</b>{% endif %}</td>
+				<!--td style="background: #F1F2F1;"><b>{{ req.gant }}</b></td-->
+				<td><b>{% if req.etc == None %}0{% else %}{{ req.etc }}{% endif %}</b></td>
+
+				<td style="{% if req.avance < 10 or req.avance == None %} background:#FBFFE1;
+							{% elif req.avance < 30 %} background:#F7FFC1;
+							{% elif req.avance < 50 %} background:#F1FDA3;
+							{% elif req.avance < 70 %} background:#CFFFC5;
+							{% elif req.avance <= 100 %} background:#9FF58D;
+							{% elif req.avance > 100 %} background:#F8CB96;
+							{% else %}{% endif %}">{% if req.avance == None  %}0{% else %}{{ req.avance }}{% endif %}  %</b></td>
+
+				<td style="text-align: left; width: 500px;">{% if req.bitacora == None %}{% else %}{{ req.bitacora }}{% endif %}</td>
+
+			</tr>
+				
+			{% endfor %}
+		</TBODY>
+		
+	</table>	
+</div>
+
+
+
+
+<!--  Agregarmos el Modal de filtros
+ -->
+
+
+
+
+
+
+
+
+<br><hr>
+
+
+
+	<div class="trj">	
+		<div>
+	        <h5>Manual </h5>
+	        <li>Para el <b>cueadro resumen</b> filtra todo requerimiento perteneciente al cliente, que contenga la fecha indicada con formato DD.MM.AAA</li>
+	        <li>Para la <b>tabla de avance y acumulados</b> filtra todo requerimiento asociado las peticiones de dicho cliente que no estén en los estados: <b>Entregada, Destimado ni Cerrada.</b> </li>
+	    </div>
+	</div>
+
+
+			
+</div> 
+{% endblock section_1 %}
