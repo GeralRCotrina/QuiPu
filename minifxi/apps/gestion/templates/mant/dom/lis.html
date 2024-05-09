@@ -1,6 +1,6 @@
 {% extends "panel.html" %}
 
- 
+
 {% block txt_lv1 %}DOMINIO{% endblock txt_lv1 %}
 {% block txt_lv2 %}Listar{% endblock txt_lv2 %}
 
@@ -13,47 +13,51 @@
 {% if object_list %}
 
 
-	<div class="tabla tab_mant">
-			<a class="desc" onclick="tableToExcel('tabla1', 'minifex')">Descargar..  <i class="fa fa-file-excel-o"></i></a>
-			{% if perms.gestion.es_leader %}
-			<a href="{% url 'dom_cre' %}" class="desc">Registrar.. <i class="fa fa-plus-circle"></i></a>
-			{% endif %}
+<div class="tabla tab_mant">
+	<a class="desc" onclick="tableToExcel('tabla1', 'minifex')">Descargar.. <i class="fa fa-file-excel-o"></i></a>
+	{% if perms.gestion.es_leader %}
+	<a href="{% url 'dom_cre' %}" class="desc">Registrar.. <i class="fa fa-plus-circle"></i></a>
+	{% endif %}
 
-		<table id="tabla1">
-			<thead>
-				<tr style="background-color: #9EA665;color: white;
+	<table id="tabla1">
+		<thead>
+			<tr style="background-color: #ff8b55;color: white;
 							line-height: 1.5em; text-align:center;">
-					<td><i class="fa fa-edit"></i></td>
-					<td>Codigo</td>
-					<td>Nombre</td>
-					<td>Responsable</td>
-					<td>Descripción</td>
-				</tr>
-			</thead>
-			<tbody>
-				{% for ob in object_list %}
-					<tr>
-		{% if perms.gestion.es_leader  %}
-					<td>
-						<a href="{% url 'dom_edi' ob.pk %}"><i class="fa fa-edit"></i></a>
-						<a href="{% url 'dom_eli' ob.pk %}"><i class="fa fa-trash"></i></a><br>
-					</td>
-			{% else %}<td></td>{% endif %}
-						<td>{{ ob.codigo }}</td>
-						<td>{{ ob.nombre }}</td>
-						<td>{{ ob.responsable }}</td>
-						<td>{{ ob.descripcion }}</td>
-					</tr> 
-				{% endfor %}
+				<td><i class="fa fa-edit"></i></td>
+				<td>Codigo</td>
+				<td>Nombre</td>
+				<td>Responsable</td>
+				<td>Descripción</td>
+			</tr>
+		</thead>
+		<tbody>
+			{% for ob in object_list %}
+			<tr>
+				{% if perms.gestion.es_leader %}
+				<td>
+					<a href="{% url 'dom_edi' ob.pk %}"><i class="fa fa-edit"></i></a>
+					<a href="{% url 'dom_eli' ob.pk %}"><i class="fa fa-trash"></i></a><br>
+				</td>
+				{% else %}<td></td>{% endif %}
+				<td>{{ ob.codigo }}</td>
+				<td>{{ ob.nombre }}</td>
+				<td>{{ ob.responsable }}</td>
+				<td>{{ ob.descripcion }}</td>
+			</tr>
+			{% endfor %}
 
-			</tbody>
-		</table>
-	</div>
+		</tbody>
+	</table>
+</div>
 {% else %}
-	<p class="alert alert-warning"> No se encontraron datos.</p>
+<p class="alert alert-warning"> No se encontraron datos.</p>
+
+<br>
+<br>
+{% if perms.gestion.es_leader %}
+<a href="{% url 'dom_cre' %}" class="desc">Registrar.. <i class="fa fa-plus-circle"></i></a>
+{% endif %}
 {% endif %}
 
 
 {% endblock section_1 %}
-
-

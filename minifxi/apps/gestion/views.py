@@ -106,6 +106,12 @@ class panel(View):
 				tot_etc = float(tot_etc) + float(dic['tsk_etc'])
 		cursor.close()
 
+		if	col_cod == '':
+			col_cod = '00000'
+		if	alias == None:
+			alias = 'N/A'
+		#print("------------->"+str(alias)+" "+str(col_cod)+"    --   "+str(hoy_str))
+		
 
 		dicc = {  
 			"obj_lst"  : obj_lst,
@@ -173,7 +179,7 @@ def PassChange(ussr,cod,pss):
 		ess = True
 	else:
 		rpta = 'Err'
-		print("  >> rpta:  Err ")
+		print("  >> rpta:  No 'LEADER', 'MANAGER' ")
 	if ess:
 		#usr1 = AuthUser.objects.get(codigo=cod)
 		if AuthUser.objects.filter(codigo=cod).exists() :

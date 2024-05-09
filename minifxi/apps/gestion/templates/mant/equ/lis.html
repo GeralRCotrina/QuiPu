@@ -127,6 +127,12 @@
 
 {% else %}
 	<p class="alert alert-warning"> No se encontraron datos.</p>
+
+	<br><br>
+	{% if perms.gestion.es_leader %}
+	<a href="{% url 'equ_cre' %}" class="desc">Registrar.. <i class="fa fa-plus-circle"></i></a>
+	{% endif %}
+	
 {% endif %}
 
 

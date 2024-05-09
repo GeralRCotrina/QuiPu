@@ -126,7 +126,7 @@
                         <li class="treeview">
                             <a href="#">
                                 <i class="fa fa-th-list"></i>
-                                <span>PETICIÓN</span><i class="fa fa-angle-left pull-right"></i>
+                                <span>PROYECTO</span><i class="fa fa-angle-left pull-right"></i>
                             </a>
                             <ul class="treeview-menu">
                                 <li><a href="{% url 'pet_crear' %}"><i class="fa fa-circle-o"></i> CREAR</a></li>
@@ -197,13 +197,13 @@
                                 <span>ADMINISTRACIÓN</span><i class="fa fa-angle-left pull-right"></i>
                             </a>
                             <ul class="treeview-menu">
-                                <li><a href="{% url 'au_c_lis' %}"><i class="fa fa-circle-o"></i> ASIGNACIONES</a></li>
+                                <li><a href="{% url 'au_c_lis' %}"><i class="fa fa-circle-o"></i> ASIGNACIONES (+)</a></li>
                                 <li><a href="{% url 'dom_lis' %}"><i class="fa fa-circle-o"></i> DOMINIO</a></li>
                                 <li><a href="{% url 'equ_lis' %}"><i class="fa fa-circle-o"></i> EQUIPO</a></li>
                                 <li><a href="{% url 'cli_lis' %}"><i class="fa fa-circle-o"></i> CLIENTE</a></li>
                                 <li><a href="{% url 'pai_lis' %}"><i class="fa fa-circle-o"></i> PAÍS</a></li>
-                                <li><a href="{% url 'log_mdf' %}"><i class="fa fa-circle-o" ></i> LOG</a></li>
-                                <li><a href="{% url 'modu_lis' %}"><i class="fa fa-circle-o"></i>MÓDULOS SAP</a></li>
+                                <li><a href="{% url 'modu_lis' %}"><i class="fa fa-circle-o"></i> MÓDULOS SAP</a></li>
+                                <li><a href="{% url 'log_mdf' %}"><i class="fa fa-circle-o" ></i> LOG DE MODIF.</a></li>
                             </ul>
                         </li>
                         {% endif %}
@@ -215,18 +215,18 @@
                                 <span>RECURSOS</span><i class="fa fa-angle-left pull-right"></i>
                             </a>
                             <ul class="treeview-menu">
-                                <li><a href="{% url 'inc_t_lis' %}"><i class="fa fa-circle-o"></i> INC TIPO</a></li>
-                                <li><a href="{% url 'inc_ee_lis' %}"><i class="fa fa-circle-o"></i> INC ENCTR. EN</a></li>
-                                <li><a href="{% url 'rie_cat_lis' %}"><i class="fa fa-circle-o"></i> RIESG. CATEG.</a></li>
-                                <li><a href="{% url 'dud_ra_lis' %}"><i class="fa fa-circle-o"></i> DUD. REL. A</a></li>
-                                <li><a href="{% url 'dud_fl_lis' %}"><i class="fa fa-circle-o"></i>DUD. FASE LOC.</a></li>
-                                <li><a href="{% url 'estim_lis' %}"><i class="fa fa-circle-o"></i>ESTIM. PESOS</a></li>
-                                <li><a href="{% url 'prio_lis' %}"><i class="fa fa-circle-o"></i>PRIORIDAD</a></li>
-                                <li><a href="{% url 'pet_est_lis' %}"><i class="fa fa-circle-o"></i>PET. ESTADO</a></li>
-                                <li><a href="{% url 'pet_inpf_lis' %}"><i class="fa fa-circle-o"></i>PET. INPUT FINAL</a></li>
+                                <li><a href="{% url 'pet_est_lis' %}"><i class="fa fa-circle-o"></i>PROY. ESTADO</a></li>
+                                <li><a href="{% url 'pet_inpf_lis' %}"><i class="fa fa-circle-o"></i>PROY. INPUT FINAL</a></li>
+                                <li><a href="{% url 'prio_lis' %}"><i class="fa fa-circle-o"></i>REQ. PRIORIDAD</a></li>
                                 <li><a href="{% url 'req_cri_lis' %}"><i class="fa fa-circle-o"></i>REQ. CRITICIDAD</a></li>
                                 <li><a href="{% url 'req_cal_lis' %}"><i class="fa fa-circle-o"></i>REQ. CAL.INPUT</a></li>
                                 <li><a href="{% url 'req_inpf_lis' %}"><i class="fa fa-circle-o"></i>REQ. INPUT FINAL</a></li>
+                                <li><a href="{% url 'inc_t_lis' %}"><i class="fa fa-circle-o"></i> INC. TIPO</a></li>
+                                <li><a href="{% url 'inc_ee_lis' %}"><i class="fa fa-circle-o"></i> INC. ENCTR. EN</a></li>
+                                <li><a href="{% url 'rie_cat_lis' %}"><i class="fa fa-circle-o"></i> RIESG. CATEG.</a></li>
+                                <li><a href="{% url 'dud_ra_lis' %}"><i class="fa fa-circle-o"></i> DUD. REL. A</a></li>
+                                <li><a href="{% url 'dud_fl_lis' %}"><i class="fa fa-circle-o"></i>DUD. FASE LOC.</a></li>
+                                <li><a href="{% url 'estim_lis' %}"><i class="fa fa-circle-o"></i>ESTIM. PESOS</a></li><!--retirar grcl4-->
                                 
                             </ul>
                         </li>

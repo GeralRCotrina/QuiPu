@@ -8,12 +8,15 @@
 
 
 <div class="tabla tab_team">
-	<a href="#" class="desc" onclick="tableToExcel('tabla1', 'minifex')">Descargar..</a>
-	<a href="{% url 'modu_cre' %}" class="desc">Registrar..</a>
-	
+	<a href="#" class="desc" onclick="tableToExcel('tabla1', 'minifex')">Descargar..<i class="fa fa-file-excel-o"></i></a>
+	{% if perms.gestion.es_leader %}
+	<a href="{% url 'modu_cre' %}" class="desc">Registrar..<i class="fa fa-plus-circle"></i></a>
+	{% endif %}
+
+
 	<table id="tabla1">
-		<thead> 
-			<tr style="background-color: #9EA665;color: white;
+		<thead>
+			<tr style="background-color:#ff8b55; color: white;
 							line-height: 1.5em; text-align:center;">
 				<td><i class="fa fa-edit"></i></td>
 				<td>PK</td>
@@ -25,17 +28,17 @@
 		</thead>
 		<tbody>
 			{% for ob in object_list %}
-				<tr>
-					<td>
-						<a href="{% url 'modu_edi' ob.pk %}"><i class="fa fa-edit"></i></a>
-						<a href="{% url 'modu_eli' ob.pk %}"><i class="fa fa-trash"></i></a>
-					</td>
-					<td>[{{ ob.pk }}] </td>
-					<td>{{ ob.codigo }} </td>
-					<td>{{ ob.modulo }} </td>
-					<td>{{ ob.zultima_modificacion }} </td>
-					<td >{{ ob.estado }}  </td>
-				</tr>
+			<tr>
+				<td>
+					<a href="{% url 'modu_edi' ob.pk %}"><i class="fa fa-edit"></i></a>
+					<a href="{% url 'modu_eli' ob.pk %}"><i class="fa fa-trash"></i></a>
+				</td>
+				<td>[{{ ob.pk }}] </td>
+				<td>{{ ob.codigo }} </td>
+				<td>{{ ob.modulo }} </td>
+				<td>{{ ob.zultima_modificacion }} </td>
+				<td>{{ ob.estado }} </td>
+			</tr>
 			{% endfor %}
 		</tbody>
 	</table>
