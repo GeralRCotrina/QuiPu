@@ -96,7 +96,7 @@ def	GntValid(request,ide,req):
 		cli0 = Cliente.objects.get(pk=int(ArrID[1]))
 
 	## 2.- Validar COLABORADOR
-	#if not AuthCliente.objects.filter(Q(idauth=request.user.pk) & Q(idcliente=cli0) ).exists():#grcl4
+	#if not AuthCliente.objects.filter(Q(idauth=request.user.pk) & Q(idcliente=cli0) ).exists():
 	#	return 'NUsr' # Usted No está asignado a ese cliente.
 	#if not AuthCliente.objects.filter( Q(idauth=int(ArrID[2])) & Q(idcliente=cli0) ).exists():
 	#	return 'NAsi' # Colaborador No está asignado a ese cliente.
@@ -626,7 +626,7 @@ def ActTotIncSemanal_old(ArrIDx,cli0,req):
 		gnt_act = Gant()
 		gnt_act.idcliente = cli0
 		gnt_act.llave 	= n_llav
-		gnt_act.idauth 	= AuthUser.objects.get(pk=1)
+		gnt_act.idauth 	= AuthUser.objects.get(pk=4) #grcl4
 		gnt_act.anio 	= ArrIDx[3]
 		gnt_act.mes 	= ArrIDx[4]
 		gnt_act.sem 	= ArrIDx[5]

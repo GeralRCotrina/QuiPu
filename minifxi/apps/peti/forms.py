@@ -13,19 +13,20 @@ class PetForm(forms.ModelForm):
 	class Meta:
 		model = Peticion
 
-		fields = ['id_pet_fenix','id_ot_fenix','nombre','tipo','cliente','gestion', 'contenedora', 'estado','input_final',
+		#fields = ['id_pet_fenix','id_ot_fenix','nombre','tipo','cliente','gestion', 'contenedora', 'estado','input_final',
+		fields = ['id_pet_fenix','id_ot_fenix','nombre','tipo','cliente','gestion', 'estado','input_final',
 					'fecha_solicitud', 'fecha_fin_acuerdo', #'horas_acuerdo', #'pet_ruta','ot_ruta','comentario',
 					'color','creador']
 
 		labels = {
 			'dni':'DNI',
-			'id_pet_fenix':'Id en Fenix',
-			'id_ot_fenix':'Work Item ID',
+			'id_pet_fenix':'ID Proyecto',
+			'id_ot_fenix':'ID Proy2',
 			'nombre':'Nombre',
 			'tipo':'Tipo',
 			'gestion':'Gestión',
 			'estado':'Estado',
-			'input_final':'Input final',
+			'input_final':'Calidad DF',
 			'fecha_solicitud':'Fecha solicitud',
 			'fecha_fin_acuerdo':'Fecha fin acordada',
 			#'fecha_real_entrega':'Fecha de entrega real',
@@ -51,7 +52,7 @@ class PetForm(forms.ModelForm):
 		    #'comentario':forms.Textarea(attrs={'class':'form-control','rows':'2'}),
 		    'color':forms.TextInput(attrs={'type':'color'}),
 
-		    'contenedora'  : forms.TextInput(attrs={'type':'checkbox','checked':'checked'}), 
+		    #'contenedora'  : forms.TextInput(attrs={'type':'checkbox','checked':'checked'}), 
 		    #'pet_ruta'  : forms.TextInput(attrs={'class':'form-control'}), 
 		   # 'ot_ruta'  : forms.TextInput(attrs={'class':'form-control'}), 
 		}

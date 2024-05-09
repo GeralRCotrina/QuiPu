@@ -77,7 +77,7 @@ class PetEliminar(DeleteView):
 	model=Peticion
 	form_class=PetForm
 	template_name='peti/eliminar.html'
-	success_url=reverse_lazy('pet_listar')	#grcl4
+	success_url=reverse_lazy('pet_listar')	
 
 	def post(self,request,*args,**kwargs):
 		pet_lst = Requerimientos.objects.filter(peticion=str(self.kwargs['pk']))
@@ -93,7 +93,7 @@ class PetEditar(UpdateView):
 	model=Peticion
 	form_class=PetEditForm
 	template_name='peti/crear.html'
-	success_url=reverse_lazy('pet_listar') #grcl4
+	success_url=reverse_lazy('pet_listar') 
 
 	def get_form(self, form_class=None):
 		form=super(UpdateView,self).get_form(form_class=self.form_class)
@@ -106,7 +106,7 @@ class PetEditar(UpdateView):
 			clie = pet_e.cliente
 		else:
 			clie = AuthCliente.objects.all()
-		form.fields["creador"].queryset=AuthUser.objects.filter(authcliente__idcliente=clie) #grcl4
+		form.fields["creador"].queryset=AuthUser.objects.filter(authcliente__idcliente=clie) 
 		return form
 
 
@@ -161,10 +161,35 @@ class PetListar(View):
 			cursor.execute(str_qry)
 		resultado = cursor.fetchall()
 
+		rs_hc = 0.0 # tsk_tot_pla  +grcl4
+		rs_tp = 0.0 # tsk_tot_pla 
+		rs_tp = 0.0 # tsk_tot_pla 
+		rs_ti = 0.0 # tsk_tot_inc
+		rs_ig = 0.0 # gnt_tot_inc
+		rs_et = 0.0 # etc
+		rs_ha = 0.0 # horas_adicionales
+
 		for row in resultado:
 			dic = dict(zip([col[0] for col in cursor.description], row))
 			object_list.append(dic)
 
+			if dic['horas_acuerdo'] != None:
+				rs_hc = float(rs_hc) + float(dic['horas_acuerdo'])
+
+			if dic['tsk_tot_pla'] != None:
+				rs_tp = float(rs_tp) + float(dic['tsk_tot_pla'])
+
+			if dic['tsk_tot_inc'] != None:
+				rs_ti = float(rs_ti) + float(dic['tsk_tot_inc'])
+
+			if dic['gnt_tot_inc'] != None:
+				rs_ig = float(rs_ig) + float(dic['gnt_tot_inc'])
+
+			if dic['etc'] != None:
+				rs_et = float(rs_et) + float(dic['etc'])
+
+			if dic['horas_adicionales'] != None:
+				rs_ha = float(rs_ha) + float(dic['horas_adicionales'])
 
 		cursor.close()
 
@@ -175,6 +200,12 @@ class PetListar(View):
 				msj = msj + " en "+x.cliente
 
 		dicc = { 
+			'rs_hc': rs_hc,
+			'rs_tp': rs_tp,
+			'rs_ti': rs_ti,
+			'rs_ig': rs_ig,
+			'rs_et': rs_et,
+			'rs_ha': rs_ha,
 			'object_list':object_list,
 			'lst_cliente': obj2,
 			'msj': msj
@@ -225,8 +256,8 @@ horas_adicionales
 			'rs_ig': rs_ig,
 			'rs_et': rs_et,
 			'rs_ha': rs_ha
-"""
 
+"""
 
 
 

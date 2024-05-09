@@ -230,7 +230,7 @@ function ValidReq(ide, val_1, val_2) { // Vamos a las validaciones en el servido
 
 			switch (xhr.response) {
 				case 'NAsi': alert("Colaborador No está asignado a ese cliente (Solicite a un líder que lo asigne)."); break;
-				case 'NUsr': alert("Usted no tiene asignación aquí, nopuede modificar.");
+				case 'NUsr': alert("Usted no tiene asignación aquí, no puede modificar.");
 					document.getElementById(ide).removeAttribute('onblur');
 					break;
 				case 'NCli': alert("No existe el cliente."); break;
