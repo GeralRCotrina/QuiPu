@@ -10,7 +10,7 @@
 		<div class="col-6 mx-auto">
 			<form method="post">
 			{% csrf_token %}
-			<h2>¿Seguro que desea eliminar : "{{ object.nombre }} " ?</h2>
+			<h2>¿Seguro que desea eliminar : "{{ object.cliente }} - {{ object.descripcion }}" ?</h2>
 			<a href="{% url 'cli_lis' %}" class="btn btn-info">Cancelar</a>
 			<button class="btn  btn-danger" type="submit">Sí, eliminar</button>		
 		</form><br>

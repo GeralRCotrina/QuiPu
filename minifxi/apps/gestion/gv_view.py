@@ -3,7 +3,7 @@
 # ----------------------------------------------------------------------------------------- #
 import datetime
 from datetime import timedelta
-from apps.gestion.models import AuthCliente, AuthUser, Equipo, LogDeModificaciones
+from apps.gestion.models import AuthCliente, AuthUser, Equipo, LogDeModificaciones, EquiDetalle
 from django.db.models import Q
 import numpy as np
 from django.shortcuts import render
@@ -38,27 +38,35 @@ def ValidaCliente(usr_id,cli_id):
 def	MiCliente(userpk):
 	hoy = datetime.datetime.now()
 	clie = None
-	if AuthCliente.objects.filter( Q(idauth = userpk) & Q(fecha_alta__lte=hoy) & Q(fecha_baja__gte=hoy) ).exists():
-		asig01 = AuthCliente.objects.filter( Q(idauth = userpk) & Q(fecha_alta__lte=hoy) & Q(fecha_baja__gte=hoy) ).first()
+	if AuthCliente.objects.filter( Q(idauth = userpk) & Q(fecha_alta__lte=hoy) & Q(fecha_baja__gte=hoy) & Q(prioridad="on") ).exists():
+		asig01 = AuthCliente.objects.filter( Q(idauth = userpk) & Q(fecha_alta__lte=hoy) & Q(fecha_baja__gte=hoy) & Q(prioridad="on") ).last()
 		clie = asig01.idcliente.pk
 	else:
+		if AuthCliente.objects.filter( Q(idauth = userpk) & Q(fecha_alta__lte=hoy) & Q(fecha_baja__gte=hoy)).exists():
+			asig01 = AuthCliente.objects.filter( Q(idauth = userpk) & Q(fecha_alta__lte=hoy) & Q(fecha_baja__gte=hoy)).last()
+			clie = asig01.idcliente.pk
 		clie = '0'
 	return clie
 
-
 # Obtenemos el equipo asignado
-def	MiEquipo(clie):
+def	MiEquipo(clie,usr):
 	equ = '0'
 	if equ == None or equ == '' or equ == '0':
-		if AuthCliente.objects.filter(idcliente=clie).exists():
-			acl = AuthCliente.objects.filter(idcliente=clie).first()
-			equi = acl.idcliente.equipo
+		if AuthCliente.objects.filter(idauth=usr, idcliente=clie, prioridad='on').exists():
+			acl = AuthCliente.objects.filter(idauth=usr, idcliente=clie, prioridad='on').last()
+			equi_det = EquiDetalle.objects.filter(idcliente=acl.idcliente).last()# Tenemos el id del cliente favorito jajaja
+			equi = Equipo.objects.get(idequipo=equi_det.idequipo.pk)
 		else: 
-			equi = Equipo.objects.get(idequipo=1) # Toma valor inicial será uno
+			# Validamos si tine asignación sin Cliente Prioridad
+			if AuthCliente.objects.filter(idauth=usr, idcliente=clie).exists():
+				acl = AuthCliente.objects.filter(idauth=usr, idcliente=clie).last()
+				equi_det = EquiDetalle.objects.filter(idcliente=acl.idcliente).last()# Tenemos el id del cliente favorito jajaja
+				equi = Equipo.objects.get(idequipo=equi_det.idequipo.pk)
+			else:
+				equi = Equipo.objects.get(idequipo=1) # Toma valor inicial será uno
 	else:
 		equi = Equipo.objects.get(idequipo=equ)
 	return equi
-
 
 
 

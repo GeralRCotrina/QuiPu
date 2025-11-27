@@ -43,6 +43,7 @@ var gant_html = ""; 		//		Gante en HTML.
 var cant_col = 0;  		// 		Obtenemos cantidad de colaboradores
 var col_span = 0;  		//		Cantidad filas que ocuparan
 var cliente = "";		//		Cliente
+var cli_color = "";		//		Cliente color ++grcl456
 var var_fts = "";		// 		Concepto del cliente
 var mes = "";
 var anio = "";
@@ -125,6 +126,7 @@ function ObtAsig(idc) {
 				lstCOL = myObj['lstCOL'].split(',');
 				lstIDs = myObj['lstIDs'].split(',');
 				cliente = myObj['Cli'];
+				cli_color = myObj['cli_color'];// ++grcl456
 				pais = myObj['Pai'];
 				var_fts = myObj['Fte'];
 				lstNlb = myObj['lstNlb'].split('~');  // 
@@ -404,11 +406,12 @@ function InsertarEnElDom() {
 	cabt += ' - ' + hoy.getHours() + ':' + hoy.getMinutes() + ':' + hoy.getSeconds() + '';
 	cabt += '    -    Rep: ' + mes + '/' + anio;
 
-	// 1° fila de la cabecera
-	var gant_html_1 = '<thead><tr class="cls04"><td colspan="7" class="cls03 fj00 cntr titl"><b>' + cabt + '</b></td>';
-
+	// 1° fila de la cabecera  grcl456
+	/*var gant_html_1 = '<thead><tr class="cls04"><td colspan="7" class="cls03 fj00 cntr titl"><b>' + cabt + '</b></td>';*/
+	var gant_html_1 = '<thead><tr class="cls04"><td colspan="7" class="cls03 fj00 cntr" '// style="background:'+cli_color+'86;text-shadow: 0px -1px 3px #ffffff;"><b>' + cabt + '</b></td>';
+	    gant_html_1 += 'style="background:'+cli_color+'86;text-shadow: 0px -1px 3px #ffffff;"><b>' + cabt + '</b></td>';
 	for (var i = 1; i <= cant_dias; i++) {
-		gant_html_1 += '<td colspan="2" class="cls05">' + DescDia(i) + '</td>';
+		gant_html_1 += '<td colspan="2" class="cls05" style="background:'+cli_color+'8f;text-shadow: 0px -1px 3px #ffffff;">' + DescDia(i) + '</td>';
 	}
 
 	// 2° fila de la cabecera

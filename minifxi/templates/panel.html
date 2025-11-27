@@ -42,7 +42,7 @@
         <input type="hidden" value="<%=codUsuario%>" id="codUser">
         <div class="wrapper">      
             <header class="main-header">
-                <a href="{% url 'panel' %}" class="logo">QUIPU Dev  <i class="fa fa-barcode"></i></a>
+                <a href="{% url 'panel' %}" class="logo">QUIPU Dev <i class="fa fa-barcode"></i></a>
                 <nav class="navbar navbar-static-top" role="navigation">
                     <a href="#" class="sidebar-toggle" data-toggle="offcanvas" role="button" id="btn_0">
                         <span class="sr-only">Toggle navigation</span> </a>
@@ -166,9 +166,10 @@
                                 <span>REPORTES</span><i class="fa fa-angle-left pull-right"></i>
                             </a>
                             <ul class="treeview-menu">
+                                <li><a href="{% url 'rep008' %}"><i class="fa fa-circle-o" style="color:rgb(71, 240, 69)"></i>REP.INDRA</a></li>
                                 <li><a href="{% url 'rep007' %}"><i class="fa fa-circle-o"></i>REP.SEMANAL</a></li>
-                                <li><a href="{% url 'rep005' %}"><i class="fa fa-circle-o" style="color:#9CFF9A;"></i>INCURRIDOS</a></li>
-                                <li><a href="{% url 'rep006' %}"><i class="fa fa-circle-o" style="color:#9CFF9A;"></i>DISPONIBILIDAD</a></li>
+                                <li><a href="{% url 'rep005' %}"><i class="fa fa-circle-o"></i>INCURRIDOS</a></li>
+                                <li><a href="{% url 'rep006' %}"><i class="fa fa-circle-o"></i>DISPONIBILIDAD</a></li>
                                 <li><a href="{% url 'rep001' %}"><i class="fa fa-circle-o"></i> CLIENTES</a></li>
                                 <li><a href="{% url 'rep002' %}"><i class="fa fa-circle-o"></i> COLABORADORES</a></li>
                                 <li><a href="{% url 'rep003' %}"><i class="fa fa-circle-o"></i> Incur/Dispo.</a></li>

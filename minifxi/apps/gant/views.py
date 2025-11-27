@@ -626,7 +626,7 @@ def ActTotIncSemanal_old(ArrIDx,cli0,req):
 		gnt_act = Gant()
 		gnt_act.idcliente = cli0
 		gnt_act.llave 	= n_llav
-		gnt_act.idauth 	= AuthUser.objects.get(pk=4) #grcl4
+		gnt_act.idauth 	= AuthUser.objects.get(pk=1) #grcl4
 		gnt_act.anio 	= ArrIDx[3]
 		gnt_act.mes 	= ArrIDx[4]
 		gnt_act.sem 	= ArrIDx[5]
@@ -898,7 +898,7 @@ class Gnt_d2(View):
 
 
 
-
+#       BOTÓN 'CARGAR'   ____> Cargamos el Gant del clietne eleccionado
 #		Obtiene los colaboradores asignados al cliente. ftes
 class ObtAsignaciones(View):
 
@@ -957,7 +957,8 @@ class ObtAsignaciones(View):
 
 			lsC += '",'
 			jsn += '"msj":"Ok",'+Cli+Nlb+Pai+Fte+lsC+lsI+'"'
-			jsn += ',"StrJsn":"'+GntLst(idc,fecha_desde,fecha_hasta)+'"}'
+			jsn += ',"StrJsn":"'+GntLst(idc,fecha_desde,fecha_hasta)+'"'
+			jsn += ',"cli_color":"'+str(client.color)+'"}'
 
 		else:
 			jsn +='"msj":"Err"}'  

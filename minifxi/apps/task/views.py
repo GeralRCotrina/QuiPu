@@ -627,30 +627,34 @@ def CrearCodigoTask(idr):
 	# get last id
 	# Creamos un Id Código par ala task ( 'Cod cliente' + 'Correlativo' )
 	req01 = Requerimientos.objects.get(pk=int(idr))
-	cdg = req01.peticion.cliente.codigo
+	#cdg = req01.peticion.cliente.codigo --grcl 24.09.19
+	# Tomamos las 3 primeras letras del nombre del cliente
+	# para el código de la Task
+	cdg = req01.peticion.cliente.cliente[0:3] 
+	#print("------------> idr : "+str(idr)+" --|-- cdg: ´"+str(cdg)+"´")
 	cod  = ''
 	cod1 = 0
 
 	if Task.objects.filter(id_interno__contains=str(cdg)).exists():
 		task1 = Task.objects.filter(id_interno__contains=str(cdg)).last().id_interno
-		#print(" >> :"+str(task1))
+		#print(" -------------->> cdg :"+str(cdg)+"  tsk:"+str(task1))
 		cod1 = int(task1[len(cdg):(len(cdg)+6)]) + 1
 	else:
 		cod1 = 0 + 1
 
 	#print("  >> "+str(len(cdg))+"  >> +str(task1)+  >> "+str(cod))
 	if cod1 < 10:
-		cod = str(req01.peticion.cliente.codigo)+'00000'+str(cod1)
+		cod = str(req01.peticion.cliente.cliente[0:3])+'00000'+str(cod1)
 	if cod1 < 100:
-		cod = str(req01.peticion.cliente.codigo)+'0000'+str(cod1)
+		cod = str(req01.peticion.cliente.cliente[0:3])+'0000'+str(cod1)
 	elif cod1 < 1000:
-		cod = str(req01.peticion.cliente.codigo)+'000'+str(cod1)
+		cod = str(req01.peticion.cliente.cliente[0:3])+'000'+str(cod1)
 	elif cod1 < 10000:
-		cod = str(req01.peticion.cliente.codigo)+'00'+str(cod1)
+		cod = str(req01.peticion.cliente.cliente[0:3])+'00'+str(cod1)
 	elif cod1 < 100000:
-		cod = str(req01.peticion.cliente.codigo)+'0'+str(cod1)
+		cod = str(req01.peticion.cliente.cliente[0:3])+'0'+str(cod1)
 	else:
-		cod = str(req01.peticion.cliente.codigo)+str(cod1)
+		cod = str(req01.peticion.cliente.cliente[0:3])+str(cod1)
 	#print("  >> Por def : "+str(cod))
 
 	return cod

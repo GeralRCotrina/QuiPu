@@ -101,13 +101,11 @@ class Daily(View):
 	def get(self,request,*args,**kwargs):
 		
 		# Lista de clientes para el matchcode
-
 		equ = self.request.GET.get('equ')
 		fecha_desde = self.request.GET.get('fecha_desde')
 		fecha_hasta = self.request.GET.get('fecha_hasta')
 
-
-		# Get TIPO ESTIM
+		# Get Estados de la Petición/Proyecto
 		lst_pes = PeticionEstado.objects.all()
 		for pes in lst_pes:
 			pass
@@ -142,23 +140,24 @@ class Daily(View):
 			cad += '-'+str(fa.pk)
 		#print("  >> "+cad)
 
-
 		userpk = self.request.user.pk
-
-		# Obtenemos el equipo asignado
-		#print(" >> equ : ["+str(equ)+"]")
-		if equ == None or equ == '' or equ == '0':
-			if AuthCliente.objects.filter(idauth=userpk).exists():
-				acl = AuthCliente.objects.filter(idauth=userpk).first()
-				equi = acl.idcliente.equipo
-			else: 
-				equi = Equipo.objects.get(idequipo=1) # Toma valor inicial será uno
+		
+		if equ == None:
+			if AuthCliente.objects.filter(idauth=userpk, prioridad='on').exists():
+				au_cli = AuthCliente.objects.filter(idauth=userpk, prioridad='on').last()
+				eq_det = EquiDetalle.objects.filter(idcliente=au_cli.idcliente).last()
+				equ = eq_det.idequipo
+				print("  1-> "+str(equ))
+			else:
+				au_cli = AuthCliente.objects.filter(idauth=userpk).last()
+				eq_det = EquiDetalle.objects.filter(idcliente=au_cli.idcliente).last()
+				equ = eq_det.idequipo
+				print("  2-> "+str(equ))
+			equi = Equipo.objects.get(idequipo=equ.pk)
 		else:
 			equi = Equipo.objects.get(idequipo=equ)
-
-
-		#print(" >> Equi : "+str(equi))
-
+		print("  3-> "+str(equ))
+				
 
 		# Validamos fechas
 		if fecha_desde == None:
@@ -174,6 +173,7 @@ class Daily(View):
 		lst_usrs = []	
 		cursor = connection.cursor()
 		cursor.execute("CALL sp_002_usr_x_equi ("+str(equi.pk)+","+fecha_desde+","+fecha_hasta+")")
+		#cursor.execute("CALL sp_002_usr_x_equi ("+str(equi)+","+fecha_desde+","+fecha_hasta+")")
 		resultado = cursor.fetchall()
 		cad = ''
 		for row in resultado:
@@ -187,6 +187,7 @@ class Daily(View):
 		object_list = []		
 		cursor = connection.cursor()
 		cursor.execute("CALL sp_dail_x_fecha_2 ("+str(equi.pk)+","+str(fecha_desde)+","+str(fecha_hasta)+")")
+		#cursor.execute("CALL sp_dail_x_fecha_2 ("+str(equi)+","+str(fecha_desde)+","+str(fecha_hasta)+")")
 		cursor.execute("CALL sp_dail_x_fecha_2 (1,'2020-01-01','2020-01-01')")	# ---> CONSULTA FANTASMA NECESARIA
 		resultado = cursor.fetchall()
 
@@ -245,7 +246,7 @@ class EstCrear(View):
 			pass
 
 
-		# Traer la lista de lso estatus excluidos en el filtro  #grcl4
+		# Traer la lista de lso estatus excluidos en el filtro 
 		lst_excl = []
 		lst_sta_excl = Hardcode.objects.filter( Q(app='gest') & Q(asp='esta') & Q(typcon='clie') & Q(item='excl_sta') & Q(item='excl_sta') )
 		for q in lst_sta_excl:
@@ -268,12 +269,12 @@ class EstCrear(View):
 				cli_id0 = Cliente.objects.filter(idcliente__gte=1).first()
 				cli_id = cli_id0.pk
 		
-		# Cuando se consulta por cliente, es necesario buscarlo
+		# Cuando NO se consulta por cliente, es necesario buscarlo
 		if clie == None:
 			clie = Cliente.objects.get(pk=cli_id)
 
 
-		# Traer la lista de los estatus excluidos en el filtro  #grcl4
+		# Traer la lista de los estatus excluidos en el filtro
 		lst_excl = []
 		lst_sta_excl = Hardcode.objects.filter( Q(app='gest') & Q(asp='esta') & Q(typcon='clie') & Q(consum=str(cli_id)) & Q(item='excl_sta') )
 		for q in lst_sta_excl:
@@ -300,7 +301,7 @@ class EstCrear(View):
 			hoy = hoy + "0"+str(fch.month)+"."
 		else:
 			hoy = hoy + str(fch.month)+"."
-
+		hoy = hoy + str(fch.year)  # ++grcl-24.09.18
 
 
 		ArrF = StartEndWeek(fchs)

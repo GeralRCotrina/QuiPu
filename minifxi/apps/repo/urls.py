@@ -20,6 +20,9 @@ urlpatterns = [
 
 	# --- IBM ---
 	re_path(r'^rep007/$',login_required(views.Rep007.as_view()),name='rep007'),  
+	
+	# --- INDRA ---
+	re_path(r'^rep008/$',login_required(views.Rep008.as_view()),name='rep008'), 
 
 ]
 

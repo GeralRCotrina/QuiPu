@@ -156,7 +156,8 @@
 						<!-- PAIS -->
 						<!-- <td style="background: #fff;">{{ ob.pais }}</td> -->
 
-						<td style="font-weight: bold; background: #fff;">{{ ob.cliente }}</td>
+						<!-- CLIENTE -->
+						<td style="font-weight: bold; background:{{ ob.cli_color }}; text-shadow: 0px -1px 3px #ffffff;">{{ ob.cliente }}</td>
 
 						<td style="font-weight: bold; background:{{ ob.pet_col }}"> {% if ob.codigo != 'None' %}{{ ob.pet_nom }}{% endif %} </td>
 						<td style="font-weight: bold; background:#F4F7F5;">{{ ob.codigo }}</td>

@@ -371,7 +371,7 @@ class ReqFilt(View):
 		clie = MiCliente(self.request.user.pk)
 		
 		# Obtenemos el equipo asignado 
-		equi = MiEquipo(clie)
+		equi = MiEquipo(clie,self.request.user.pk)
 
 		
 		# Colaboradores con asignación activa
@@ -380,10 +380,10 @@ class ReqFilt(View):
 			pass#print("   "+str(it))
 
 
-
 		#from django.db import connection, transaction
 		object_list = []		
 		cursor = connection.cursor()
+		print("   ---->"+str(equi.pk))
 		cursor.execute("CALL sp_001_req_filt ("+str(equi.pk)+",'%"+str(filt)+"%')")
 		resultado = cursor.fetchall()
 

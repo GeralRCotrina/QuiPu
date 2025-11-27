@@ -68,8 +68,11 @@ class EquipoForm(forms.ModelForm):
 
 class ClienteForm(forms.ModelForm):
 	class Meta:
-		model = Cliente
-		fields = ['codigo','equipo','cliente','correlativo','ftes','idpais','descripcion','wi_id']
+		model = Cliente 
+		fields = ['equipo','cliente','descripcion','codigo','wi_id','correlativo','ftes','idpais','color']
+		widgets={
+			'color':forms.TextInput(attrs={'type':'color'}),
+			}
 
 
 class PaisForm(forms.ModelForm):
@@ -178,21 +181,23 @@ class DudasEdiForm(forms.ModelForm):
 class AuthClienteForm(forms.ModelForm):
 	class Meta:
 		model = AuthCliente
-		fields = ['idcliente','idauth','asignacion','descripcion','fecha_alta','fecha_baja']#,'activo']
+		fields = ['idcliente','idauth','asignacion','descripcion','fecha_alta','fecha_baja','prioridad']#,'activo']
 
 		widgets={
 			    'fecha_alta':forms.DateInput(attrs={'type':'date'}),
 			    'fecha_baja':forms.DateInput(attrs={'type':'date'}),
 			    'descripcion':forms.Textarea(attrs={'rows':'2'}),
 			   # 'activo':forms.TextInput(attrs={'type':'checkbox','checked':'checked'}),
+			   	'prioridad'  : forms.TextInput(attrs={'type':'checkbox','checked':'checked' }),
 		    } 
 
 class AuthClienteEdiForm(forms.ModelForm):
 	class Meta:
 		model = AuthCliente
-		fields = ['idcliente','idauth','asignacion','descripcion','fecha_alta','fecha_baja']#,'activo']
+		fields = ['idcliente','idauth','asignacion','descripcion','fecha_alta','fecha_baja','prioridad']#,'activo']
 
-		widgets={ 'descripcion':forms.Textarea(attrs={'rows':'2'}), }
+		widgets={ 'descripcion':forms.Textarea(attrs={'rows':'2'}),
+			      'prioridad'  : forms.TextInput(attrs={'type':'checkbox'}), }
 			      #'activo':forms.TextInput(attrs={'type':'checkbox','checked':'checked'}), }
 
 

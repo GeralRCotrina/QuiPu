@@ -16,7 +16,7 @@ DATABASES = {
     'default': {
         'ENGINE': 'mysql_cymysql',
         #'NAME': 'dbexcelv34',
-        'NAME': 'quipu01',
+        'NAME': 'quipu03',
         'USER': 'root',
         'PASSWORD': '',
         'HOST': '127.0.0.1',

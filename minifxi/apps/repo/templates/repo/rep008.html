@@ -1,0 +1,138 @@
+{% extends "panel.html" %}
+
+{% block blck_static_head %}
+{% load staticfiles i18n %} 
+{% endblock blck_static_head %}
+
+{% block txt_lv1 %}Reporte INDRA{% endblock txt_lv1 %}
+{% block txt_lv2 %}REP008{% endblock txt_lv2 %}
+
+{% block section_1 %}
+<div class="reporte1">
+    <i class="inv">----</i>
+    <input id="input_url" type="text" value="/panel/" hidden="">
+    <input type="date" id="fecha_desde1" class="input_d1">
+    <input type="date" id="fecha_hasta1" class="input_d2">
+    <input type="number" id="cod_col" class="input_d2" placeholder="código de emp..">        
+    <button onclick="ConsultarRepo(7)" class="input_d3" data-toggle="tooltip" data-original-title="Colsultar fecha">Consultar</button>
+</div>
+
+
+
+{% if tabla_list %}
+
+<br>
+<hr>
+    
+<div class="tabla tab_task">
+
+    <h2>{{ msj }}<i class="inv">___</i><small>Recordar que solo salen las SF = Rojo.</small></h2> 
+    
+
+    <a class="desc" onclick="tableToExcel('tabla1', 'minifex')">Descargar..  <i class="fa fa-file-excel-o"></i></a>
+    <table class="table" id="tabla1">
+        <thead>
+            <tr style="background-color: #108a79;
+                        color: #ffffff;
+                        font-weight: bold;
+                        line-height: 1.5em;
+                        font-size: 1.3em;">
+                <td>Ítem</td> 
+                <td>Cliente</td>
+                <td>Código</td>
+                <td>WI</td>
+                <td>1</td>
+                <td>2</td>
+                <td>3</td>
+                <td>4</td>
+                <td>5</td>
+                <td>6</td>
+                <td>7</td>
+                <td>8</td>
+                <td>9</td>
+                <td>10</td>
+                <td>11</td>
+                <td>12</td>
+                <td>13</td>
+                <td>14</td>
+                <td>15</td>
+                <td>16</td>
+                <td>17</td>
+                <td>18</td>
+                <td>19</td>
+                <td>20</td>
+                <td>21</td>
+                <td>22</td>
+                <td>23</td>
+                <td>24</td>
+                <td>25</td>
+                <td>26</td>
+                <td>27</td>
+                <td>28</td>
+                <td>29</td>
+                <td>30</td>
+                <td>31</td>                
+            </tr>
+
+        </thead>
+        <tbody>
+            {% for ob in tabla_list %}
+                <tr style="border: 1px rgb(109, 79, 241);">
+                    <td>{{ ob.item }}</td>
+                    <td style="background-color: {{ ob.color }};"><b>{{ ob.cliente }}</b></td>
+                    <td>{{ ob.codigo }}</td>
+                    <td>{{ ob.wi_id }}</td>  
+                    <td>{{ ob.dia_1 }}</td>  
+                    <td>{{ ob.dia_2 }}</td>  
+                    <td>{{ ob.dia_3 }}</td>  
+                    <td>{{ ob.dia_4 }}</td>  
+                    <td>{{ ob.dia_5 }}</td>  
+                    <td>{{ ob.dia_6 }}</td>  
+                    <td>{{ ob.dia_7 }}</td>  
+                    <td>{{ ob.dia_8 }}</td>  
+                    <td>{{ ob.dia_9 }}</td>  
+                    <td>{{ ob.dia_10 }}</td>  
+                    <td>{{ ob.dia_11 }}</td>  
+                    <td>{{ ob.dia_12 }}</td>  
+                    <td>{{ ob.dia_13 }}</td>  
+                    <td>{{ ob.dia_14 }}</td>  
+                    <td>{{ ob.dia_15 }}</td>  
+                    <td>{{ ob.dia_16 }}</td>  
+                    <td>{{ ob.dia_17 }}</td>  
+                    <td>{{ ob.dia_18 }}</td>  
+                    <td>{{ ob.dia_19 }}</td>  
+                    <td>{{ ob.dia_20 }}</td>  
+                    <td>{{ ob.dia_21 }}</td>  
+                    <td>{{ ob.dia_22 }}</td>  
+                    <td>{{ ob.dia_23 }}</td>  
+                    <td>{{ ob.dia_24 }}</td>  
+                    <td>{{ ob.dia_25 }}</td>  
+                    <td>{{ ob.dia_26 }}</td>  
+                    <td>{{ ob.dia_27 }}</td>  
+                    <td>{{ ob.dia_28 }}</td>  
+                    <td>{{ ob.dia_29 }}</td>  
+                    <td>{{ ob.dia_30 }}</td>  
+                    <td>{{ ob.dia_31 }}</td>  
+                                      
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% else %}
+    <p class="alert alert-warning"> {{ msj }} </p>
+{% endif %}
+
+
+
+
+{% endblock section_1 %}
+
+
+
+
+
+{% block blck_static_foot %}
+<script src="{% static 'js/repo.js' %}"></script>
+{% endblock blck_static_foot %}
+

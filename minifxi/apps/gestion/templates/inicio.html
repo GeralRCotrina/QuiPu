@@ -65,6 +65,7 @@
                 <tr style="background: #E4EEFF;">
                     <td></td>
                     <td>Sf</td>
+                    <td>Cliente</td>
                     <td>Proy.</td>
                     <td colspan="3"  style="background: #D3E2FF;">Requerimiento</td>
                     <td>Subtarea</td>
@@ -87,6 +88,9 @@
                         onclick="ActualizarTSf({{ ob.tsk_id }})" id="sf_{{ ob.tsk_id }}"></td>
 
 
+                    <!-- Cliente grcl4-->
+                     <td style="background: {{ ob.cli_color }};font-weight: bold;text-shadow: 0px -1px 3px #ffffff;">{{ ob.cli_codigo }}</td>
+
                     <!-- PROY -->
                     <td style="font-weight: bold; text-align: center; background:{{ ob.pet_col }}">{{ ob.pet_proy }}</td>
 
@@ -94,7 +98,7 @@
 
 
                     <td> {{ ob.req_desc }} </td>
-                    <td id="td_sel_est_P{{ ob.req_id }}" style="background:{{ ob.pte_col }};">{{ ob.pte_est }}</td> <!-- grcl4-->
+                    <td id="td_sel_est_P{{ ob.req_id }}" style="background:{{ ob.pte_col }};">{{ ob.pte_est }}</td> <!-- -->
 
                     <td><b>{{ ob.tsk_sub }}</b></td>
                     <td>{{ ob.tsk_tip }}</td>
@@ -111,6 +115,7 @@
 
             <tfoot> 
                 <tr>    
+                    <td></td>
                     <td></td>
                     <td></td>
                     <td></td>
@@ -139,7 +144,7 @@
 
 
 
-    {% if obj_est %} <!-- Para seleccionar los colores de los estados grcl4 -->
+    {% if obj_est %} <!-- Para seleccionar los colores de los estados -->
         {% for est in obj_est %}
             <input type="text" id="inp_sel_est_{{ est.pk }}" value="{{ est.col_str }}" hidden>
             <input type="text" id="inp_sel_est_T{{ est.pk }}" value="{{ est.descripcion }}" hidden>
@@ -208,7 +213,7 @@
                     </tr>
                     <tr>
                         <td id="td_sel_est_{{ ob.req_id }}" style="background-color: {{ ob.pte_col }};">
-                             {% if obj_est %} <!-- grcl4 -->
+                             {% if obj_est %} <!-- -->
 
                              <select id="sel_est_{{ ob.req_id }}" class="form-control" 
                                                                     style="outline: none;color: white; 
@@ -337,7 +342,7 @@ color: white;font-style: italic;">{{ msj2 }}</h5>
 
         <thead>
             <tr style="background: #ff8b55;">
-                <td></td>
+                <td colspan="2" style="text-align: right;" >Cliente</td>
                 <td>Proy.</td>
                 <td colspan="4" style="background: #ff6737;">Requerimiento</td>
                 <td>F.Est.</td>
@@ -353,6 +358,7 @@ color: white;font-style: italic;">{{ msj2 }}</h5>
                 <td id="tdgd05" contenteditable onkeyup='Filtrar(this.id)'></td>
                 <td id="tdgd06" contenteditable onkeyup='Filtrar(this.id)'></td>
                 <td id="tdgd07" contenteditable onkeyup='Filtrar(this.id)'></td>
+                <td id="tdgd08" contenteditable onkeyup='Filtrar(this.id)'></td>
             </tr>
 
         </thead>
@@ -362,12 +368,13 @@ color: white;font-style: italic;">{{ msj2 }}</h5>
             {% for ob in obj_lst2 %}
                 <tr>
                     <td> <a href="#openModal_r{{ ob.req_id }}"><i class="fa fa-list-ul"></i></a> </td>
+                    <td style="background: {{ ob.cli_color }};font-weight: bold;text-shadow: 0px -1px 3px #ffffff;">{{ ob.cli_codigo }}</td> <!--grcl4 -->
                     <td style="background: {{ ob.pet_col }};">{{ ob.pet_nom }}</td>
                     <td>{{ ob.req_cod }}</td>
                     <td>{{ ob.req_des }}</td>
                     <td>{{ ob.funcional }}</td>
                     <!--td id="td_sel_est_{{ ob.req_id }}" style="background: {{ ob.pte_col }};">{{ ob.pte_est }}</td-->
-                    <td id="td_sel_est_P{{ ob.req_id }}" style="background: {{ ob.pte_col }};">{{ ob.pte_est }}</td> <!-- grcl4 -->
+                    <td id="td_sel_est_P{{ ob.req_id }}" style="background: {{ ob.pte_col }};">{{ ob.pte_est }}</td> <!-- -->
                     <td>{{ ob.req_fec }}</td>
                     <td style="font-weight:bold;">{{ ob.tsk_fec }}</td>
                 </tr>
@@ -375,7 +382,7 @@ color: white;font-style: italic;">{{ msj2 }}</h5>
 
         </tbody>
 
-        <tfoot><tr><td colspan="8"></td> </tr></tfoot>
+        <tfoot><tr><td colspan="9"></td> </tr></tfoot>
 
     </table>
 </div>
@@ -427,7 +434,7 @@ color: white;font-style: italic;">{{ msj2 }}</h5>
                     <tr style="text-align: center;">
 
                         <td id="td_sel_est_{{ ob.req_id }}" style="background-color: {{ ob.pte_col }};">
-                            {% if obj_est %} <!-- grcl4 -->
+                            {% if obj_est %} <!-- -->
                             <select id="sel_est_{{ ob.req_id }}" class="form-control" 
                                                                    style="outline: none;color: white; 
                                                                            text-shadow: black 0.1em 0.1em 0.1em; 

@@ -83,7 +83,7 @@ class panel(View):
 
 
 		#REQUES
-		cursor.execute("CALL sp_panel_req("+str(idr)+")")
+		cursor.execute("CALL sp_panel_req("+str(idr)+")") # grcl456
 		resultado = cursor.fetchall()
 		for row in resultado:
 			dic = dict(zip([col[0] for col in cursor.description], row))
@@ -92,6 +92,7 @@ class panel(View):
 
 
 		#  TASK
+		#print("------>  " + "CALL sp_panel_tsk('"+hoy_str+"',"+str(idr)+")" )
 		cursor.execute("CALL sp_panel_tsk('"+hoy_str+"',"+str(idr)+")") # CONSULTA FANTASMA NECESARIA
 		cursor.execute("CALL sp_panel_tsk('"+hoy_str+"',"+str(idr)+")")
 		resultado = cursor.fetchall()
@@ -382,7 +383,7 @@ class ColFot(View):
 		ahc = MiCliente(self.request.user.pk)
 		
 		# Obtenemos el equipo asignado
-		equi = MiEquipo(ahc)
+		equi = MiEquipo(ahc,self.request.user.pk) #grcl45
 		equ = equi.pk
 
 
@@ -391,7 +392,7 @@ class ColFot(View):
 		dic =          '{ "Foto" : "'+ fto + '" ,'
 		dic = '' + dic +' "Codigo" : "'+ str(usr.codigo) + '" ,'
 		dic = '' + dic +' "Cliente" : "' + str(ahc) + '" , '
-		dic = '' + dic +' "Equipo" : "' + str(equ) + '" '
+		dic = '' + dic +' "Equipo" : "' + str(equ) + '" ' 
 		dic = '' + dic +' } '
 
 		#print(" >>> " + dic)

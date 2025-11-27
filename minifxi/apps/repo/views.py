@@ -12,10 +12,122 @@ from django.db import connection
 
 # Create your views here.
 
+#	Reporte los Viernes 
+class Rep008(View): 
+
+	def get(self,request,*args,**kwargs):
+
+		# Get request
+		idu = self.request.GET.get('idu')
+		fd1 = self.request.GET.get('fd1')
+		fh1 = self.request.GET.get('fh1')
+		usr = AuthUser.objects.get(pk=self.request.user.pk)
+
+		# Código default
+		if idu == None:
+			idu = usr.codigo
+
+		# Fecha Hasta default
+		if fd1 == None:
+			fd2 = datetime.datetime.now()
+			fd1 = "'"+str(fd2.year)+"-"+str(fd2.month)+"-01'"
+			#print(">> No :. fd1 : "+str(fd1))
+		if fh1 == None:
+			fh2 = datetime.datetime.now()
+			fh1 = "'"+str(fh2.year)+"-"+str(fh2.month)+"-"+str(fh2.day)+"'"
+			#print(">> No :. fh1 : "+str(fh1))
+
+		#-----------------LISTA DE TAREAS--------------#
+		cursor = connection.cursor()
+		cursor.execute("CALL sp_rep008("+str(fd1)+","+str(fh1)+",'"+str(idu)+"')")
+		resultado = cursor.fetchall()
+		
+
+		row_lst = []
+		import numpy as np
+		cont = -1
+		object_list = []
+		for row in resultado:
+			dic = dict(zip([col[0] for col in cursor.description], row))
+			object_list.append(dic)
+
+			# llenamos la matriz
+			cont += 1
+			row_lst[cont] = row
+
+			print(" -----------> row[1]: "+str(row[1]))
+			#print(" -----------> dic: "+str(dic)+"     -  row[1]: "+str(row[1]))
+			#horas = horas + float(row[5])
+		cursor.close()
+
+		#-----------------LISTA DE CLIENTES--------------#
+		cursor = connection.cursor()
+		cursor.execute("CALL sp_rep008_cli("+str(self.request.user.pk)+")")
+		cursor.execute("CALL sp_rep008_cli("+str(self.request.user.pk)+")")
+		resultado = cursor.fetchall()
+		
+		cli_lst = []
+		#cli_lst.append("{'idcliente': 33, 'cliente': 'Locura', 'codigo': 'USISAP', 'wi_id': '10', 'color': '#3d5dff'}")
+		for row in resultado:
+			dic = dict(zip([col[0] for col in cursor.description], row))
+			cli_lst.append(dic)
+			#print("---->"+str(dic))
+		cursor.close()
+
+		#-----------------ARMAMOS LA TABLA--------------#
+		tabla_list = []
+		lin = 0
+		import ast
+		import json
+
+		for row in cli_lst:
+			# Convertimos a string para luego a diccionario
+			dic_1 = ast.literal_eval(str(row))
+			lin += 1
+			linea = '{"item":"' + str(lin) + '",'
+			linea += '"cliente":"'+str(dic_1.get("cliente")) +'",'
+			linea += '"color":"'+str(dic_1.get("color")) +'",'
+			linea += '"codigo":"'+str(dic_1.get("codigo")) +'",'
+			linea += '"wi_id":"'+str(dic_1.get("wi_id")) + '",'
+			
+			# -------------------------------------------------------
+			dia1 = 0
+			while dia1 <= 30:
+
+				# Acumulamos del día 
+				#for item in object_list if :
+
+
+				dia1 += 1
+				linea += '"dia_'+str(dia1)+'":"dia__'+str(dia1) + '"'
+				if dia1 != 31:
+					linea += ','
+
+			# -------------------------------------------------------
+			
+			
+			linea += '}'
+			# Agregamos la línea del cliente / en formato diccionario
+			#print("-------------->"+linea)
+			tabla_list.append(json.loads(linea))
+			
+		dicc = { 
+			'msj' : ' trabajadas',
+			'object_list' : object_list,
+			'tabla_list' : tabla_list
+		}
+		return render(request,'repo/rep008.html',dicc)
 
 
 
-#	Reporte los Viernes grcl4
+
+
+
+
+
+
+
+#	Reporte los Viernes
 class Rep007(View): 
 
 	def get(self,request,*args,**kwargs):

@@ -11,9 +11,15 @@ from django.utils.translation import ugettext as _
 
 
 class AuthCliente(models.Model):
+    PRIORIDAD = (
+        ('X', 'Prioritaria'),
+        (' ', 'No prioritaria'),
+    )
     idauth_cliente = models.AutoField(primary_key=True)
     idauth = models.ForeignKey('AuthUser', models.DO_NOTHING, db_column='idauth')
     idcliente = models.ForeignKey('Cliente', models.DO_NOTHING, db_column='idcliente')
+    #contenedora = models.CharField(max_length=2, choices=CONTENEDORA, default=' ')
+    prioridad = models.CharField(max_length=2, blank=True, null=True)
     asignacion = models.FloatField()
     fecha_alta = models.DateField()
     fecha_baja = models.DateField()
@@ -137,7 +143,8 @@ class AuthUserUserPermissions(models.Model):
 class Cliente(models.Model):
     idcliente = models.AutoField(primary_key=True)
     codigo = models.CharField(max_length=11)
-    equipo = models.ForeignKey('Equipo', models.DO_NOTHING, db_column='equipo')
+    #equipo = models.ForeignKey('Equipo', models.DO_NOTHING, db_column='equipo') # GRCL4
+    equipo = models.CharField(max_length=11)
     cliente = models.CharField(max_length=35)
     idpais = models.ForeignKey('Pais', models.DO_NOTHING, db_column='idpais', blank=True, null=True)
     descripcion = models.CharField(max_length=75, blank=True, null=True)
@@ -146,6 +153,7 @@ class Cliente(models.Model):
     zultima_modificacion = models.DateField(blank=True, null=True)
     zestado = models.CharField(max_length=1, blank=True, null=True,default='1')
     wi_id = models.CharField(max_length=10, blank=True, null=True)
+    color = models.CharField(max_length=10, blank=True, null=True,default='#f9d184')
 
     class Meta:
         managed = False

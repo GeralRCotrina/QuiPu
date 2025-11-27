@@ -32,6 +32,7 @@
 				<td><i class="fa fa-edit"></i></td>
 				<td>Cliente</td>
 				<td>Colaborador</td>
+				<td>Prioridad</td>
 				<td>Asignación</td>
 				<td>Fecha de alta</td>
 				<td>Fecha de baja</td>
@@ -46,6 +47,7 @@
 				<td id="tdfd04" contenteditable onkeyup='Filtrar(this.id)'></td>
 				<td id="tdfd05" contenteditable onkeyup='Filtrar(this.id)'></td>
 				<td id="tdfd06" contenteditable onkeyup='Filtrar(this.id)'></td>
+				<td id="tdfd07" contenteditable onkeyup='Filtrar(this.id)'></td>
 			</tr>
 
 		</thead>
@@ -58,8 +60,9 @@
 					<a href="{% url 'au_c_eli' ob.pk %}"><i class="fa fa-trash"></i></a><br>
 				</td>
 				{% else %}<td></td>{% endif %}
-				<td>{{ ob.idcliente.codigo }}</td>
+				<td><b>{{ ob.idcliente.cliente }}</b></td>
 				<td>{{ ob.idauth.alias }}</td>
+				<td>{% if ob.prioridad != None %}su prioridad{% endif %}</td>
 				<td>{{ ob.asignacion }}</td>
 				<td>{{ ob.fecha_alta.day }}.{{ ob.fecha_alta.month }}.{{ ob.fecha_alta.year }}</td>
 				<td>{{ ob.fecha_baja.day }}.{{ ob.fecha_baja.month }}.{{ ob.fecha_baja.year }}</td>

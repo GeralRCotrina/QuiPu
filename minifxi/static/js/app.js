@@ -228,8 +228,8 @@ function ActualizarTotalTask(){
 
 	for (var i = 1; i < (resume_table.rows.length - 1); i++) {
 
-		idinp  = ''+ resume_table.rows[i].cells[8].id + '';
-		idinp2 = ''+ resume_table.rows[i].cells[9].id + '';
+		idinp  = ''+ resume_table.rows[i].cells[9].id + '';
+		idinp2 = ''+ resume_table.rows[i].cells[10].id + '';
 
 		// Esfuerzo planificado
 		var inpt0 = document.getElementById(('inpt'+idinp));
@@ -916,7 +916,7 @@ function ConsultarPanel(){
 
 
 
-
+ 
 
 /* =======   P A N E L    I N D E X ========*/
 function ConsulReq(){
